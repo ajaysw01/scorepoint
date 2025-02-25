@@ -1,0 +1,5 @@
+backend/logs/*
+backend/.idea/*
+backend/__pycache__
+backend/.env
+backend/venv/*
