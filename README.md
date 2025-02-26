@@ -51,21 +51,7 @@ venv\Scripts\activate      # On Windows
 pip install -r requirements.txt
 ```
 
-4️⃣ **Set Up Environment Variables**  
-Create a `.env` file in the project root and add:  
-```env
-DATABASE_URL=postgresql://username:password@localhost/sports_db
-SECRET_KEY=your_secret_key
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
-```
-
-5️⃣ **Run Database Migrations**  
-```bash
-alembic upgrade head
-```
-
-6️⃣ **Run the FastAPI application:**  
+4️⃣ **Run the FastAPI application:**  
 ```bash
 uvicorn main:app --reload
 ```
@@ -149,6 +135,19 @@ POST /api/teams/
 ✅ **Response:** `200 OK` (Created Team)  
 🔐 **Security:** Requires authentication.
 
+### **Delete a Team**
+```http
+DELETE /api/teams/{team_id}
+```
+✅ **Response:**  
+```json
+{
+  "message": "Team deleted successfully"
+}
+```
+🔐 **Security:** Only the team creator or an authorized user can delete a team.  
+🛑 **Player records will be updated, but bonuses will only be stored when awarded (not initialized at 0).**  
+
 ---
 
 ## 🏅 **Sports Management**  
@@ -204,7 +203,7 @@ GET /api/scores/player/{player_id}
 
 ### **Get Team Leaderboard**
 ```http
-GET /api/leaderboard
+GET /api/scores/leaderboard
 ```
 ✅ **Query Parameter (Optional):**  
 - `sport_id` (Filter by sport)  
@@ -214,23 +213,21 @@ GET /api/leaderboard
 [
     {
         "team_name": "Team A",
-        "scores_per_game": {
+        "sports": {
             "Badminton": 100,
             "Carrom": 50,
             "Table Tennis": 75
         },
-        "bonus_points": 10,
-        "total_score": 235
+        "total_score": 225
     },
     {
         "team_name": "Team B",
-        "scores_per_game": {
+        "sports": {
             "Badminton": 80,
             "Carrom": 60,
             "Table Tennis": 90
         },
-        "bonus_points": 5,
-        "total_score": 235
+        "total_score": 230
     }
 ]
 ```
@@ -276,22 +273,8 @@ GET /api/leaderboard
 
 ---
 
-## 🛠 **Future Improvements**
-- ✅ Role-Based Access Control (RBAC)  
-- ✅ Email Verification & Password Reset  
-- ✅ WebSockets for Real-Time Score Updates  
-
----
-
-## 🤝 **Contributing**
-1. Fork the repository  
-2. Create a new feature branch  
-3. Commit your changes  
-4. Push to your fork  
-5. Open a pull request  
-
----
-
-## 📜 **License**
-This project is licensed under the **MIT License**.
+## 📌 **Notes & Enhancements**
+- **Bonus points are only stored when awarded** → Avoids unnecessary 0 values in the database.
+- **Deleting a team will update player records but won't remove previous scores**.
+- **Leaderboard is dynamically generated and supports filtering by sport**.
 
