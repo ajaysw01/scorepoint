@@ -1,8 +1,8 @@
-# 🏆 ScorePoint API  
+# 🏆 **ScorePoint API**  
 
 A **FastAPI**-powered backend for managing **sports, teams, players, and scores** with authentication and leaderboards.
 
-## 📑 Table of Contents  
+## 📑 **Table of Contents**  
 
 - [📌 Introduction](#-introduction)  
 - [🚀 Getting Started](#-getting-started)  
@@ -18,7 +18,7 @@ A **FastAPI**-powered backend for managing **sports, teams, players, and scores*
 
 ---
 
-## 📌 Introduction  
+## 📌 **Introduction**  
 
 ScorePoint API provides endpoints for:  
 ✅ **User authentication** (registration & login)  
@@ -29,7 +29,7 @@ ScorePoint API provides endpoints for:
 
 ---
 
-## 🚀 Getting Started  
+## 🚀 **Getting Started**  
 
 ### **🔧 Setup Instructions**  
 
@@ -61,7 +61,7 @@ uvicorn main:app --reload
 
 ---
 
-## 📡 API Endpoints  
+## 📡 **API Endpoints**  
 
 ### 🔍 **Health Check**  
 
@@ -133,36 +133,7 @@ POST /api/teams/
 }
 ```
 ✅ **Response:** `200 OK` (Created Team)  
-❌ **Errors:** `422 Validation Error`  
 🔐 **Security:** Requires authentication.
-
-### **Get Team by ID**
-```http
-GET /api/teams/{team_id}
-```
-✅ **Response:** `200 OK` (Team Details)  
-🔐 **Security:** Requires authentication.
-
-### **Update Team**
-```http
-PUT /api/teams/{team_id}
-```
-✅ **Request Body:**  
-```json
-{
-  "name": "Updated Team",
-  "players": [1, 4, 5]
-}
-```
-✅ **Response:** `200 OK` (Updated Team)  
-🔐 **Security:** Requires authentication. Team owner only.
-
-### **Delete Team**
-```http
-DELETE /api/teams/{team_id}
-```
-✅ **Response:** `200 OK`  
-🔐 **Security:** Requires authentication. Team owner only.
 
 ---
 
@@ -182,37 +153,10 @@ POST /api/sports/
 ```json
 {
   "name": "Badminton",
-  "category": "Racket Sport"
+  "category": "Singles"
 }
 ```
 ✅ **Response:** `200 OK` (Created Sport)  
-🔐 **Security:** Requires authentication.
-
-### **Get Sport by ID**
-```http
-GET /api/sports/{sport_id}
-```
-✅ **Response:** `200 OK` (Sport Details)
-
-### **Update Sport**
-```http
-PUT /api/sports/{sport_id}
-```
-✅ **Request Body:**  
-```json
-{
-  "name": "Updated Sport",
-  "category": "Outdoor"
-}
-```
-✅ **Response:** `200 OK` (Updated Sport)  
-🔐 **Security:** Requires authentication.
-
-### **Delete Sport**
-```http
-DELETE /api/sports/{sport_id}
-```
-✅ **Response:** `200 OK`  
 🔐 **Security:** Requires authentication.
 
 ---
@@ -221,45 +165,71 @@ DELETE /api/sports/{sport_id}
 
 ### **Submit a Player's Score**
 ```http
-POST /api/scores/{player_id}/{sport_id}
+POST /api/scores/
 ```
-✅ **Parameters:** `player_id`, `sport_id`, `points`  
+✅ **Request Body:**  
+```json
+{
+  "player_id": 1,
+  "sport_id": 2,
+  "points": 20
+}
+```
 ✅ **Response:** `200 OK` (Updated Score)  
 🔐 **Security:** Requires authentication.
 
 ### **Get Player's Score**
 ```http
-GET /api/scores/player/{player_id}/{sport_id}
+GET /api/scores/player/{player_id}
 ```
 ✅ **Response:** `200 OK` (Player's Total Score)
-
-### **Get Team's Score**
-```http
-GET /api/scores/team/{team_id}/{sport_id}
-```
-✅ **Response:** `200 OK` (Team's Total Score)
 
 ---
 
 ## 📊 **Leaderboards**  
 
-### **Get Leaderboard**
+### **Get Team Leaderboard**
 ```http
 GET /api/scores/leaderboard
 ```
-✅ **Parameters:** `sport_id` (optional)  
-✅ **Response:** `200 OK` (Leaderboard List)
+✅ **Query Parameter (Optional):**  
+- `sport_id` (Filter by sport)  
+
+✅ **Response:**  
+```json
+[
+    {
+        "team_name": "Team A",
+        "sports": {
+            "Badminton": 100,
+            "Carrom": 50,
+            "Table Tennis": 75
+        },
+        "total_score": 225
+    },
+    {
+        "team_name": "Team B",
+        "sports": {
+            "Badminton": 80,
+            "Carrom": 60,
+            "Table Tennis": 90
+        },
+        "total_score": 230
+    }
+]
+```
+🔐 **Public API**: No authentication required.  
 
 ---
 
-## 🔐 Security  
+## 🔐 **Security**  
 
 - **JWT Authentication** (`OAuth2PasswordBearer`) is required for most API calls.
 - **Unauthorized requests** will return a `401 Unauthorized` response.
 
 ---
 
-## ❌ Error Handling  
+## ❌ **Error Handling**  
 
 ✅ **Validation Errors (`422`)**  
 ```json
