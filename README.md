@@ -1,150 +1,321 @@
-# ScorePoint API
+# 🏆 ScorePoint API  
 
-This repository contains the API for ScorePoint, a service for managing sports, teams, players, and scores.
+A **FastAPI**-powered backend for managing **sports, teams, players, and scores** with authentication and leaderboards.
 
-## Table of Contents
+## 📑 Table of Contents
 
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-- [API Endpoints](#api-endpoints)
-  - [Health Check](#health-check)
-  - [User Registration](#user-registration)
-  - [Authentication](#authentication)
-  - [Team Endpoints](#team-endpoints)
-  - [Sports Endpoints](#sports-endpoints)
-  - [Score Endpoints](#score-endpoints)
-- [Schemas](#schemas)
-- [Security](#security)
-- [Error Handling](#error-handling)
+- [📌 Introduction](#-introduction)  
+- [🚀 Getting Started](#-getting-started)  
+- [📡 API Endpoints](#-api-endpoints)  
+  - [🔍 Health Check](#-health-check)  
+  - [👤 User Authentication](#-user-authentication)  
+  - [🏅 Sports Management](#-sports-management)  
+  - [👥 Team Management](#-team-management)  
+  - [🎯 Score Management](#-score-management)  
+  - [📊 Leaderboards](#-leaderboards)  
+- [📦 Schemas](#-schemas)  
+- [🔐 Security](#-security)  
+- [❌ Error Handling](#-error-handling)  
+- [⚡ Future Improvements](#-future-improvements)
 
-## Introduction
+---
 
-The ScorePoint API provides endpoints for:
+## 📌 Introduction  
 
-- Managing users (registration, login)
-- Managing sports (create, read, update, delete)
-- Managing teams (create, read, update, delete)
-- Managing player scores (submit, get player score, get team score)
-- Retrieving leaderboards
+ScorePoint API provides endpoints for:  
+✅ **User authentication** (registration & login)  
+✅ **Managing sports** (create, read, update, delete)  
+✅ **Managing teams** (create, read, update, delete)  
+✅ **Recording player scores** (submit, retrieve)  
+✅ **Generating leaderboards** for teams and players  
 
-## Getting Started
+---
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository_url>
-    ```
-2.  **Install dependencies:** (Assuming you are using Python and a framework like FastAPI)
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  **Run the application:**
-    ```bash
-    uvicorn main:app --reload
-    ```
-    (Replace `main:app` with your application entry point.)
+## 🚀 Getting Started  
 
-## API Endpoints
+### **🔧 Setup Instructions**  
 
-### Health Check
+1️⃣ **Clone the repository:**  
+```bash
+git clone <repository_url>
+cd scorepoint-backend
+```
 
--   **`/` (GET)**: Checks the API's health.
-    -   Response: `200 OK`
+2️⃣ **Create a virtual environment & activate it:**  
+```bash
+python -m venv venv
+source venv/bin/activate   # On macOS/Linux
+venv\Scripts\activate      # On Windows
+```
 
-### User Registration
+3️⃣ **Install dependencies:**  
+```bash
+pip install -r requirements.txt
+```
 
--   **`/api/users/register` (POST)**: Registers a new user.
-    -   Request Body: `UserRegister` schema (name, email, password)
-    -   Response: `201 Created` with `UserResponse` schema (name, email, message)
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
+4️⃣ **Run the FastAPI application:**  
+```bash
+uvicorn main:app --reload
+```
+   - The API will be available at: **http://127.0.0.1:8000**
+   - Swagger Docs: **http://127.0.0.1:8000/docs**  
+   - Redoc Docs: **http://127.0.0.1:8000/redoc**  
 
-### Authentication
+---
 
--   **`/api/auth/login` (POST)**: Logs in a user and provides an access token.
-    -   Request Body: `application/x-www-form-urlencoded` with `Body_login_api_auth_login_post` schema (username, password).
-    -   Response: `200 OK` with access token.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
+## 📡 API Endpoints  
 
-### Team Endpoints
+### 🔍 **Health Check**
+**Check if API is running**  
+```http
+GET /
+```
+✅ **Response:**  
+```json
+{"status": "ok"}
+```
 
--   **`/api/teams/` (GET)**: Retrieves all teams with their players.
-    -   Response: `200 OK` with an array of `TeamResponse` schemas.
--   **`/api/teams/` (POST)**: Creates a new team.
-    -   Request Body: `TeamCreate` schema (name, players).
-    -   Response: `200 OK` with `TeamResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
--   **`/api/teams/{team_id}` (GET)**: Retrieves a specific team by ID.
-    -   Parameters: `team_id` (integer, path parameter).
-    -   Response: `200 OK` with `TeamResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
--   **`/api/teams/{team_id}` (PUT)**: Updates a team's information.
-    -   Parameters: `team_id` (integer, path parameter).
-    -   Request Body: `TeamUpdate` schema (name, players).
-    -   Response: `200 OK` with `TeamResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer). Team owner only.
--   **`/api/teams/{team_id}` (DELETE)**: Deletes a team and its players.
-    -   Parameters: `team_id` (integer, path parameter).
-    -   Response: `200 OK`.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer). Team owner only.
+---
 
-### Sports Endpoints
+### 👤 **User Authentication**  
 
--   **`/api/sports/` (GET)**: Retrieves all sports.
-    -   Response: `200 OK` with an array of `SportResponse` schemas.
--   **`/api/sports/` (POST)**: Creates a new sport.
-    -   Request Body: `SportCreate` schema (name, category).
-    -   Response: `200 OK` with `SportResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
--   **`/api/sports/{sport_id}` (GET)**: Retrieves a specific sport by ID.
-    -   Parameters: `sport_id` (integer, path parameter).
-    -   Response: `200 OK` with `SportResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
--   **`/api/sports/{sport_id}` (PUT)**: Updates a sport's information.
-    -   Parameters: `sport_id` (integer, path parameter).
-    -   Request Body: `SportUpdate` schema (name, category).
-    -   Response: `200 OK` with `SportResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
--   **`/api/sports/{sport_id}` (DELETE)**: Deletes a sport.
-    -   Parameters: `sport_id` (integer, path parameter).
-    -   Response: `200 OK`.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
+#### 🔹 **Register a New User**  
+```http
+POST /api/users/register
+```
+✅ **Request Body:**  
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
+✅ **Response:**  
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "message": "User registered successfully"
+}
+```
 
-### Score Endpoints
+#### 🔹 **User Login (Token-Based Authentication)**
+```http
+POST /api/auth/login
+```
+✅ **Response:**  
+```json
+{
+  "access_token": "your.jwt.token",
+  "token_type": "bearer"
+}
+```
 
--   **`/api/scores/{player_id}/{sport_id}` (POST)**: Submits a player's score.
-    -   Parameters: `player_id`, `sport_id` (integer, path parameters), `points` (integer, query parameter).
-    -   Response: `200 OK` with `PlayerScoreResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
-    -   Security: Requires authentication (OAuth2PasswordBearer).
--   **`/api/scores/player/{player_id}/{sport_id}` (GET)**: Retrieves a player's score for a specific sport.
-    -   Parameters: `player_id`, `sport_id` (integer, path parameters).
-    -   Response: `200 OK` with `PlayerScoreResponse` schema.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
--   **`/api/scores/team/{team_id}/{sport_id}` (GET)**: Retrieves a team's score for a specific sport.
-    -   Parameters: `team_id`, `sport_id` (integer, path parameters).
-    -   Response: `200 OK`.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
--   **`/api/scores/leaderboard` (GET)**: Retrieves the leaderboard.
-    -   Parameters: `sport_id` (integer, optional query parameter).
-    -   Response: `200 OK` with an array of `LeaderboardEntry` schemas.
-    -   Error: `422 Validation Error` with `HTTPValidationError` schema.
+---
 
-## Schemas
+### 🏅 **Sports Management**  
 
-(Refer to the OpenAPI specification for detailed schema definitions.)
+#### 🔹 **Get All Sports**
+```http
+GET /api/sports/
+```
+✅ **Response:**  
+```json
+[
+  {"id": 1, "name": "Badminton", "category": "Singles"},
+  {"id": 2, "name": "Cricket", "category": null}
+]
+```
 
-## Security
+#### 🔹 **Create a Sport**  
+```http
+POST /api/sports/
+```
+✅ **Request Body:**  
+```json
+{
+  "name": "Tennis",
+  "category": "Doubles"
+}
+```
+✅ **Response:**  
+```json
+{
+  "id": 3,
+  "name": "Tennis",
+  "category": "Doubles"
+}
+```
 
--   Authentication is handled using OAuth2PasswordBearer.
--   Some endpoints require authentication (e.g., creating teams, sports, submitting scores).
+---
 
-## Error Handling
+### 👥 **Team Management**  
 
--   Validation errors are returned with a `422` status code and a `HTTPValidationError` schema.
--   Other errors may be returned with appropriate HTTP status codes and error messages.
+#### 🔹 **Get All Teams**
+```http
+GET /api/teams/
+```
+✅ **Response:**  
+```json
+[
+  {"id": 1, "name": "Team A", "players": [{"id": 5, "name": "Player1"}]},
+  {"id": 2, "name": "Team B", "players": [{"id": 6, "name": "Player2"}]}
+]
+```
+
+#### 🔹 **Create a Team**  
+```http
+POST /api/teams/
+```
+✅ **Request Body:**  
+```json
+{
+  "name": "Team Alpha",
+  "players": [5, 6]
+}
+```
+✅ **Response:**  
+```json
+{
+  "id": 3,
+  "name": "Team Alpha",
+  "players": [{"id": 5, "name": "Player1"}, {"id": 6, "name": "Player2"}]
+}
+```
+
+---
+
+### 🎯 **Score Management**  
+
+#### 🔹 **Submit a Player's Score**  
+```http
+POST /api/scores/{player_id}/{sport_id}?points=50
+```
+✅ **Response:**  
+```json
+{
+  "player_id": 5,
+  "sport_id": 2,
+  "points": 50,
+  "total_player_score": 200
+}
+```
+
+#### 🔹 **Get a Player's Total Score**
+```http
+GET /api/scores/player/{player_id}/{sport_id}
+```
+✅ **Response:**  
+```json
+{
+  "player_id": 5,
+  "sport_id": 2,
+  "total_player_score": 200
+}
+```
+
+---
+
+### 📊 **Leaderboards**  
+
+#### 🔹 **Get Leaderboard by Team & Sport**
+```http
+GET /api/scores/leaderboard
+```
+✅ **Response:**  
+```json
+[
+  {
+    "team_name": "Team A",
+    "sports": [
+      {"sport_name": "Badminton", "total_points": 90},
+      {"sport_name": "Cricket", "total_points": 100}
+    ]
+  },
+  {
+    "team_name": "Team B",
+    "sports": [
+      {"sport_name": "Badminton", "total_points": 70}
+    ]
+  }
+]
+```
+
+---
+
+## 📦 Schemas  
+
+| Schema                | Description                                        |
+|-----------------------|----------------------------------------------------|
+| **UserResponse**      | User details upon successful registration/login   |
+| **TeamResponse**      | Team details including players                    |
+| **SportResponse**     | Sport details including category (singles/doubles) |
+| **PlayerScoreResponse** | Score details for a player                        |
+| **LeaderboardResponse** | Team-wise leaderboard per sport                  |
+
+---
+
+## 🔐 Security  
+
+- **JWT Authentication** (`OAuth2PasswordBearer`) is required for most API calls.
+- **Unauthorized requests** will return a `401 Unauthorized` response.
+
+---
+
+## ❌ Error Handling  
+
+✅ **Validation Errors (`422`)**  
+```json
+{
+  "detail": [
+    {
+      "loc": ["body", "email"],
+      "msg": "Invalid email format",
+      "type": "value_error"
+    }
+  ]
+}
+```
+
+✅ **Unauthorized (`401`)**  
+```json
+{
+  "detail": "Invalid credentials"
+}
+```
+
+✅ **Not Found (`404`)**  
+```json
+{
+  "detail": "Resource not found"
+}
+```
+
+---
+
+## ⚡ Future Improvements  
+
+- **Role-based access control** (Admin, Player, Viewer)  
+- **More detailed match statistics**  
+- **Email verification & password reset**  
+- **Webhooks for real-time updates**  
+
+---
+
+## 🌟 Contributing  
+
+1. **Fork the repository**  
+2. **Create a feature branch** (`git checkout -b feature-name`)  
+3. **Commit your changes** (`git commit -m "Add feature"`)  
+4. **Push the branch** (`git push origin feature-name`)  
+5. **Create a Pull Request** 🚀  
+
+---
+
+## 📝 License  
+
+This project is licensed under the **MIT License**.  
+
+---
+
