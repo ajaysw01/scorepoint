@@ -6,9 +6,9 @@ from src.api.configurations.config import get_settings
 from src.api.customexception.exceptions import UserExistsException
 from src.api.configurations.logger import setup_logging
 
-setup_logging()  # Initialize the logging configuration
+setup_logging()
 
-logger = logging.getLogger(__name__)  # Use the logger for this specific file
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
@@ -30,12 +30,7 @@ def create(request: request_models.UserRegister, db: Session):
     )
 
     db.add(new_user)
-    logger.debug(f"User {request.name} added to the session")
-
     db.commit()
-    logger.debug(f"User {request.name} committed to the database")
-
     db.refresh(new_user)
-    logger.debug(f"User {request.name} refreshed from the database")
 
     return new_user

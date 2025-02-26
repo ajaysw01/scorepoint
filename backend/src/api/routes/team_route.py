@@ -51,7 +51,7 @@ def delete_team_route(
 def add_team_bonus_route(
     team_id: int,
     sport_id: int,
-    points: int,  # ✅ Now FastAPI will take it as a query param
+    points: int,
     db: Session = Depends(get_db)
 ):
     return add_team_bonus(db, team_id, sport_id, points)

@@ -15,33 +15,23 @@ from src.api.models.response_models import SportResponse
 
 router = APIRouter()
 
-
-# ✅ Create a Sport
 @router.post("/", response_model=SportResponse)
 def create_sport_route(sport_data: SportCreate, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     return create_sport(sport_data, db)
 
-
-# ✅ Get All Sports
 @router.get("/", response_model=list[SportResponse])
 def get_sports_route(db: Session = Depends(get_db)):
     return get_all_sports(db)
 
-
-# ✅ Get a Sport by ID
 @router.get("/{sport_id}", response_model=SportResponse)
 def get_sport_route(sport_id: int, db: Session = Depends(get_db)):
     return get_sport_by_id(sport_id, db)
 
-
-# ✅ Update a Sport
 @router.put("/{sport_id}", response_model=SportResponse)
 def update_sport_route(sport_id: int, sport_data: SportUpdate, db: Session = Depends(get_db),
                        user: dict = Depends(get_current_user)):
     return update_sport(sport_id, sport_data, db)
 
-
-# ✅ Delete a Sport
 @router.delete("/{sport_id}")
 def delete_sport_route(sport_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     return delete_sport(sport_id, db)

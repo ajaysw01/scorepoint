@@ -1,10 +1,6 @@
-from typing import List
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func
-
-from src.api.models.models import Player, Sport, PlayerScore, Team, TeamBonus
+from src.api.models.models import  Sport
 from src.api.models.response_models import PlayerScoreResponse, TeamLeaderboardResponse
 
 
@@ -17,7 +13,6 @@ def submit_player_score(player_id: int, sport_id: int, points: int, db: Session)
     if not sport:
         raise HTTPException(status_code=404, detail="Sport not found")
 
-    # ✅ Add player score
     new_score = PlayerScore(
         player_id=player_id,
         sport_id=sport_id,
@@ -27,13 +22,11 @@ def submit_player_score(player_id: int, sport_id: int, points: int, db: Session)
     db.commit()
     db.refresh(new_score)
 
-    # ✅ Calculate total player score
     total_points = db.query(func.sum(PlayerScore.points)).filter(
         PlayerScore.player_id == player_id,
         PlayerScore.sport_id == sport_id
     ).scalar() or 0
 
-    # ✅ Calculate total team score per sport
     team = db.query(Team).filter(Team.id == player.team_id).first()
     if team:
         team_total_points = db.query(func.sum(PlayerScore.points)).join(Player).filter(
@@ -41,7 +34,7 @@ def submit_player_score(player_id: int, sport_id: int, points: int, db: Session)
             PlayerScore.sport_id == sport_id
         ).scalar() or 0
     else:
-        team_total_points = 0  # Player may not belong to a team
+        team_total_points = 0
 
     return {
         "id": new_score.id,
@@ -93,7 +86,7 @@ def get_leaderboard(db: Session, sport_id: int = None):
         for player in team.players:
             for score in player.scores:
                 if sport_id and score.sport_id != sport_id:
-                    continue  # ✅ Filter by sport if sport_id is provided
+                    continue
 
                 sport_id_key = score.sport_id
                 if sport_id_key not in team_scores:
@@ -101,7 +94,6 @@ def get_leaderboard(db: Session, sport_id: int = None):
                 team_scores[sport_id_key] += score.points
                 total_score += score.points
 
-        # ✅ Add bonus points
         bonus_points = sum(bonus.bonus_points for bonus in team.bonuses)
         total_score += bonus_points
 
