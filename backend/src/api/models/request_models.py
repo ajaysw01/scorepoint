@@ -14,19 +14,20 @@ class UserLogin(BaseModel):
     password: str
 
 
-# ✅ Team and Player Models
+# ✅ Player Models
 class PlayerCreate(BaseModel):
     name: str
-
-
-class TeamCreate(BaseModel):
-    name: str
-    players: List[PlayerCreate]
 
 
 class PlayerUpdate(BaseModel):
     id: int
     name: str
+
+
+# ✅ Team Models
+class TeamCreate(BaseModel):
+    name: str
+    players: List[PlayerCreate]  # List of players to be added to the team
 
 
 class TeamUpdate(BaseModel):
@@ -50,3 +51,9 @@ class PlayerScoreCreate(BaseModel):
     player_id: int
     sport_id: int
     points: int
+
+
+# ✅ Team Bonus Model (For Adding Bonus)
+class TeamBonusCreate(BaseModel):
+    sport_id: int
+    bonus_points: int

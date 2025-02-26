@@ -27,9 +27,10 @@ class Team(Base):
 
     user = relationship("User", back_populates="teams")
     players = relationship("Player", back_populates="team")
+    bonuses = relationship("TeamBonus", back_populates="team", cascade="all, delete-orphan")
 
 
-# ✅ Sport Model (Now includes category column)
+# ✅ Sport Model
 class Sport(Base):
     __tablename__ = "sports"
 
@@ -38,6 +39,7 @@ class Sport(Base):
     category = Column(String(50), nullable=True)  # "Singles", "Doubles", or NULL for Cricket, Darts
 
     players = relationship("PlayerScore", back_populates="sport")
+    bonuses = relationship("TeamBonus", back_populates="sport", cascade="all, delete-orphan")
 
 
 # ✅ Player Model
@@ -52,7 +54,7 @@ class Player(Base):
     scores = relationship("PlayerScore", back_populates="player")
 
 
-# ✅ Player Score Model (Tracks scores per sport & category)
+# ✅ Player Score Model
 class PlayerScore(Base):
     __tablename__ = "player_scores"
 
@@ -64,3 +66,17 @@ class PlayerScore(Base):
 
     player = relationship("Player", back_populates="scores")
     sport = relationship("Sport", back_populates="players")
+
+
+# ✅ Team Bonus Model (New)
+class TeamBonus(Base):
+    __tablename__ = "team_bonuses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
+    sport_id = Column(Integer, ForeignKey("sports.id"), nullable=False)
+    bonus_points = Column(Integer, nullable=False, default=0)
+    awarded_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    team = relationship("Team", back_populates="bonuses")
+    sport = relationship("Sport", back_populates="bonuses")

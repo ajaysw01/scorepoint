@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from src.api.auth.oauth2 import get_current_user
 from src.api.database.db_conn import get_db
-from src.api.models.response_models import PlayerScoreResponse, LeaderboardResponse, LeaderboardEntry
+from src.api.models.response_models import PlayerScoreResponse,TeamLeaderboardResponse
 from src.api.services.score_service import (
     submit_player_score,
     get_total_player_score,
@@ -33,9 +33,9 @@ def get_player_score(player_id: int, sport_id: int, db: Session = Depends(get_db
 def get_team_score(team_id: int, sport_id: int, db: Session = Depends(get_db)):
     return get_total_team_score(team_id, sport_id, db)
 
-@router.get("/leaderboard", response_model=List[LeaderboardEntry])
+@router.get("/leaderboard", response_model=List[TeamLeaderboardResponse])
 def leaderboard(
-    sport_id: int = Query(None, description="Filter leaderboard by sport"),
+    sport_id: Optional[int] = Query(None, description="Filter leaderboard by sport"),
     db: Session = Depends(get_db)
 ):
     return get_leaderboard(db, sport_id)

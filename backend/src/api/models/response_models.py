@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 from pydantic import BaseModel, EmailStr
 
 
@@ -30,6 +30,7 @@ class PlayerResponse(BaseModel):
 class TeamResponse(BaseModel):
     id: int
     name: str
+    total_bonus: int  # ✅ NEW: Total bonus points for the team
     players: List[PlayerResponse] = []  # Include players in response
 
     class Config:
@@ -67,13 +68,24 @@ class LeaderboardEntry(BaseModel):
         from_attributes = True
 
 
-class LeaderboardResponse(BaseModel):
-    leaderboard: List[LeaderboardEntry]
+class TeamLeaderboardResponse(BaseModel):
+    team_id: int
+    team_name: str
+    scores_per_game: Dict[int, int]  # {sport_id: score}
+    bonus_points: int
+    total_score: int
+
+    class Config:
+        from_attributes = True  # ✅ Fixed for Pydantic v2
+
+
+# ✅ Team Bonus Response
+class TeamBonusResponse(BaseModel):
+    id: int
+    team_id: int
+    sport_id: int
+    bonus_points: int
+    awarded_at: str
 
     class Config:
         from_attributes = True
-
-
-class TeamLeaderboardResponse(BaseModel):
-    team_name: str
-    total_points: int

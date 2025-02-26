@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 class Settings(BaseSettings):
-    APP_NAME: str = "MatchPoint"
+    APP_NAME: str = "ScorePoint"
     DEBUG_MODE: bool = False
     API_PREFIX: str = "/api"
 

@@ -1,9 +1,12 @@
+from typing import List
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from src.api.models.models import Player, Sport, PlayerScore, Team
-from src.api.models.response_models import PlayerScoreResponse
+from src.api.models.models import Player, Sport, PlayerScore, Team, TeamBonus
+from src.api.models.response_models import PlayerScoreResponse, TeamLeaderboardResponse
+
 
 def submit_player_score(player_id: int, sport_id: int, points: int, db: Session):
     player = db.query(Player).filter(Player.id == player_id).first()
@@ -74,32 +77,40 @@ def get_total_team_score(team_id: int, sport_id: int, db: Session):
     return {"team_id": team_id, "sport_id": sport_id, "total_team_score": total_points}
 
 
+from sqlalchemy.orm import Session
+from sqlalchemy import func
+from src.api.models.models import Team, PlayerScore, Player, TeamBonus
+
+
 def get_leaderboard(db: Session, sport_id: int = None):
     teams = db.query(Team).all()
-
     leaderboard = []
+
     for team in teams:
-        team_sport_scores = db.query(
-            Sport.id.label("sport_id"),
-            Sport.name.label("sport_name"),
-            func.sum(PlayerScore.points).label("total_points")
-        ).join(PlayerScore, Sport.id == PlayerScore.sport_id) \
-            .join(Player, Player.id == PlayerScore.player_id) \
-            .filter(Player.team_id == team.id)
+        team_scores = {}
+        total_score = 0
 
-        if sport_id:  # Filter by sport if needed
-            team_sport_scores = team_sport_scores.filter(Sport.id == sport_id)
+        for player in team.players:
+            for score in player.scores:
+                if sport_id and score.sport_id != sport_id:
+                    continue  # ✅ Filter by sport if sport_id is provided
 
-        team_sport_scores = team_sport_scores.group_by(Sport.id).all()
+                sport_id_key = score.sport_id
+                if sport_id_key not in team_scores:
+                    team_scores[sport_id_key] = 0
+                team_scores[sport_id_key] += score.points
+                total_score += score.points
 
-        sports_data = [
-            {"sport_name": row.sport_name, "total_points": row.total_points}
-            for row in team_sport_scores
-        ]
+        # ✅ Add bonus points
+        bonus_points = sum(bonus.bonus_points for bonus in team.bonuses)
+        total_score += bonus_points
 
         leaderboard.append({
+            "team_id": team.id,
             "team_name": team.name,
-            "sports": sports_data
+            "scores_per_game": team_scores,
+            "bonus_points": bonus_points,
+            "total_score": total_score
         })
 
-    return leaderboard
+    return sorted(leaderboard, key=lambda x: x["total_score"], reverse=True)

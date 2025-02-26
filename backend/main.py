@@ -18,6 +18,10 @@ app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG_MODE
 )
+
+@app.get("/")
+async def health_check() :
+    return {"message":"App is running ..."}
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS.split(","),
