@@ -2,21 +2,19 @@
 
 A **FastAPI**-powered backend for managing **sports, teams, players, and scores** with authentication and leaderboards.
 
-## 📑 Table of Contents
+## 📑 Table of Contents  
 
 - [📌 Introduction](#-introduction)  
 - [🚀 Getting Started](#-getting-started)  
 - [📡 API Endpoints](#-api-endpoints)  
   - [🔍 Health Check](#-health-check)  
   - [👤 User Authentication](#-user-authentication)  
-  - [🏅 Sports Management](#-sports-management)  
   - [👥 Team Management](#-team-management)  
+  - [🏅 Sports Management](#-sports-management)  
   - [🎯 Score Management](#-score-management)  
   - [📊 Leaderboards](#-leaderboards)  
-- [📦 Schemas](#-schemas)  
 - [🔐 Security](#-security)  
 - [❌ Error Handling](#-error-handling)  
-- [⚡ Future Improvements](#-future-improvements)
 
 ---
 
@@ -65,7 +63,8 @@ uvicorn main:app --reload
 
 ## 📡 API Endpoints  
 
-### 🔍 **Health Check**
+### 🔍 **Health Check**  
+
 **Check if API is running**  
 ```http
 GET /
@@ -77,9 +76,9 @@ GET /
 
 ---
 
-### 👤 **User Authentication**  
+## 👤 **User Authentication**  
 
-#### 🔹 **Register a New User**  
+### **Register a New User**  
 ```http
 POST /api/users/register
 ```
@@ -100,7 +99,7 @@ POST /api/users/register
 }
 ```
 
-#### 🔹 **User Login (Token-Based Authentication)**
+### **User Login (Token-Based Authentication)**
 ```http
 POST /api/auth/login
 ```
@@ -114,145 +113,142 @@ POST /api/auth/login
 
 ---
 
-### 🏅 **Sports Management**  
+## 👥 **Team Management**  
 
-#### 🔹 **Get All Sports**
-```http
-GET /api/sports/
-```
-✅ **Response:**  
-```json
-[
-  {"id": 1, "name": "Badminton", "category": "Singles"},
-  {"id": 2, "name": "Cricket", "category": null}
-]
-```
-
-#### 🔹 **Create a Sport**  
-```http
-POST /api/sports/
-```
-✅ **Request Body:**  
-```json
-{
-  "name": "Tennis",
-  "category": "Doubles"
-}
-```
-✅ **Response:**  
-```json
-{
-  "id": 3,
-  "name": "Tennis",
-  "category": "Doubles"
-}
-```
-
----
-
-### 👥 **Team Management**  
-
-#### 🔹 **Get All Teams**
+### **Get All Teams**
 ```http
 GET /api/teams/
 ```
-✅ **Response:**  
-```json
-[
-  {"id": 1, "name": "Team A", "players": [{"id": 5, "name": "Player1"}]},
-  {"id": 2, "name": "Team B", "players": [{"id": 6, "name": "Player2"}]}
-]
-```
+✅ **Response:** `200 OK` (List of Teams)
 
-#### 🔹 **Create a Team**  
+### **Create a New Team**
 ```http
 POST /api/teams/
 ```
 ✅ **Request Body:**  
 ```json
 {
-  "name": "Team Alpha",
-  "players": [5, 6]
+  "name": "Team A",
+  "players": [1, 2, 3]
 }
 ```
-✅ **Response:**  
+✅ **Response:** `200 OK` (Created Team)  
+❌ **Errors:** `422 Validation Error`  
+🔐 **Security:** Requires authentication.
+
+### **Get Team by ID**
+```http
+GET /api/teams/{team_id}
+```
+✅ **Response:** `200 OK` (Team Details)  
+🔐 **Security:** Requires authentication.
+
+### **Update Team**
+```http
+PUT /api/teams/{team_id}
+```
+✅ **Request Body:**  
 ```json
 {
-  "id": 3,
-  "name": "Team Alpha",
-  "players": [{"id": 5, "name": "Player1"}, {"id": 6, "name": "Player2"}]
+  "name": "Updated Team",
+  "players": [1, 4, 5]
 }
 ```
+✅ **Response:** `200 OK` (Updated Team)  
+🔐 **Security:** Requires authentication. Team owner only.
+
+### **Delete Team**
+```http
+DELETE /api/teams/{team_id}
+```
+✅ **Response:** `200 OK`  
+🔐 **Security:** Requires authentication. Team owner only.
 
 ---
 
-### 🎯 **Score Management**  
+## 🏅 **Sports Management**  
 
-#### 🔹 **Submit a Player's Score**  
+### **Get All Sports**
 ```http
-POST /api/scores/{player_id}/{sport_id}?points=50
+GET /api/sports/
 ```
-✅ **Response:**  
+✅ **Response:** `200 OK` (List of Sports)
+
+### **Create a New Sport**
+```http
+POST /api/sports/
+```
+✅ **Request Body:**  
 ```json
 {
-  "player_id": 5,
-  "sport_id": 2,
-  "points": 50,
-  "total_player_score": 200
+  "name": "Badminton",
+  "category": "Racket Sport"
 }
 ```
+✅ **Response:** `200 OK` (Created Sport)  
+🔐 **Security:** Requires authentication.
 
-#### 🔹 **Get a Player's Total Score**
+### **Get Sport by ID**
+```http
+GET /api/sports/{sport_id}
+```
+✅ **Response:** `200 OK` (Sport Details)
+
+### **Update Sport**
+```http
+PUT /api/sports/{sport_id}
+```
+✅ **Request Body:**  
+```json
+{
+  "name": "Updated Sport",
+  "category": "Outdoor"
+}
+```
+✅ **Response:** `200 OK` (Updated Sport)  
+🔐 **Security:** Requires authentication.
+
+### **Delete Sport**
+```http
+DELETE /api/sports/{sport_id}
+```
+✅ **Response:** `200 OK`  
+🔐 **Security:** Requires authentication.
+
+---
+
+## 🎯 **Score Management**  
+
+### **Submit a Player's Score**
+```http
+POST /api/scores/{player_id}/{sport_id}
+```
+✅ **Parameters:** `player_id`, `sport_id`, `points`  
+✅ **Response:** `200 OK` (Updated Score)  
+🔐 **Security:** Requires authentication.
+
+### **Get Player's Score**
 ```http
 GET /api/scores/player/{player_id}/{sport_id}
 ```
-✅ **Response:**  
-```json
-{
-  "player_id": 5,
-  "sport_id": 2,
-  "total_player_score": 200
-}
+✅ **Response:** `200 OK` (Player's Total Score)
+
+### **Get Team's Score**
+```http
+GET /api/scores/team/{team_id}/{sport_id}
 ```
+✅ **Response:** `200 OK` (Team's Total Score)
 
 ---
 
-### 📊 **Leaderboards**  
+## 📊 **Leaderboards**  
 
-#### 🔹 **Get Leaderboard by Team & Sport**
+### **Get Leaderboard**
 ```http
 GET /api/scores/leaderboard
 ```
-✅ **Response:**  
-```json
-[
-  {
-    "team_name": "Team A",
-    "sports": [
-      {"sport_name": "Badminton", "total_points": 90},
-      {"sport_name": "Cricket", "total_points": 100}
-    ]
-  },
-  {
-    "team_name": "Team B",
-    "sports": [
-      {"sport_name": "Badminton", "total_points": 70}
-    ]
-  }
-]
-```
-
----
-
-## 📦 Schemas  
-
-| Schema                | Description                                        |
-|-----------------------|----------------------------------------------------|
-| **UserResponse**      | User details upon successful registration/login   |
-| **TeamResponse**      | Team details including players                    |
-| **SportResponse**     | Sport details including category (singles/doubles) |
-| **PlayerScoreResponse** | Score details for a player                        |
-| **LeaderboardResponse** | Team-wise leaderboard per sport                  |
+✅ **Parameters:** `sport_id` (optional)  
+✅ **Response:** `200 OK` (Leaderboard List)
 
 ---
 
@@ -291,31 +287,6 @@ GET /api/scores/leaderboard
   "detail": "Resource not found"
 }
 ```
-
----
-
-## ⚡ Future Improvements  
-
-- **Role-based access control** (Admin, Player, Viewer)  
-- **More detailed match statistics**  
-- **Email verification & password reset**  
-- **Webhooks for real-time updates**  
-
----
-
-## 🌟 Contributing  
-
-1. **Fork the repository**  
-2. **Create a feature branch** (`git checkout -b feature-name`)  
-3. **Commit your changes** (`git commit -m "Add feature"`)  
-4. **Push the branch** (`git push origin feature-name`)  
-5. **Create a Pull Request** 🚀  
-
----
-
-## 📝 License  
-
-This project is licensed under the **MIT License**.  
 
 ---
 
