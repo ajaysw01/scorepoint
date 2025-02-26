@@ -51,7 +51,21 @@ venv\Scripts\activate      # On Windows
 pip install -r requirements.txt
 ```
 
-4️⃣ **Run the FastAPI application:**  
+4️⃣ **Set Up Environment Variables**  
+Create a `.env` file in the project root and add:  
+```env
+DATABASE_URL=postgresql://username:password@localhost/sports_db
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+```
+
+5️⃣ **Run Database Migrations**  
+```bash
+alembic upgrade head
+```
+
+6️⃣ **Run the FastAPI application:**  
 ```bash
 uvicorn main:app --reload
 ```
@@ -190,7 +204,7 @@ GET /api/scores/player/{player_id}
 
 ### **Get Team Leaderboard**
 ```http
-GET /api/scores/leaderboard
+GET /api/leaderboard
 ```
 ✅ **Query Parameter (Optional):**  
 - `sport_id` (Filter by sport)  
@@ -200,21 +214,23 @@ GET /api/scores/leaderboard
 [
     {
         "team_name": "Team A",
-        "sports": {
+        "scores_per_game": {
             "Badminton": 100,
             "Carrom": 50,
             "Table Tennis": 75
         },
-        "total_score": 225
+        "bonus_points": 10,
+        "total_score": 235
     },
     {
         "team_name": "Team B",
-        "sports": {
+        "scores_per_game": {
             "Badminton": 80,
             "Carrom": 60,
             "Table Tennis": 90
         },
-        "total_score": 230
+        "bonus_points": 5,
+        "total_score": 235
     }
 ]
 ```
@@ -259,4 +275,23 @@ GET /api/scores/leaderboard
 ```
 
 ---
+
+## 🛠 **Future Improvements**
+- ✅ Role-Based Access Control (RBAC)  
+- ✅ Email Verification & Password Reset  
+- ✅ WebSockets for Real-Time Score Updates  
+
+---
+
+## 🤝 **Contributing**
+1. Fork the repository  
+2. Create a new feature branch  
+3. Commit your changes  
+4. Push to your fork  
+5. Open a pull request  
+
+---
+
+## 📜 **License**
+This project is licensed under the **MIT License**.
 
