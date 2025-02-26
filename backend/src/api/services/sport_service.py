@@ -6,9 +6,7 @@ from src.api.models.request_models import SportCreate, SportUpdate
 
 # ✅ Create a Sport
 def create_sport(sport_data: SportCreate, db: Session):
-    existing_sport = db.query(Sport).filter(Sport.name == sport_data.name).first()
-    if existing_sport:
-        raise HTTPException(status_code=400, detail="Sport with this name already exists")
+
 
     new_sport = Sport(name=sport_data.name, category=sport_data.category)
     db.add(new_sport)

@@ -5,7 +5,7 @@ from src.api.auth import authentication
 from src.api.customexception.exceptions import AuthException, InvalidCredentialsException, UserExistsException, UserNotFoundException
 from src.api.configurations.config import get_settings
 from src.api.database.db_conn import Base, engine
-from src.api.routes import user_route, team_route, sport_route
+from src.api.routes import user_route, team_route, sport_route, score_route
 from src.api.customexception import exception_handlers
 import time
 
@@ -36,6 +36,9 @@ app.include_router(user_route.router, prefix=settings.API_PREFIX + "/users", tag
 app.include_router(authentication.router, prefix=settings.API_PREFIX + "/auth", tags=["Login"])
 app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team Endpoints"])
 app.include_router(sport_route.router, prefix=settings.API_PREFIX + "/sports", tags=["Sports Endpoints"])
+app.include_router(score_route.router, prefix=settings.API_PREFIX + "/scores", tags=["Score Endpoints"])
+
+
 
 
 @app.middleware("http")

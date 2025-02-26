@@ -13,7 +13,7 @@ from src.api.services.sport_service import (
 from src.api.models.request_models import SportCreate, SportUpdate
 from src.api.models.response_models import SportResponse
 
-router = APIRouter(prefix="/api/sports", tags=["Sports"])
+router = APIRouter()
 
 
 # ✅ Create a Sport
