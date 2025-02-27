@@ -75,7 +75,7 @@ class TeamLeaderboardResponse(BaseModel):
     total_points: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # ✅ Team Bonus Response
 class TeamBonusResponse(BaseModel):

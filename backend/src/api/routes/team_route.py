@@ -9,7 +9,7 @@ from src.api.models.models import User
 from src.api.models.request_models import TeamCreate, TeamUpdate
 from src.api.models.response_models import TeamResponse
 from src.api.services.team_service import (
-    create_team, get_teams, get_team_by_id, update_team, delete_team, add_team_bonus
+    create_team, get_teams, get_team_by_id, update_team, delete_team,add_team_bonus
 )
 
 router = APIRouter()
@@ -60,13 +60,11 @@ def delete_team_route(
     return  # No response body needed for 204
 
 
-
-
 @router.post("/{team_id}/sports/{sport_id}/bonus", response_model=dict)
 def add_team_bonus_route(
     team_id: int,
     sport_id: int,
-    bonus: int = Query(..., description="Bonus points to add"),  # ✅ Explicit query param
+    bonus: int,
     db: Session = Depends(get_db),
     user: User = Depends(require_admin)
 ):
