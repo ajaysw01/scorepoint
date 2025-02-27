@@ -46,14 +46,15 @@ class SportUpdate(BaseModel):
     category: Optional[str] = None
 
 
-# ✅ Player Score Model
-class PlayerScoreCreate(BaseModel):
+# ✅ Player Points Model
+class PlayerPointsCreate(BaseModel):
     player_id: int
     sport_id: int
     points: int
 
 
-# ✅ Team Bonus Model (For Adding Bonus)
-class TeamBonusCreate(BaseModel):
+# ✅ Team Points Model (For Adding Bonus)
+class TeamPointsCreate(BaseModel):
     sport_id: int
     bonus_points: int
+

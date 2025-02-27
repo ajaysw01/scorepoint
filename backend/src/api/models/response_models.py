@@ -30,7 +30,7 @@ class PlayerResponse(BaseModel):
 class TeamResponse(BaseModel):
     id: int
     name: str
-    total_bonus: int  # ✅ NEW: Total bonus points for the team
+    total_points: int  # ✅ NEW: Total bonus points for the team
     players: List[PlayerResponse] = []  # Include players in response
 
     class Config:
@@ -47,12 +47,12 @@ class SportResponse(BaseModel):
         from_attributes = True
 
 
-# ✅ Player Score Response
-class PlayerScoreResponse(BaseModel):
+# ✅ Player Points Response
+class PlayerPointsResponse(BaseModel):
     player_id: int
     sport_id: int
     points: int  # Points for this submission
-    total_player_score: int  # Accumulated points for this sport
+    total_player_points: int  # Accumulated points for this sport
 
     class Config:
         from_attributes = True
@@ -69,15 +69,13 @@ class LeaderboardEntry(BaseModel):
 
 
 class TeamLeaderboardResponse(BaseModel):
-    team_id: int
     team_name: str
-    scores_per_game: Dict[int, int]  # {sport_id: score}
+    sports_scores: Dict[str, int]  # Dynamic sports with scores
     bonus_points: int
-    total_score: int
+    total_points: int
 
     class Config:
-        from_attributes = True  # ✅ Fixed for Pydantic v2
-
+        orm_mode = True
 
 # ✅ Team Bonus Response
 class TeamBonusResponse(BaseModel):

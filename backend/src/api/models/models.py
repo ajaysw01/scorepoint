@@ -8,10 +8,10 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True, nullable=False)
+    name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    role = Column(String, default="user")
 
     teams = relationship("Team", back_populates="user")
 
@@ -27,7 +27,7 @@ class Team(Base):
 
     user = relationship("User", back_populates="teams")
     players = relationship("Player", back_populates="team")
-    bonuses = relationship("TeamBonus", back_populates="team", cascade="all, delete-orphan")
+    scores = relationship("TeamPoints", back_populates="team", cascade="all, delete-orphan")
 
 
 # ✅ Sport Model
@@ -38,8 +38,8 @@ class Sport(Base):
     name = Column(String(50), nullable=False, unique=True)
     category = Column(String(50), nullable=True)  # "Singles", "Doubles", or NULL for Cricket, Darts
 
-    players = relationship("PlayerScore", back_populates="sport")
-    bonuses = relationship("TeamBonus", back_populates="sport", cascade="all, delete-orphan")
+    players = relationship("PlayerPoints", back_populates="sport")
+    scores = relationship("TeamPoints", back_populates="sport", cascade="all, delete-orphan")
 
 
 # ✅ Player Model
@@ -51,32 +51,33 @@ class Player(Base):
     team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
 
     team = relationship("Team", back_populates="players")
-    scores = relationship("PlayerScore", back_populates="player")
+    scores = relationship("PlayerPoints", back_populates="player")
 
 
-# ✅ Player Score Model
-class PlayerScore(Base):
-    __tablename__ = "player_scores"
+# ✅ Player Points Model
+class PlayerPoints(Base):
+    __tablename__ = "player_points"
 
     id = Column(Integer, primary_key=True, index=True)
-    player_id = Column(Integer, ForeignKey("players.id"), nullable=False)
-    sport_id = Column(Integer, ForeignKey("sports.id"), nullable=False)
-    points = Column(Integer, nullable=False)
+    player_id = Column(Integer, ForeignKey("players.id"), nullable=False, index=True)
+    sport_id = Column(Integer, ForeignKey("sports.id"), nullable=False, index=True)
+    points = Column(Integer, nullable=False, default=0)
     recorded_at = Column(DateTime(timezone=True), server_default=func.now())
 
     player = relationship("Player", back_populates="scores")
     sport = relationship("Sport", back_populates="players")
 
 
-# ✅ Team Bonus Model (New)
-class TeamBonus(Base):
-    __tablename__ = "team_bonuses"
+# ✅ Team Points Model (Updated from TeamBonus)
+class TeamPoints(Base):
+    __tablename__ = "team_points"
 
     id = Column(Integer, primary_key=True, index=True)
     team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     sport_id = Column(Integer, ForeignKey("sports.id"), nullable=False)
-    bonus_points = Column(Integer, nullable=False, default=0)
+    team_points = Column(Integer, nullable=False, default=0)  # Sum of player scores
+    bonus_points = Column(Integer, nullable=False, default=0)  # Additional bonus points
     awarded_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    team = relationship("Team", back_populates="bonuses")
-    sport = relationship("Sport", back_populates="bonuses")
+    team = relationship("Team", back_populates="scores")
+    sport = relationship("Sport", back_populates="scores")

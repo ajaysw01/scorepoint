@@ -11,7 +11,6 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = int(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-
 def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     now = datetime.now(timezone.utc)
     expire = now + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
@@ -20,7 +19,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
 
     try:
         token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-        logging.info(f"Token created for user {data.get('sub')}, expires at {expire}")
+        logging.info(f"Token created for user {data.get('sub')}, role: {data.get('role')}, expires at {expire}")
     except Exception as e:
         logging.exception("Error encoding JWT: %s", e)
         raise AuthException("Error creating token")

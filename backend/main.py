@@ -1,18 +1,21 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
 from src.api.auth import authentication
 from src.api.customexception.exceptions import AuthException, InvalidCredentialsException, UserExistsException, UserNotFoundException
 from src.api.configurations.config import get_settings
-from src.api.database.db_conn import Base, engine
-from src.api.routes import user_route, team_route, sport_route, score_route
+from src.api.database.db_conn import Base, engine, SessionLocal  # ✅ Import SessionLocal
+from src.api.routes import user_route, team_route, sport_route, points_route
 from src.api.customexception import exception_handlers
+from src.api.models.models import User
+from src.api.utils.hashing import Hash
 import time
 
+# ✅ Create tables
 Base.metadata.create_all(bind=engine)
 
 settings = get_settings()
-
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -20,8 +23,9 @@ app = FastAPI(
 )
 
 @app.get("/")
-async def health_check() :
-    return {"message":"App is running ..."}
+async def health_check():
+    return {"message": "App is running ..."}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS.split(","),
@@ -35,14 +39,36 @@ app.add_exception_handler(UserExistsException, exception_handlers.user_exists_ex
 app.add_exception_handler(InvalidCredentialsException, exception_handlers.invalid_credentials_exception_handler)
 app.add_exception_handler(UserNotFoundException, exception_handlers.user_not_found_exception_handler)
 
-
 app.include_router(user_route.router, prefix=settings.API_PREFIX + "/users", tags=["User registration"])
 app.include_router(authentication.router, prefix=settings.API_PREFIX + "/auth", tags=["Login"])
 app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team Endpoints"])
 app.include_router(sport_route.router, prefix=settings.API_PREFIX + "/sports", tags=["Sports Endpoints"])
-app.include_router(score_route.router, prefix=settings.API_PREFIX + "/scores", tags=["Score Endpoints"])
+app.include_router(points_route.router, prefix=settings.API_PREFIX + "/points", tags=["Points Endpoints"])
 
 
+def create_admin():
+    db: Session = SessionLocal()
+
+    try:
+        admin_email = "ajay@mail.com"
+        admin = db.query(User).filter(User.email == admin_email).first()
+
+        if not admin:
+            new_admin = User(
+                name="Ajay",
+                email=admin_email,
+                hashed_password=Hash.bcrypt("ajay"),
+                role="admin"
+            )
+            db.add(new_admin)
+            db.commit()
+            print("✅ Admin user created: ajay@mail.com / Password: ajay")
+        else:
+            print("⚠️ Admin user already exists.")
+    finally:
+        db.close()
+
+create_admin()
 
 
 @app.middleware("http")
