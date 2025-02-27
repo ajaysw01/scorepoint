@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ddc626df-89f4-4282-950e-cb090626be4e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/auth/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth/authentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/routes/sport_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/routes/sport_route.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/routes/team_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/routes/team_route.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/services/score_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/score_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/services/sport_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/sport_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/services/team_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/team_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/services/user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/user_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

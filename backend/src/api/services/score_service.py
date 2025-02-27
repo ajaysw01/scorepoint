@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from src.api.models.models import  Sport
-from src.api.models.response_models import PlayerScoreResponse, TeamLeaderboardResponse
+from src.api.models.response_models import PlayerScoreResponse
 
 
 def submit_player_score(player_id: int, sport_id: int, points: int, db: Session):
@@ -46,7 +46,6 @@ def submit_player_score(player_id: int, sport_id: int, points: int, db: Session)
     }
 
 
-# ✅ Get Player's Total Score
 def get_total_player_score(player_id: int, sport_id: int, db: Session) -> PlayerScoreResponse:
     total_points = db.query(func.sum(PlayerScore.points)).filter(
         PlayerScore.player_id == player_id,
@@ -56,11 +55,10 @@ def get_total_player_score(player_id: int, sport_id: int, db: Session) -> Player
     return PlayerScoreResponse(
         player_id=player_id,
         sport_id=sport_id,
-        points=total_points,  # Include points to match response model
+        points=total_points,
         total_player_score=total_points
     )
 
-# ✅ Get Team's Total Score
 def get_total_team_score(team_id: int, sport_id: int, db: Session):
     total_points = db.query(func.sum(PlayerScore.points)).join(Player).filter(
         Player.team_id == team_id,
