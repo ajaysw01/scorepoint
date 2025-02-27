@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from src.api.database.db_conn import Base
 
 
-# ✅ User Model
 class User(Base):
     __tablename__ = "users"
 
@@ -16,7 +15,6 @@ class User(Base):
     teams = relationship("Team", back_populates="user")
 
 
-# ✅ Team Model
 class Team(Base):
     __tablename__ = "teams"
 
@@ -30,19 +28,17 @@ class Team(Base):
     scores = relationship("TeamPoints", back_populates="team", cascade="all, delete-orphan")
 
 
-# ✅ Sport Model
 class Sport(Base):
     __tablename__ = "sports"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False, unique=True)
-    category = Column(String(50), nullable=True)  # "Singles", "Doubles", or NULL for Cricket, Darts
+    category = Column(String(50), nullable=True)
 
     players = relationship("PlayerPoints", back_populates="sport")
     scores = relationship("TeamPoints", back_populates="sport", cascade="all, delete-orphan")
 
 
-# ✅ Player Model
 class Player(Base):
     __tablename__ = "players"
 
@@ -54,7 +50,6 @@ class Player(Base):
     scores = relationship("PlayerPoints", back_populates="player")
 
 
-# ✅ Player Points Model
 class PlayerPoints(Base):
     __tablename__ = "player_points"
 
@@ -68,15 +63,14 @@ class PlayerPoints(Base):
     sport = relationship("Sport", back_populates="players")
 
 
-# ✅ Team Points Model (Updated from TeamBonus)
 class TeamPoints(Base):
     __tablename__ = "team_points"
 
     id = Column(Integer, primary_key=True, index=True)
     team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     sport_id = Column(Integer, ForeignKey("sports.id"), nullable=False)
-    team_points = Column(Integer, nullable=False, default=0)  # Sum of player scores
-    bonus_points = Column(Integer, nullable=False, default=0)  # Additional bonus points
+    team_points = Column(Integer, nullable=False, default=0)
+    bonus_points = Column(Integer, nullable=False, default=0)
     awarded_at = Column(DateTime(timezone=True), server_default=func.now())
 
     team = relationship("Team", back_populates="scores")

@@ -2,7 +2,6 @@ from typing import List, Optional, Dict
 from pydantic import BaseModel, EmailStr
 
 
-# ✅ Authentication Responses
 class UserResponse(BaseModel):
     name: str
     email: EmailStr
@@ -17,7 +16,6 @@ class TokenResponse(BaseModel):
     token_type: str
 
 
-# ✅ Player & Team Responses
 class PlayerResponse(BaseModel):
     id: int
     name: str
@@ -30,35 +28,32 @@ class PlayerResponse(BaseModel):
 class TeamResponse(BaseModel):
     id: int
     name: str
-    total_points: int  # ✅ NEW: Total bonus points for the team
-    players: List[PlayerResponse] = []  # Include players in response
+    total_points: int
+    players: List[PlayerResponse] = []
 
     class Config:
         from_attributes = True
 
 
-# ✅ Sport Responses
 class SportResponse(BaseModel):
     id: int
     name: str
-    category: Optional[str] = None  # "Singles", "Doubles", or None
+    category: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 
-# ✅ Player Points Response
 class PlayerPointsResponse(BaseModel):
     player_id: int
     sport_id: int
-    points: int  # Points for this submission
-    total_player_points: int  # Accumulated points for this sport
+    points: int
+    total_player_points: int
 
     class Config:
         from_attributes = True
 
 
-# ✅ Leaderboard Responses
 class LeaderboardEntry(BaseModel):
     player_id: int
     player_name: str
@@ -70,14 +65,14 @@ class LeaderboardEntry(BaseModel):
 
 class TeamLeaderboardResponse(BaseModel):
     team_name: str
-    sports_scores: Dict[str, int]  # Dynamic sports with scores
+    sports_scores: Dict[str, int]
     bonus_points: int
     total_points: int
 
     class Config:
         from_attributes = True
 
-# ✅ Team Bonus Response
+
 class TeamBonusResponse(BaseModel):
     id: int
     team_id: int

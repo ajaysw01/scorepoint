@@ -2,7 +2,6 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr
 
 
-# ✅ User Models
 class UserRegister(BaseModel):
     name: str
     email: EmailStr
@@ -14,7 +13,6 @@ class UserLogin(BaseModel):
     password: str
 
 
-# ✅ Player Models
 class PlayerCreate(BaseModel):
     name: str
 
@@ -24,21 +22,19 @@ class PlayerUpdate(BaseModel):
     name: str
 
 
-# ✅ Team Models
 class TeamCreate(BaseModel):
     name: str
-    players: List[PlayerCreate]  # List of players to be added to the team
+    players: List[PlayerCreate]
 
 
 class TeamUpdate(BaseModel):
-    name: Optional[str] = None  # Allow updating only the name if needed
-    players: Optional[List[PlayerUpdate]] = None  # Allow updating players
+    name: Optional[str] = None
+    players: Optional[List[PlayerUpdate]] = None
 
 
-# ✅ Sport Models
 class SportCreate(BaseModel):
     name: str
-    category: Optional[str] = None  # "Singles", "Doubles", or None for Cricket/Darts
+    category: Optional[str] = None
 
 
 class SportUpdate(BaseModel):
@@ -46,15 +42,12 @@ class SportUpdate(BaseModel):
     category: Optional[str] = None
 
 
-# ✅ Player Points Model
 class PlayerPointsCreate(BaseModel):
     player_id: int
     sport_id: int
     points: int
 
 
-# ✅ Team Points Model (For Adding Bonus)
 class TeamPointsCreate(BaseModel):
     sport_id: int
     bonus_points: int
-

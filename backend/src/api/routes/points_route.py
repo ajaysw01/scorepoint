@@ -13,27 +13,23 @@ from src.api.services.points_service import (
 
 router = APIRouter()
 
-
 def require_admin(user: Optional[User] = Depends(get_current_user)):
-    """Dependency to check if the user is an admin."""
     if not user or user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     return user
-
 
 @router.post("/submit/{player_id}/{sport_id}", response_model=PlayerPointsResponse)
 def submit_points(
     player_id: int,
     sport_id: int,
-    points: int = Query(..., description="Points earned by the player"),  # ✅ Required Query Parameter
+    points: int = Query(..., description="Points earned by the player"),
     db: Session = Depends(get_db),
-    user: User = Depends(require_admin)  # ✅ Only admins can submit points
+    user: User = Depends(require_admin)
 ):
     if points <= 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Points must be greater than 0")
 
     return submit_player_points(player_id, sport_id, points, db)
-
 
 @router.get("/player/{player_id}/{sport_id}", response_model=PlayerPointsResponse)
 def get_player_points(
@@ -41,8 +37,7 @@ def get_player_points(
     sport_id: int,
     db: Session = Depends(get_db)
 ):
-    return get_total_player_points(player_id, sport_id, db)  # ✅ No need for extra fallback
-
+    return get_total_player_points(player_id, sport_id, db)
 
 @router.get("/team/{team_id}/{sport_id}", response_model=dict)
 def get_team_points(
@@ -51,8 +46,7 @@ def get_team_points(
     db: Session = Depends(get_db)
 ):
     points = get_total_team_points(team_id, sport_id, db)
-    return points if points else {"team_id": team_id, "sport_id": sport_id, "total_team_points": 0}  # ✅ Consistent response format
-
+    return points if points else {"team_id": team_id, "sport_id": sport_id, "total_team_points": 0}
 
 @router.get("/leaderboard", response_model=List[TeamLeaderboardResponse])
 def leaderboard(

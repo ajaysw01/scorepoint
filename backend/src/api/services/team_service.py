@@ -1,7 +1,6 @@
 import logging
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-
 from src.api.models.models import Team, User, Player, Sport, TeamPoints
 from src.api.models.request_models import TeamCreate, TeamUpdate
 from src.api.models.response_models import TeamResponse, PlayerResponse
@@ -9,7 +8,6 @@ from src.api.models.response_models import TeamResponse, PlayerResponse
 logger = logging.getLogger(__name__)
 
 def create_team(db: Session, team_data: TeamCreate, user_id: int):
-    # ✅ Check for duplicate team name
     existing_team = db.query(Team).filter(Team.name == team_data.name).first()
     if existing_team:
         raise HTTPException(status_code=400, detail="Team name already exists")
@@ -21,7 +19,7 @@ def create_team(db: Session, team_data: TeamCreate, user_id: int):
 
     players = []
     for player_data in team_data.players:
-        player = Player(name=player_data.name, team_id=team.id)  # ✅ Assign team_id
+        player = Player(name=player_data.name, team_id=team.id)
         db.add(player)
         db.commit()
         db.refresh(player)
@@ -31,10 +29,8 @@ def create_team(db: Session, team_data: TeamCreate, user_id: int):
         "id": team.id,
         "name": team.name,
         "total_points": 0,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in players]  # ✅ Include `team_id`
+        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in players]
     }
-
-
 
 def get_teams(db: Session):
     teams = db.query(Team).all()
@@ -43,11 +39,10 @@ def get_teams(db: Session):
             "id": team.id,
             "name": team.name,
             "total_points": sum(score.team_points + score.bonus_points for score in team.scores),
-            "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players],  # ✅ Return objects
+            "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
         }
         for team in teams
     ]
-
 
 def get_team_by_id(db: Session, team_id: int):
     team = db.query(Team).filter(Team.id == team_id).first()
@@ -60,9 +55,8 @@ def get_team_by_id(db: Session, team_id: int):
         "id": team.id,
         "name": team.name,
         "total_points": total_points,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players],  # ✅ Return objects
+        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
     }
-
 
 def update_team(db: Session, team_id: int, team_data: TeamUpdate, user: User):
     team = db.query(Team).filter(Team.id == team_id).first()
@@ -92,7 +86,7 @@ def update_team(db: Session, team_id: int, team_data: TeamUpdate, user: User):
         "id": team.id,
         "name": team.name,
         "total_points": total_points,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players],  # ✅ Return objects
+        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
     }
 
 def delete_team(db: Session, team_id: int, user: User):
@@ -121,7 +115,7 @@ def add_team_bonus(db: Session, team_id: int, sport_id: int, bonus: int):
 
     score = db.query(TeamPoints).filter(TeamPoints.team_id == team_id, TeamPoints.sport_id == sport_id).first()
     if score:
-        score.bonus_points += bonus  # ✅ Only adding bonus points
+        score.bonus_points += bonus
     else:
         score = TeamPoints(team_id=team_id, sport_id=sport_id, team_points=0, bonus_points=bonus)
         db.add(score)
@@ -129,8 +123,8 @@ def add_team_bonus(db: Session, team_id: int, sport_id: int, bonus: int):
     db.commit()
     db.refresh(score)
 
-    total_score = sum(s.team_points + s.bonus_points for s in team.scores)  # ✅ Total across all sports
-    sport_specific_score = score.team_points + score.bonus_points  # ✅ Total for this sport
+    total_score = sum(s.team_points + s.bonus_points for s in team.scores)
+    sport_specific_score = score.team_points + score.bonus_points
 
     return {
         "message": f"Bonus updated: {bonus} points for team '{team.name}' in '{sport.name}'.",
