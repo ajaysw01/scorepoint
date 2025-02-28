@@ -34,12 +34,10 @@ class TeamUpdate(BaseModel):
 
 class SportCreate(BaseModel):
     name: str
-    category: Optional[str] = None
 
 
 class SportUpdate(BaseModel):
     name: str
-    category: Optional[str] = None
 
 
 class PlayerPointsCreate(BaseModel):

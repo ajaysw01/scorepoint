@@ -33,7 +33,6 @@ class Sport(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False, unique=True)
-    category = Column(String(50), nullable=True)
 
     players = relationship("PlayerPoints", back_populates="sport")
     scores = relationship("TeamPoints", back_populates="sport", cascade="all, delete-orphan")

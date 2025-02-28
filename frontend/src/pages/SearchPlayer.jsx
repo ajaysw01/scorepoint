@@ -37,7 +37,6 @@ const SearchPlayer = () => {
           <CardContent>
             <Typography variant="h6">{playerData.name}</Typography>
             <Typography>Sport: {playerData.sport_name}</Typography>
-            <Typography>Category: {playerData.sport_category}</Typography>
             <Typography>Player Points: {playerData.player_points}</Typography>
             <Typography>Team Points: {playerData.team_points}</Typography>
           </CardContent>

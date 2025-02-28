@@ -4,7 +4,7 @@ from src.api.models.models import Sport, TeamPoints
 from src.api.models.request_models import SportCreate, SportUpdate
 
 def create_sport(sport_data: SportCreate, db: Session):
-    new_sport = Sport(name=sport_data.name, category=sport_data.category)
+    new_sport = Sport(name=sport_data.name)
     db.add(new_sport)
     db.commit()
     db.refresh(new_sport)
@@ -25,7 +25,6 @@ def update_sport(sport_id: int, sport_data: SportUpdate, db: Session):
         raise HTTPException(status_code=404, detail="Sport not found")
 
     sport.name = sport_data.name
-    sport.category = sport_data.category
 
     db.commit()
     db.refresh(sport)

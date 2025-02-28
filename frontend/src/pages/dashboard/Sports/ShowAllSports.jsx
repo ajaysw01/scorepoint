@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSports } from "../../../features/sportSlice";
 import {
   Container,
   Typography,
@@ -9,28 +11,31 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 
-const dummySports = [
-  { id: 1, name: "Badminton", category: "Singles" },
-  { id: 2, name: "Carrom", category: "Doubles" },
-];
-
 const ShowAllSports = () => {
-  const [sports, setSports] = useState(dummySports);
+  const dispatch = useDispatch();
+  const { sports, loading, error } = useSelector((state) => state.sports);
+
+  useEffect(() => {
+    dispatch(fetchSports());
+  }, [dispatch]);
 
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
         All Sports
       </Typography>
+      {loading && <CircularProgress />}
+      {error && <Alert severity="error">{error}</Alert>}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Category</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -38,7 +43,6 @@ const ShowAllSports = () => {
               <TableRow key={sport.id}>
                 <TableCell>{sport.id}</TableCell>
                 <TableCell>{sport.name}</TableCell>
-                <TableCell>{sport.category}</TableCell>
               </TableRow>
             ))}
           </TableBody>

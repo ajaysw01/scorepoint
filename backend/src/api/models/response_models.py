@@ -38,7 +38,6 @@ class TeamResponse(BaseModel):
 class SportResponse(BaseModel):
     id: int
     name: str
-    category: Optional[str] = None
 
     class Config:
         from_attributes = True
