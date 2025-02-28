@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Header = () => {
   return (
@@ -34,8 +35,8 @@ const Header = () => {
           CreditSafe
         </Typography>
 
-        {/* Navigation Links */}
-        <Box sx={{ display: "flex", gap: 3 }}>
+        {/* Navigation Links & Search Icon */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
           <Typography
             component={Link}
             to="/scores"
@@ -64,6 +65,11 @@ const Header = () => {
           >
             Leaderboard
           </Typography>
+
+          {/* Search Icon (Links to Search Player Page) */}
+          <IconButton component={Link} to="/dashboard/players/search" sx={{ color: "#fff" }}>
+            <SearchIcon />
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>

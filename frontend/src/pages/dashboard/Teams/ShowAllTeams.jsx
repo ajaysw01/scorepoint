@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeams } from "../../../features/teamSlice";
 import {
-  Container,
-  Typography,
   Table,
   TableBody,
   TableCell,
@@ -9,49 +9,39 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
+  Typography,
 } from "@mui/material";
 
-const dummyTeams = [
-  { id: 1, name: "Team A", players: 5 },
-  { id: 2, name: "Team B", players: 7 },
-];
-
 const ShowAllTeams = () => {
-  const [teams, setTeams] = useState(dummyTeams);
+  const dispatch = useDispatch();
+  const { teams, loading, error } = useSelector((state) => state.team);
+
+  useEffect(() => {
+    dispatch(fetchTeams());
+  }, [dispatch]);
+
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        All Teams
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Players</TableCell>
-              <TableCell>Actions</TableCell>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Name</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {teams.map((team) => (
+            <TableRow key={team.id}>
+              <TableCell>{team.id}</TableCell>
+              <TableCell>{team.name}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {teams.map((team) => (
-              <TableRow key={team.id}>
-                <TableCell>{team.id}</TableCell>
-                <TableCell>{team.name}</TableCell>
-                <TableCell>{team.players}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="error" size="small">
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

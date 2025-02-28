@@ -20,7 +20,6 @@ router = APIRouter(tags=["Authentication"])
 logger = logging.getLogger(__name__)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES  # Move to a config file if needed
-
 @router.post("/login")
 def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db_conn.get_db)):
     try:
@@ -33,15 +32,19 @@ def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(
 
         # Generate JWT Token
         access_token = jwt_token.create_access_token(
-            data={"sub": user.email, "role": user.role},
+            data={"sub": user.email, "role": user.role},  # ✅ Include role in token
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         )
 
         return JSONResponse(
             status_code=200,
-            content={"access_token": access_token, "message": "Login Successful!"}
+            content={
+                "access_token": access_token,
+                "role": user.role,  # ✅ Return role in response
+                "message": "Login Successful!"
+            }
         )
 
     except Exception:
-        logger.exception("An unexpected error occurred during login.")  # Avoid exposing user details
+        logger.exception("An unexpected error occurred during login.")
         return JSONResponse(status_code=500, content={"detail": "Internal Server Error."})

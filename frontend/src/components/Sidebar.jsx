@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Drawer,
@@ -26,6 +27,9 @@ const Sidebar = () => {
     scores: false,
   });
 
+  const { user } = useSelector((state) => state.auth); // 🔹 Get user from Redux
+  const isAdmin = user?.role === "admin"; // 🔹 Check if user is an admin
+
   const handleToggle = (menu) => {
     setOpenMenu((prev) => ({ ...prev, [menu]: !prev[menu] }));
   };
@@ -39,7 +43,7 @@ const Sidebar = () => {
         "& .MuiDrawer-paper": {
           width: 250,
           boxSizing: "border-box",
-          background: "#121212", // Dark Sidebar
+          background: "#121212",
           color: "white",
         },
       }}
@@ -56,20 +60,24 @@ const Sidebar = () => {
           </ListItem>
           <Collapse in={openMenu.teams} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/dashboard/teams/create"
-                sx={{ pl: 4 }}
-              >
-                <ListItemText primary="Create Team" />
-              </ListItemButton>
-              <ListItemButton
-                component={Link}
-                to="/dashboard/teams/update"
-                sx={{ pl: 4 }}
-              >
-                <ListItemText primary="Update Teams" />
-              </ListItemButton>
+              {isAdmin && (
+                <>
+                  <ListItemButton
+                    component={Link}
+                    to="/dashboard/teams/create"
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemText primary="Create Team" />
+                  </ListItemButton>
+                  <ListItemButton
+                    component={Link}
+                    to="/dashboard/teams/update"
+                    sx={{ pl: 4 }}
+                  >
+                    <ListItemText primary="Update Teams" />
+                  </ListItemButton>
+                </>
+              )}
               <ListItemButton
                 component={Link}
                 to="/dashboard/teams/show"
@@ -90,19 +98,41 @@ const Sidebar = () => {
           </ListItem>
           <Collapse in={openMenu.sports} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/dashboard/sports/create"
-                sx={{ pl: 4 }}
-              >
-                <ListItemText primary="Create Sport" />
-              </ListItemButton>
+              {isAdmin && (
+                <ListItemButton
+                  component={Link}
+                  to="/dashboard/sports/create"
+                  sx={{ pl: 4 }}
+                >
+                  <ListItemText primary="Create Sport" />
+                </ListItemButton>
+              )}
               <ListItemButton
                 component={Link}
                 to="/dashboard/sports/show"
                 sx={{ pl: 4 }}
               >
                 <ListItemText primary="Show All Sports" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+
+          {/* PLAYERS MENU */}
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => handleToggle("players")}>
+              <Person sx={{ marginRight: 1 }} />
+              <ListItemText primary="Players" />
+              {openMenu.players ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={openMenu.players} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton
+                component={Link}
+                to="/dashboard/players/search"
+                sx={{ pl: 4 }}
+              >
+                <ListItemText primary="Search Player" />
               </ListItemButton>
             </List>
           </Collapse>
@@ -117,13 +147,15 @@ const Sidebar = () => {
           </ListItem>
           <Collapse in={openMenu.scores} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/dashboard/scores/submit"
-                sx={{ pl: 4 }}
-              >
-                <ListItemText primary="Submit Score" />
-              </ListItemButton>
+              {isAdmin && (
+                <ListItemButton
+                  component={Link}
+                  to="/dashboard/scores/submit"
+                  sx={{ pl: 4 }}
+                >
+                  <ListItemText primary="Submit Score" />
+                </ListItemButton>
+              )}
               <ListItemButton
                 component={Link}
                 to="/dashboard/scores/show"
