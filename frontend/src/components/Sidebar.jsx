@@ -69,13 +69,13 @@ const Sidebar = () => {
                   >
                     <ListItemText primary="Create Team" />
                   </ListItemButton>
-                  <ListItemButton
+                  {/* <ListItemButton
                     component={Link}
                     to="/dashboard/teams/update"
                     sx={{ pl: 4 }}
                   >
                     <ListItemText primary="Update Teams" />
-                  </ListItemButton>
+                  </ListItemButton> */}
                 </>
               )}
               <ListItemButton

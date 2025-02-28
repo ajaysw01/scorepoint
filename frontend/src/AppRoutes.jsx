@@ -8,7 +8,7 @@ import SearchPlayer from "./pages/SearchPlayer";
 
 // Teams
 import CreateTeam from "./pages/dashboard/Teams/CreateTeam";
-import UpdateTeam from "./pages/dashboard/Teams/UpdateTeam";
+// import UpdateTeam from "./pages/dashboard/Teams/UpdateTeam";
 import ShowAllTeams from "./pages/dashboard/Teams/ShowAllTeams";
 
 // Sports
@@ -51,10 +51,10 @@ const AppRoutes = () => {
           path="teams/create"
           element={<AdminRoute element={<CreateTeam />} />}
         />
-        <Route
+        {/* <Route
           path="teams/update"
           element={<AdminRoute element={<UpdateTeam />} />}
-        />
+        /> */}
         <Route path="teams/show" element={<ShowAllTeams />} />
 
         {/* Sports */}

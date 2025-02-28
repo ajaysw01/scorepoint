@@ -30,6 +30,7 @@ const ShowAllTeams = () => {
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>Name</TableCell>
+            <TableCell>Players</TableCell> {/* ✅ Added Players Column */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,6 +38,17 @@ const ShowAllTeams = () => {
             <TableRow key={team.id}>
               <TableCell>{team.id}</TableCell>
               <TableCell>{team.name}</TableCell>
+              <TableCell>
+                {team.players && team.players.length > 0 ? (
+                  <ul style={{ margin: 0, paddingLeft: "15px" }}>
+                    {team.players.map((player) => (
+                      <li key={player.id}>{player.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  "No Players"
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
