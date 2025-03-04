@@ -1,6 +1,7 @@
 from typing import List, Optional, Dict
 from pydantic import BaseModel, EmailStr
-
+from datetime import datetime
+from src.api.models.models import SportCategoryEnum
 
 class UserResponse(BaseModel):
     name: str
@@ -10,11 +11,9 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
-
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
-
 
 class PlayerResponse(BaseModel):
     id: int
@@ -23,7 +22,6 @@ class PlayerResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
 
 class TeamResponse(BaseModel):
     id: int
@@ -34,25 +32,23 @@ class TeamResponse(BaseModel):
     class Config:
         from_attributes = True
 
-
 class SportResponse(BaseModel):
     id: int
     name: str
-    category: Optional[str] = None
 
-    class Config:
+    class Config :
         from_attributes = True
-
 
 class PlayerPointsResponse(BaseModel):
     player_id: int
     sport_id: int
+    category: Optional[SportCategoryEnum] = None  # Use SportCategoryEnum instead of category_id
+    competition_level: str  # Tracks the level of competition
     points: int
-    total_player_points: int
+    total_player_points: int  # Accumulated points for the player in this sport
 
     class Config:
         from_attributes = True
-
 
 class LeaderboardEntry(BaseModel):
     player_id: int
@@ -62,23 +58,21 @@ class LeaderboardEntry(BaseModel):
     class Config:
         from_attributes = True
 
-
 class TeamLeaderboardResponse(BaseModel):
     team_name: str
-    sports_scores: Dict[str, int]
+    sports_scores: Dict[str, int]  # Example: {"Badminton": 50, "Cricket": 30}
     bonus_points: int
     total_points: int
 
     class Config:
         from_attributes = True
 
-
 class TeamBonusResponse(BaseModel):
     id: int
     team_id: int
     sport_id: int
     bonus_points: int
-    awarded_at: str
+    awarded_at: datetime  # Proper timestamp for when the bonus was awarded
 
     class Config:
         from_attributes = True

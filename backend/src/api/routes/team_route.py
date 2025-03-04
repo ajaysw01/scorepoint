@@ -1,11 +1,10 @@
 from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.api.auth.oauth2 import get_current_user
 from src.api.database.db_conn import get_db
-from src.api.models.models import User
+from src.api.auth.oauth2 import get_current_user
+from src.api.utils.dependencies import require_admin
 from src.api.models.request_models import TeamCreate, TeamUpdate
 from src.api.models.response_models import TeamResponse
 from src.api.services.team_service import (
@@ -14,18 +13,13 @@ from src.api.services.team_service import (
 
 router = APIRouter()
 
-def require_admin(user: User = Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
-    return user
-
 @router.post("/", response_model=TeamResponse)
-def create_team_route(
+def create_new_team(
     team_data: TeamCreate,
     db: Session = Depends(get_db),
-    user: User = Depends(require_admin)
+    user=Depends(require_admin)  # ✅ Requires admin
 ):
-    return create_team(db, team_data, user.id)
+    return create_team(db, team_data, user.id)  # ✅ Store user_id instead of admin_id
 
 @router.get("/", response_model=List[TeamResponse])
 def get_teams_route(db: Session = Depends(get_db)):
@@ -40,7 +34,7 @@ def update_team_route(
     team_id: int,
     team_data: TeamUpdate,
     db: Session = Depends(get_db),
-    user: User = Depends(require_admin)
+    user=Depends(require_admin)  # ✅ Requires admin
 ):
     return update_team(db, team_id, team_data, user)
 
@@ -48,7 +42,7 @@ def update_team_route(
 def delete_team_route(
     team_id: int,
     db: Session = Depends(get_db),
-    user: User = Depends(require_admin)
+    user=Depends(require_admin)  # ✅ Requires admin
 ):
     delete_team(db, team_id, user)
 
@@ -58,6 +52,6 @@ def add_team_bonus_route(
     sport_id: int,
     bonus: int,
     db: Session = Depends(get_db),
-    user: User = Depends(require_admin)
+    user=Depends(require_admin)  # ✅ Requires admin
 ):
     return add_team_bonus(db, team_id, sport_id, bonus)

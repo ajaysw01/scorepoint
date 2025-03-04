@@ -7,12 +7,12 @@ from src.api.models.response_models import TeamResponse, PlayerResponse
 
 logger = logging.getLogger(__name__)
 
-def create_team(db: Session, team_data: TeamCreate, user_id: int):
+def create_team(db: Session, team_data: TeamCreate, id: int):
     existing_team = db.query(Team).filter(Team.name == team_data.name).first()
     if existing_team:
         raise HTTPException(status_code=400, detail="Team name already exists")
 
-    team = Team(name=team_data.name, user_id=user_id)
+    team = Team(name=team_data.name, user_id=id)  # Store admin user_id
     db.add(team)
     db.commit()
     db.refresh(team)
@@ -25,22 +25,22 @@ def create_team(db: Session, team_data: TeamCreate, user_id: int):
         db.refresh(player)
         players.append(player)
 
-    return {
-        "id": team.id,
-        "name": team.name,
-        "total_points": 0,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in players]
-    }
+    return TeamResponse(
+        id=team.id,
+        name=team.name,
+        total_points=0,
+        players=[PlayerResponse(id=p.id, name=p.name, team_id=p.team_id) for p in players]
+    )
 
 def get_teams(db: Session):
     teams = db.query(Team).all()
     return [
-        {
-            "id": team.id,
-            "name": team.name,
-            "total_points": sum(score.team_points + score.bonus_points for score in team.scores),
-            "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
-        }
+        TeamResponse(
+            id=team.id,
+            name=team.name,
+            total_points=sum(score.team_points + score.bonus_points for score in team.scores),
+            players=[PlayerResponse(id=p.id, name=p.name, team_id=p.team_id) for p in team.players]
+        )
         for team in teams
     ]
 
@@ -51,20 +51,17 @@ def get_team_by_id(db: Session, team_id: int):
 
     total_points = sum(score.team_points + score.bonus_points for score in team.scores)
 
-    return {
-        "id": team.id,
-        "name": team.name,
-        "total_points": total_points,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
-    }
+    return TeamResponse(
+        id=team.id,
+        name=team.name,
+        total_points=total_points,
+        players=[PlayerResponse(id=p.id, name=p.name, team_id=p.team_id) for p in team.players]
+    )
 
 def update_team(db: Session, team_id: int, team_data: TeamUpdate, user: User):
     team = db.query(Team).filter(Team.id == team_id).first()
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-
-    if team.user_id != user.id:
-        raise HTTPException(status_code=403, detail="You are not authorized to update this team")
 
     team.name = team_data.name
     db.commit()
@@ -82,20 +79,17 @@ def update_team(db: Session, team_id: int, team_data: TeamUpdate, user: User):
 
     total_points = sum(score.team_points + score.bonus_points for score in team.scores)
 
-    return {
-        "id": team.id,
-        "name": team.name,
-        "total_points": total_points,
-        "players": [{"id": p.id, "name": p.name, "team_id": p.team_id} for p in team.players]
-    }
+    return TeamResponse(
+        id=team.id,
+        name=team.name,
+        total_points=total_points,
+        players=[PlayerResponse(id=p.id, name=p.name, team_id=p.team_id) for p in team.players]
+    )
 
 def delete_team(db: Session, team_id: int, user: User):
     team = db.query(Team).filter(Team.id == team_id).first()
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-
-    if team.user_id != user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to delete this team")
 
     db.query(Player).filter(Player.team_id == team_id).delete(synchronize_session=False)
     db.query(TeamPoints).filter(TeamPoints.team_id == team_id).delete(synchronize_session=False)

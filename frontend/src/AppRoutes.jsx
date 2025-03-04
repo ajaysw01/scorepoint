@@ -44,7 +44,8 @@ const AppRoutes = () => {
       {/* Dashboard Layout */}
       <Route
         path="/dashboard/*"
-        element={<ProtectedRoute element={<DashboardLayout />} />}
+        element={<DashboardLayout />}
+        // element={<ProtectedRoute element={<DashboardLayout />} />}
       >
         {/* Teams */}
         <Route
