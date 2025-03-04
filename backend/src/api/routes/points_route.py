@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI endpoints for managing points of players and teams.
+"""
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.api.database.db_conn import get_db
@@ -10,14 +16,13 @@ from src.api.services.points_service import (
     get_team_points_by_category,
     get_team_points_by_sport,
     get_total_team_points,
-    get_leaderboard
+    get_leaderboard, get_player_rankings_by_category
 )
 from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate
-from src.api.utils.dependencies import require_admin  # Enforce admin-only access
+from src.api.utils.dependencies import require_admin
 
 router = APIRouter()
 
-# Only Admins can submit points
 @router.post("/player/submit", dependencies=[Depends(require_admin)])
 def submit_points(payload: PlayerPointsCreate, db: Session = Depends(get_db)):
     return submit_player_points(db, payload)
@@ -56,3 +61,8 @@ def total_team_points(team_id: int, db: Session = Depends(get_db)):
 @router.get("/leaderboard")
 def leaderboard(db: Session = Depends(get_db)):
     return get_leaderboard(db)
+
+
+@router.get("/player/rankings")
+def player_rankings_by_category(db: Session = Depends(get_db)):
+    return get_player_rankings_by_category(db)

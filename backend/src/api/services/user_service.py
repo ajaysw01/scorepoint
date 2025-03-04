@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI services for managing user.
+"""
+
 import logging
 from sqlalchemy.orm import Session
 from src.api.utils import hashing

@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI services for managing teams.
+"""
+
 import logging
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
@@ -98,30 +104,3 @@ def delete_team(db: Session, team_id: int, user: User):
 
     return {"message": "Team deleted successfully"}
 
-def add_team_bonus(db: Session, team_id: int, sport_id: int, bonus: int):
-    team = db.query(Team).filter(Team.id == team_id).first()
-    if not team:
-        raise HTTPException(status_code=404, detail="Team not found")
-
-    sport = db.query(Sport).filter(Sport.id == sport_id).first()
-    if not sport:
-        raise HTTPException(status_code=404, detail="Sport not found")
-
-    score = db.query(TeamPoints).filter(TeamPoints.team_id == team_id, TeamPoints.sport_id == sport_id).first()
-    if score:
-        score.bonus_points += bonus
-    else:
-        score = TeamPoints(team_id=team_id, sport_id=sport_id, team_points=0, bonus_points=bonus)
-        db.add(score)
-
-    db.commit()
-    db.refresh(score)
-
-    total_score = sum(s.team_points + s.bonus_points for s in team.scores)
-    sport_specific_score = score.team_points + score.bonus_points
-
-    return {
-        "message": f"Bonus updated: {bonus} points for team '{team.name}' in '{sport.name}'.",
-        "total_score": total_score,
-        "sport_specific_score": sport_specific_score
-    }

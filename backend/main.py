@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This is the main file of the application.
+"""
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -5,14 +11,13 @@ from sqlalchemy.orm import Session
 from src.api.auth import authentication
 from src.api.customexception.exceptions import AuthException, InvalidCredentialsException, UserExistsException, UserNotFoundException
 from src.api.configurations.config import get_settings
-from src.api.database.db_conn import Base, engine, SessionLocal  # ✅ Import SessionLocal
+from src.api.database.db_conn import Base, engine, SessionLocal
 from src.api.routes import user_route, team_route, sport_route, points_route
 from src.api.customexception import exception_handlers
 from src.api.models.models import User
 from src.api.utils.hashing import Hash
 import time
 
-# ✅ Create tables
 Base.metadata.create_all(bind=engine)
 
 settings = get_settings()
@@ -50,21 +55,18 @@ def create_admin():
     db: Session = SessionLocal()
 
     try:
-        admin_email = "ajay@mail.com"
+        admin_email = "ajaysw45@mail.com"
         admin = db.query(User).filter(User.email == admin_email).first()
 
         if not admin:
             new_admin = User(
                 name="Ajay",
                 email=admin_email,
-                hashed_password=Hash.bcrypt("ajay"),
+                hashed_password=Hash.bcrypt("Ajay@123"),
                 role="admin"
             )
             db.add(new_admin)
             db.commit()
-            print("✅ Admin user created: ajay@mail.com / Password: ajay")
-        else:
-            print("⚠️ Admin user already exists.")
     finally:
         db.close()
 

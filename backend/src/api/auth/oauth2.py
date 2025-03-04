@@ -20,7 +20,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         if user is None:
             raise AuthException("User not found")
 
-        return user  # No need to modify user role manually
+        return user
 
     except AuthException as e:
         raise e

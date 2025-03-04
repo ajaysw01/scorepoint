@@ -5,7 +5,6 @@ from jwt import ExpiredSignatureError, InvalidTokenError
 from src.api.configurations.config import get_settings
 from src.api.customexception.exceptions import AuthException
 
-# Fetch settings
 settings = get_settings()
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM

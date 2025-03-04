@@ -1,10 +1,17 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI services for managing points of players and teams.
+"""
+
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from fastapi import HTTPException
 from src.api.models.models import PlayerPoints, TeamPoints, Player, Team, Sport
+
+
 def submit_player_points(db: Session, payload):
     """Submit points for a player in a specific sport & category."""
-    # Fetch Sport and Player separately
     sport = db.query(Sport).filter(Sport.id == payload.sport_id).first()
     if not sport:
         raise HTTPException(status_code=404, detail="Sport not found")
@@ -13,7 +20,6 @@ def submit_player_points(db: Session, payload):
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
 
-    # Validate category
     if sport.name in {"Badminton", "Carrom", "Table Tennis"} and not payload.category:
         raise HTTPException(status_code=400, detail="This sport requires a category.")
     if sport.name in {"Cricket", "Darts", "Fun Fridays"} and payload.category:
@@ -27,9 +33,34 @@ def submit_player_points(db: Session, payload):
         points=payload.points
     )
     db.add(new_points)
+
+    team_points = db.query(TeamPoints).filter(
+        TeamPoints.team_id == player.team_id,
+        TeamPoints.sport_id == payload.sport_id,
+        TeamPoints.category == payload.category
+    ).first()
+
+    if team_points:
+        team_points.team_points += payload.points
+    else:
+        team_points = TeamPoints(
+            team_id=player.team_id,
+            sport_id=payload.sport_id,
+            category=payload.category,
+            team_points=payload.points,
+            bonus_points=0
+        )
+        db.add(team_points)
+
     db.commit()
     db.refresh(new_points)
-    return {"message": "Player points submitted successfully", "points_id": new_points.id}
+    db.refresh(team_points)
+
+    return {
+        "message": "Player points submitted successfully",
+        "points_id": new_points.id,
+        "team_total_points": team_points.team_points + team_points.bonus_points  # Correct total calculation
+    }
 
 
 def get_player_points_by_category(db: Session, player_id: int):
@@ -80,7 +111,15 @@ def assign_team_bonus_points(db: Session, payload):
         team_points.bonus_points += payload.bonus_points
 
     db.commit()
-    return {"message": "Bonus points assigned successfully"}
+    db.refresh(team_points)
+
+    team_total_points = team_points.team_points + team_points.bonus_points
+
+    return {
+        "message": "Bonus points assigned successfully",
+        "team_total_points": team_total_points
+    }
+
 
 
 def get_team_points_by_category(db: Session, team_id: int):
@@ -95,26 +134,32 @@ def get_team_points_by_category(db: Session, team_id: int):
 
 def get_team_points_by_sport(db: Session, team_id: int):
     """Get team points per sport (ignoring category)."""
-    results = db.query(Sport.name, func.sum(TeamPoints.team_points + TeamPoints.bonus_points)) \
-        .join(Sport, Sport.id == TeamPoints.sport_id) \
+    results = db.query(
+        Sport.name,
+        func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
+    ).join(Sport, Sport.id == TeamPoints.sport_id) \
         .filter(TeamPoints.team_id == team_id) \
         .group_by(Sport.name) \
         .all()
-    return [{"sport": r[0], "points": r[1]} for r in results]
+    return [{"sport": r[0], "points": r[1] or 0} for r in results]
 
 
 def get_total_team_points(db: Session, team_id: int):
     """Get total points for a team across all sports."""
-    total = db.query(func.sum(TeamPoints.team_points + TeamPoints.bonus_points)) \
-        .filter(TeamPoints.team_id == team_id) \
-        .scalar()
+    total = db.query(
+        func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
+    ).filter(TeamPoints.team_id == team_id).scalar()
+
     return {"team_id": team_id, "total_points": total or 0}
 
 
 def get_leaderboard(db: Session):
     """Get leaderboard with teams and their sport-wise points."""
-    results = db.query(Team.name, Sport.name, func.sum(TeamPoints.team_points + TeamPoints.bonus_points)) \
-        .join(Sport, Sport.id == TeamPoints.sport_id) \
+    results = db.query(
+        Team.name,
+        Sport.name,
+        func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
+    ).join(Sport, Sport.id == TeamPoints.sport_id) \
         .join(Team, Team.id == TeamPoints.team_id) \
         .group_by(Team.name, Sport.name) \
         .all()
@@ -123,7 +168,45 @@ def get_leaderboard(db: Session):
     for team_name, sport, points in results:
         if team_name not in leaderboard:
             leaderboard[team_name] = {"total_points": 0}
-        leaderboard[team_name][sport] = points
-        leaderboard[team_name]["total_points"] += points
+        leaderboard[team_name][sport] = points or 0
+        leaderboard[team_name]["total_points"] += points or 0
 
-    return [{"team": team, "total_points": data["total_points"], "sports": {k: v for k, v in data.items() if k != "total_points"}} for team, data in leaderboard.items()]
+    return [
+        {
+            "team": team,
+            "total_points": data["total_points"],
+            "sports": {k: v for k, v in data.items() if k != "total_points"}
+        }
+        for team, data in leaderboard.items()
+    ]
+
+
+def get_player_rankings_by_category(db: Session):
+    """Get player rankings grouped by sport category, counting competition levels."""
+    results = (
+        db.query(
+            PlayerPoints.category,
+            Player.name,
+            Team.name.label("team"),
+            func.count(PlayerPoints.competition_level).label("matches_played"),
+            func.sum(PlayerPoints.points).label("total_points")
+        )
+        .join(Player, Player.id == PlayerPoints.player_id)
+        .join(Team, Team.id == Player.team_id)
+        .group_by(PlayerPoints.category, Player.name, Team.name)
+        .order_by(PlayerPoints.category, func.sum(PlayerPoints.points).desc())
+        .all()
+    )
+
+    category_rankings = {}
+    for category, player_name, team_name, matches_played, total_points in results:
+        if category not in category_rankings:
+            category_rankings[category] = {"playerData": []}
+        category_rankings[category]["playerData"].append({
+            "name": player_name,
+            "team": team_name,
+            "matches_played": matches_played,
+            "points": total_points
+        })
+
+    return category_rankings

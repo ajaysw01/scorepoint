@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI endpoints for managing teams.
+"""
+
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -8,7 +14,7 @@ from src.api.utils.dependencies import require_admin
 from src.api.models.request_models import TeamCreate, TeamUpdate
 from src.api.models.response_models import TeamResponse
 from src.api.services.team_service import (
-    create_team, get_teams, get_team_by_id, update_team, delete_team, add_team_bonus
+    create_team, get_teams, get_team_by_id, update_team, delete_team
 )
 
 router = APIRouter()
@@ -17,9 +23,9 @@ router = APIRouter()
 def create_new_team(
     team_data: TeamCreate,
     db: Session = Depends(get_db),
-    user=Depends(require_admin)  # ✅ Requires admin
+    user=Depends(require_admin)
 ):
-    return create_team(db, team_data, user.id)  # ✅ Store user_id instead of admin_id
+    return create_team(db, team_data, user.id)
 
 @router.get("/", response_model=List[TeamResponse])
 def get_teams_route(db: Session = Depends(get_db)):
@@ -34,7 +40,7 @@ def update_team_route(
     team_id: int,
     team_data: TeamUpdate,
     db: Session = Depends(get_db),
-    user=Depends(require_admin)  # ✅ Requires admin
+    user=Depends(require_admin)
 ):
     return update_team(db, team_id, team_data, user)
 
@@ -42,16 +48,8 @@ def update_team_route(
 def delete_team_route(
     team_id: int,
     db: Session = Depends(get_db),
-    user=Depends(require_admin)  # ✅ Requires admin
+    user=Depends(require_admin)
 ):
     delete_team(db, team_id, user)
 
-@router.post("/{team_id}/sports/{sport_id}/bonus", response_model=dict)
-def add_team_bonus_route(
-    team_id: int,
-    sport_id: int,
-    bonus: int,
-    db: Session = Depends(get_db),
-    user=Depends(require_admin)  # ✅ Requires admin
-):
-    return add_team_bonus(db, team_id, sport_id, bonus)
+

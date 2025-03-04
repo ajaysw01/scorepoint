@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains FastAPI services for managing sports.
+"""
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from src.api.models.models import Sport, TeamPoints, PlayerPoints
@@ -8,8 +14,6 @@ def create_sport(sport_data: SportCreate, db: Session):
     """Create a new sport"""
 
     sport_name = sport_data.name.strip()
-
-    # Check if the sport already exists (ignoring case)
     existing_sport = db.query(Sport).filter(Sport.name.ilike(sport_name)).first()
 
     if existing_sport:
@@ -41,7 +45,6 @@ def update_sport(sport_id: int, sport_data: SportUpdate, db: Session):
     if not sport:
         raise HTTPException(status_code=404, detail="Sport not found")
 
-    # Update name with validation
     if sport_data.name:
         sport_name = sport_data.name.strip()
         existing_sport = db.query(Sport).filter(Sport.name.ilike(sport_name), Sport.id != sport_id).first()
@@ -60,7 +63,6 @@ def delete_sport(sport_id: int, db: Session):
     if not sport:
         raise HTTPException(status_code=404, detail="Sport not found")
 
-    # Prevent deletion if team or player scores exist
     if db.query(TeamPoints).filter(TeamPoints.sport_id == sport_id).first():
         raise HTTPException(status_code=400, detail="Cannot delete sport with existing team scores")
 
