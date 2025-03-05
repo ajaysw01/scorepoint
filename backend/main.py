@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import uvicorn
+import os
 
 from src.api.auth import authentication
 from src.api.customexception.exceptions import AuthException, InvalidCredentialsException, UserExistsException, UserNotFoundException
@@ -23,7 +24,7 @@ port = int(os.getenv("PORT", 8000))
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=port)
-    
+
 Base.metadata.create_all(bind=engine)
 
 settings = get_settings()
