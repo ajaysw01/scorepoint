@@ -11,10 +11,10 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     DATABASE_URL: str
-    ALLOWED_ORIGINS: str
 
     class Config:
-        env_file = str(Path(__file__).parents[3] / ".env")
+        # env_file = str(Path(__file__).parents[3] / ".env")
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 @lru_cache
