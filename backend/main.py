@@ -7,6 +7,7 @@ Description: This is the main file of the application.
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import uvicorn
 
 from src.api.auth import authentication
 from src.api.customexception.exceptions import AuthException, InvalidCredentialsException, UserExistsException, UserNotFoundException
@@ -17,6 +18,12 @@ from src.api.customexception import exception_handlers
 from src.api.models.models import User
 from src.api.utils.hashing import Hash
 import time
+
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8000))  # Use PORT from Render, default to 8000 for local testing
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 Base.metadata.create_all(bind=engine)
 
