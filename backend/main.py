@@ -25,6 +25,9 @@ from src.api.customexception import exception_handlers
 from src.api.models.models import User
 from src.api.utils.hashing import Hash
 
+# Explicitly get port from environment
+PORT = int(os.getenv("PORT", 8000))
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
@@ -96,7 +99,6 @@ async def add_process_time_header(request: Request, call_next):
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
-# Get port from environment, default to 8000 if not set
+# Ensure the server runs on 0.0.0.0 and the correct port
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT)
