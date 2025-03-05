@@ -1,5 +1,19 @@
-backend/logs/*
-backend/.idea/*
-backend/__pycache__
-backend/.env
-backend/venv/*
+# Ignore environment variables
+.env
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore virtual environment
+venv/
+
+# Ignore logs and database migrations (optional)
+logs/
+migrations/versions
+
