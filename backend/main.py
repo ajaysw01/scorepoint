@@ -19,12 +19,11 @@ from src.api.models.models import User
 from src.api.utils.hashing import Hash
 import time
 
+port = int(os.getenv("PORT", 8000))
 
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 8000))  # Use PORT from Render, default to 8000 for local testing
-    uvicorn.run(app, host="0.0.0.0", port=port)
-
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    
 Base.metadata.create_all(bind=engine)
 
 settings = get_settings()
