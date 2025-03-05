@@ -34,9 +34,11 @@ app = FastAPI(
     debug=settings.DEBUG_MODE
 )
 
-@app.get("/")
+@app.head("/healthz", status_code=200)
+@app.get("/healthz", status_code=200)
 async def health_check():
-    return {"message": "App is running ..."}
+    return {"status": "healthy"}
+
 
 app.add_middleware(
     CORSMiddleware,
