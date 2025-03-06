@@ -18,7 +18,7 @@ def create_team(db: Session, team_data: TeamCreate, id: int):
     if existing_team:
         raise HTTPException(status_code=400, detail="Team name already exists")
 
-    team = Team(name=team_data.name, user_id=id)  # Store admin user_id
+    team = Team(name=team_data.name, user_id=id)
     db.add(team)
     db.commit()
     db.refresh(team)

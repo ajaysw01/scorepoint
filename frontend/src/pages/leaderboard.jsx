@@ -29,7 +29,7 @@ const Leaderboard = () => {
             .map((teamData) => {
               const scores = categories.map(
                 (category) => teamData.sports[category] || 0
-              ); // Fill missing categories with 0
+              );
               return {
                 name: teamData.team,
                 scores,
