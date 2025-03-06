@@ -2,25 +2,7 @@
 
 A **FastAPI**-powered backend for managing **sports, teams, players, and scores** with robust authentication, detailed leaderboards, and enhanced player management.
 
-## 📑 **Table of Contents**
-
-- [📌 Introduction](#-introduction)
-- [🚀 Getting Started](#-getting-started)
-- [📡 API Endpoints](#-api-endpoints)
-  - [🔍 Health Check](#-health-check)
-  - [👤 User Authentication](#-user-authentication)
-  - [👥 Team Management](#-team-management)
-  - [🏅 Sports Management](#-sports-management)
-  - [🎯 Score Management](#-score-management)
-  - [📊 Leaderboards](#-leaderboards)
-- [🔐 Security](#-security)
-- [❌ Error Handling](#-error-handling)
-
----
-
 ## 📌 **Introduction**
-
-ScorePoint API provides a comprehensive set of endpoints for:
 
 - ✅ **User Authentication:** Registration and secure login using JWT.
 - ✅ **Sports Management:** Create, retrieve, update, and delete sports with detailed categories.
@@ -65,303 +47,226 @@ uvicorn main:app --reload
 The API will be available at: `http://127.0.0.1:8000`  
 Swagger Docs: `http://127.0.0.1:8000/docs`  
 Redoc Docs: `http://127.0.0.1:8000/redoc`
+# ScorePoint API Documentation
 
----
+## Overview
+ScorePoint is a comprehensive sports management and scoring application with endpoints for user management, team creation, sports tracking, and point scoring.
 
-## 📡 **API Endpoints**
+## Base URL
+`http://localhost:8000/api`
 
-### 🔍 **Health Check**
+## Authentication
+Most endpoints require Bearer Token authentication. Obtain a token via the login endpoint.
 
-Check if the API is running.
+## Endpoints
 
-**HTTP**  
-`GET /`
+### User Endpoints
 
-**✅ Response:**  
+#### 1. User Registration
+- **URL:** `/users/register`
+- **Method:** `POST`
+- **Request Body:**
 ```json
 {
-  "status": "ok"
+   "name": "string",
+   "email": "string",
+   "password": "string"
+}
+```
+- **Response:**
+```json
+{
+    "name": "string",
+    "email": "string",
+    "message": "string"
 }
 ```
 
-### 👤 **User Authentication**
-
-#### Register a New User
-
-**HTTP**  
-`POST /api/users/register`
-
-**✅ Request Body:**  
+#### 2. User Login
+- **URL:** `/auth/login`
+- **Method:** `POST`
+- **Request Body (Form Data):**
+  - `username`: User email
+  - `password`: User password
+- **Response:**
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "securepassword"
+    "access_token": "string",
+    "message": "string"
 }
 ```
 
-**✅ Response:**  
+### Team Endpoints
+
+#### 1. Create Team
+- **URL:** `/teams`
+- **Method:** `POST`
+- **Requires Authentication**
+- **Request Body:**
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "message": "User registered successfully"
-}
-```
-
-#### User Login (JWT Authentication)
-
-**HTTP**  
-`POST /api/auth/login`
-
-**✅ Request Body (Form Data):**  
-```text
-username=john@example.com&password=securepassword&grant_type=password
-```
-
-**✅ Response:**  
-```json
-{
-  "access_token": "your.jwt.token",
-  "token_type": "bearer"
-}
-```
-
-### 👥 **Team Management**
-
-#### Get All Teams
-
-**HTTP**  
-`GET /api/teams/`
-
-**✅ Response:**  
-200 OK (List of Teams)
-
-#### Get a Team by ID
-
-**HTTP**  
-`GET /api/teams/{team_id}`
-
-**✅ Response:**  
-200 OK (Team Details)
-
-#### Create a New Team
-
-**HTTP**  
-`POST /api/teams/`
-
-**✅ Request Body:**  
-```json
-{
-  "name": "Team A",
+  "name": "Warriors",
   "players": [
-    {"name": "Player 1"},
-    {"name": "Player 2"}
+    { "name": "Player 1" },
+    { "name": "Player 2" }
+  ]
+}
+```
+- **Response:** Team details with created players
+
+#### 2. Get All Teams
+- **URL:** `/teams`
+- **Method:** `GET`
+- **Response:** List of all teams
+
+#### 3. Get Team by ID
+- **URL:** `/teams/{teamId}`
+- **Method:** `GET`
+- **Response:** Specific team details
+
+#### 4. Update Team
+- **URL:** `/teams/{teamId}`
+- **Method:** `PUT`
+- **Requires Authentication**
+- **Request Body:**
+```json
+{
+  "name": "Updated Team Name",
+  "players": [
+    { "id": 1, "name": "Updated Player 1" },
+    { "id": 2, "name": "Updated Player 2" }
   ]
 }
 ```
 
-**✅ Response:**  
-200 OK (Created Team)
+#### 5. Delete Team
+- **URL:** `/teams/{teamId}`
+- **Method:** `DELETE`
+- **Requires Authentication**
 
-🔐 **Security:** Requires authentication.
+### Sports Endpoints
 
-#### Update a Team
-
-**HTTP**  
-`PUT /api/teams/{team_id}`
-
-**✅ Request Body:**  
+#### 1. Create Sport
+- **URL:** `/sports`
+- **Method:** `POST`
+- **Requires Authentication**
+- **Request Body:**
 ```json
 {
-  "name": "Updated Team A",
-  "players": [
-    {"id": 1, "name": "Updated Player 1"}
-  ]
+  "name": "Table Tennis"
 }
 ```
 
-**✅ Response:**  
-200 OK (Updated Team)
+#### 2. Get All Sports
+- **URL:** `/sports`
+- **Method:** `GET`
+- **Requires Authentication**
 
-🔐 **Security:** Requires authentication.
+#### 3. Get Sport by ID
+- **URL:** `/sports/{sportId}`
+- **Method:** `GET`
+- **Requires Authentication**
 
-#### Delete a Team
-
-**HTTP**  
-`DELETE /api/teams/{team_id}`
-
-**✅ Response:**  
-204 No Content
-
-🔐 **Security:** Requires authentication.
-
-#### Add Team Bonus
-
-**HTTP**  
-`POST /api/teams/{team_id}/sports/{sport_id}/bonus?bonus={bonus_points}`
-
-**✅ Response:**  
-200 OK (Bonus Added)
-
-🔐 **Security:** Requires authentication.
-
-### 🏅 **Sports Management**
-
-#### Get All Sports
-
-**HTTP**  
-`GET /api/sports/`
-
-**✅ Response:**  
-200 OK (List of Sports)
-
-#### Get a Sport by ID
-
-**HTTP**  
-`GET /api/sports/{sport_id}`
-
-**✅ Response:**  
-200 OK (Sport Details)
-
-#### Create a New Sport
-
-**HTTP**  
-`POST /api/sports/`
-
-**✅ Request Body:**  
+#### 4. Update Sport
+- **URL:** `/sports/{sportId}`
+- **Method:** `PUT`
+- **Requires Authentication**
+- **Request Body:**
 ```json
 {
-  "name": "Badminton",
-  "category": "Singles"
+  "name": "Updated Sport Name"
 }
 ```
 
-**✅ Response:**  
-200 OK (Created Sport)
+#### 5. Delete Sport
+- **URL:** `/sports/{sportId}`
+- **Method:** `DELETE`
+- **Requires Authentication**
 
-🔐 **Security:** Requires authentication.
+### Points Endpoints
 
-#### Update a Sport
-
-**HTTP**  
-`PUT /api/sports/{sport_id}`
-
-**✅ Request Body:**  
+#### 1. Submit Player Points
+- **URL:** `/points/player/submit`
+- **Method:** `POST`
+- **Requires Authentication**
+- **Request Body:**
 ```json
 {
-  "name": "Updated Badminton",
-  "category": "Doubles"
+  "player_id": 2,
+  "sport_id": 2,
+  "category": "men_doubles",
+  "competition_level": "match1",
+  "points": 10
 }
 ```
 
-**✅ Response:**  
-200 OK (Updated Sport)
+#### 2. Get Player Points by Category
+- **URL:** `/points/player/category/{categoryId}`
+- **Method:** `GET`
+- **Requires Authentication**
 
-🔐 **Security:** Requires authentication.
+#### 3. Get Player Points by Sport
+- **URL:** `/points/player/sport/{sportId}`
+- **Method:** `GET`
 
-#### Delete a Sport
+#### 4. Get Player Rankings
+- **URL:** `/points/player/rankings`
+- **Method:** `GET`
+- **Requires Authentication**
 
-**HTTP**  
-`DELETE /api/sports/{sport_id}`
+#### 5. Get Team Points by Sport
+- **URL:** `/points/team/sport/{sportId}`
+- **Method:** `GET`
 
-**✅ Response:**  
-204 No Content
+#### 6. Get Team Points by Category
+- **URL:** `/points/team/category/{categoryId}`
+- **Method:** `GET`
 
-🔐 **Security:** Requires authentication.
+#### 7. Get Total Team Points
+- **URL:** `/points/team/total/{teamId}`
+- **Method:** `GET`
 
-### 🎯 **Score Management**
-
-#### Submit Player Points
-
-**HTTP**  
-`POST /api/points/submit/{player_id}/{sport_id}?points={points_earned}`
-
-**✅ Response:**  
-200 OK (Updated Player Points)
-
-🔐 **Security:** Requires authentication.
-
-#### Get Player Points
-
-**HTTP**  
-`GET /api/points/player/{player_id}/{sport_id}`
-
-**✅ Response:**  
-200 OK (Player Points Details)
-
-#### Get Team Points
-
-**HTTP**  
-`GET /api/points/team/{team_id}/{sport_id}`
-
-**✅ Response:**  
-200 OK (Team Points Details)
-
-### 📊 **Leaderboards**
-
-#### Get Team Leaderboard
-
-**HTTP**  
-`GET /api/points/leaderboard?sport_id={sport_id}`
-
-**✅ Query Parameter (Optional):**  
-`sport_id` (Filter by sport)
-
-**✅ Response:**  
+#### 8. Add Team Bonus Points
+- **URL:** `/points/team/bonus`
+- **Method:** `POST`
+- **Requires Authentication**
+- **Request Body:**
 ```json
-[
-  {
-    "team_name": "Team A",
-    "sports_scores": {
-      "Badminton": 100,
-      "Carrom": 50,
-      "Table Tennis": 75
-    },
-    "bonus_points": 25,
-    "total_points": 250
-  },
-  {
-    "team_name": "Team B",
-    "sports_scores": {
-      "Badminton": 80,
-      "Carrom": 60,
-      "Table Tennis": 90
-    },
-    "bonus_points": 10,
-    "total_points": 240
-  }
-]
+{
+  "team_id": 1,
+  "sport_id": 2,
+  "bonus_points": 200
+}
 ```
 
-🔐 **Public API:** No authentication required.
+#### 9. Get Leaderboard
+- **URL:** `/points/leaderboard`
+- **Method:** `GET`
 
----
-
-## 🔐 **Security**
-
-- JWT Authentication (OAuth2PasswordBearer) is required for most API calls.
-- Unauthorized requests will return a `401 Unauthorized` response.
-- Login is done via form data (`application/x-www-form-urlencoded`).
-
----
-
-## ❌ **Error Handling**
-
-- ✅ **Validation Errors (422 Unprocessable Entity):**
-  ```json
-  {
-    "detail": [
-      {
-        "loc": ["body", "email"],
-        "msg": "Invalid email format",
-        "type": "value_error.email"
-      }
-    ]
-  }
-  ```
-
-- ✅ **Unauthorized (401 Unauthorized):**
-  (Returned for requests that require authentication without a valid token)
+## Health Check
+- **URL:** `/healthz`
+- **Method:** `GET`
+- **Response:**
+```json
+{
+    "status": "healthy"
+}
 ```
 
+## Authentication
+- Most endpoints require a JWT token obtained from the login endpoint
+- Include the token in the Authorization header: `Bearer <token>`
+
+## Error Handling
+The API includes custom exception handlers for various scenarios like:
+- Authentication failures
+- User not found
+- Invalid credentials
+- User already exists
+
+## Contributing
+Please read the contributing guidelines before submitting pull requests.
+
+## License
+
+C : Ajay Wankhade
