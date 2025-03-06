@@ -72,7 +72,6 @@ def submit_player_points(db: Session, payload):
 #         .all()
 #     return [{"sport": r[0], "category": r[1], "points": r[2]} for r in results]
 
-
 def get_player_points_by_category(db: Session, player_id: int):
     """Get player points categorized by sport category with player, team, and matches played."""
 
@@ -97,6 +96,7 @@ def get_player_points_by_category(db: Session, player_id: int):
         .all()
     )
 
+    # Format response
     return {
         "player_name": player.name,
         "team_name": team.name,
@@ -112,21 +112,145 @@ def get_player_points_by_category(db: Session, player_id: int):
 
 
 def get_player_points_by_sport(db: Session, player_id: int):
-    """Get player points for each sport (ignoring category)."""
-    results = db.query(Sport.name, func.sum(PlayerPoints.points)) \
-        .join(Sport, Sport.id == PlayerPoints.sport_id) \
-        .filter(PlayerPoints.player_id == player_id) \
-        .group_by(Sport.name) \
+    """Get player points for each sport (ignoring category), including player name and team name."""
+
+    player = db.query(Player).filter(Player.id == player_id).first()
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found")
+
+    team = db.query(Team).filter(Team.id == player.team_id).first()
+    team_name = team.name if team else "No Team"
+
+    results = (
+        db.query(
+            Sport.name.label("sport"),
+            func.coalesce(func.sum(PlayerPoints.points), 0).label("total_points")
+        )
+        .join(Sport, Sport.id == PlayerPoints.sport_id)
+        .filter(PlayerPoints.player_id == player_id)
+        .group_by(Sport.name)
         .all()
-    return [{"sport": r[0], "points": r[1]} for r in results]
+    )
+
+    return {
+        "player_name": player.name,
+        "team_name": team_name,
+        "points": [
+            {
+                "sport": r.sport,
+                "points": r.total_points
+            } for r in results
+        ]
+    }
 
 
-def get_total_player_points(db: Session, player_id: int):
-    """Get total points for a player across all sports."""
-    total = db.query(func.sum(PlayerPoints.points)) \
-        .filter(PlayerPoints.player_id == player_id) \
-        .scalar()
-    return {"player_id": player_id, "total_points": total or 0}
+def get_team_points_by_sport(db: Session, team_id: int):
+    """Get team points per sport (ignoring category), including team name."""
+
+    team = db.query(Team).filter(Team.id == team_id).first()
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    results = (
+        db.query(
+            Sport.name.label("sport"),
+            func.coalesce(func.sum(TeamPoints.team_points + TeamPoints.bonus_points), 0).label("total_points")
+        )
+        .join(Sport, Sport.id == TeamPoints.sport_id)
+        .filter(TeamPoints.team_id == team_id)
+        .group_by(Sport.name)
+        .all()
+    )
+
+    return {
+        "team_name": team.name,
+        "points": [
+            {
+                "sport": r.sport,
+                "points": r.total_points
+            } for r in results
+        ]
+    }
+
+
+
+
+def get_team_points_by_category(db: Session, team_id: int):
+    """Get team points per sport category, including team name."""
+
+    team = db.query(Team).filter(Team.id == team_id).first()
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    results = (
+        db.query(
+            Sport.name.label("sport"),
+            TeamPoints.category,
+            func.sum(TeamPoints.team_points + TeamPoints.bonus_points).label("total_points")  # Include bonus points
+        )
+        .join(Sport, Sport.id == TeamPoints.sport_id)
+        .filter(TeamPoints.team_id == team_id)
+        .group_by(Sport.name, TeamPoints.category)
+        .all()
+    )
+
+    return {
+        "team_name": team.name,
+        "points": [
+            {
+                "sport": r.sport,
+                "category": r.category,
+                "points": r.total_points
+            } for r in results
+        ]
+    }
+
+def get_total_team_points(db: Session, team_id: int):
+    """Get team points per sport (ignoring category), including team name."""
+
+    team = db.query(Team).filter(Team.id == team_id).first()
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    results = (
+        db.query(
+            Sport.name.label("sport"),
+            func.sum(TeamPoints.team_points + TeamPoints.bonus_points).label("total_points")  # Sum of points and bonus points
+        )
+        .join(Sport, Sport.id == TeamPoints.sport_id)
+        .filter(TeamPoints.team_id == team_id)
+        .group_by(Sport.name)
+        .all()
+    )
+
+    return {
+        "team_name": team.name,
+        "points": [
+            {
+                "sport": r.sport,
+                "points": r.total_points or 0
+            } for r in results
+        ]
+    }
+
+
+
+# def get_player_points_by_sport(db: Session, player_id: int):
+#     """Get player points for each sport (ignoring category)."""
+#     results = db.query(Sport.name, func.sum(PlayerPoints.points)) \
+#         .join(Sport, Sport.id == PlayerPoints.sport_id) \
+#         .filter(PlayerPoints.player_id == player_id) \
+#         .group_by(Sport.name) \
+#         .all()
+#     return [{"sport": r[0], "points": r[1]} for r in results]
+#
+#
+# def get_total_player_points(db: Session, player_id: int):
+#     """Get total points for a player across all sports."""
+#     total = db.query(func.sum(PlayerPoints.points)) \
+#         .filter(PlayerPoints.player_id == player_id) \
+#         .scalar()
+#     return {"player_id": player_id, "total_points": total or 0}
 
 
 def assign_team_bonus_points(db: Session, payload):
