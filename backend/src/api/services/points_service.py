@@ -253,6 +253,32 @@ def get_total_team_points(db: Session, team_id: int):
 #     return {"player_id": player_id, "total_points": total or 0}
 
 
+
+def get_total_player_points(db: Session, player_id: int):
+    """Get total points for a player across all sports, including player name and team name."""
+
+    player = db.query(Player).filter(Player.id == player_id).first()
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found")
+
+    team = db.query(Team).filter(Team.id == player.team_id).first()
+    team_name = team.name if team else "No Team"
+
+    total_points = (
+        db.query(func.coalesce(func.sum(PlayerPoints.points), 0))
+        .filter(PlayerPoints.player_id == player_id)
+        .scalar()
+    )
+
+    return {
+        "player_id": player_id,
+        "player_name": player.name,
+        "team_name": team_name,
+        "total_points": total_points
+    }
+
+
+
 def assign_team_bonus_points(db: Session, payload):
     """Assign bonus points to a team for a specific sport."""
     team = db.query(Team).filter(Team.id == payload.team_id).first()
@@ -261,7 +287,6 @@ def assign_team_bonus_points(db: Session, payload):
     if not team or not sport:
         raise HTTPException(status_code=404, detail="Team or Sport not found")
 
-    # Fetch or create TeamPoints
     team_points = db.query(TeamPoints).filter_by(
         team_id=payload.team_id, sport_id=payload.sport_id
     ).first()
@@ -284,35 +309,35 @@ def assign_team_bonus_points(db: Session, payload):
 
 
 
-def get_team_points_by_category(db: Session, team_id: int):
-    """Get team points per sport category."""
-    results = db.query(Sport.name, TeamPoints.category, func.sum(TeamPoints.team_points)) \
-        .join(Sport, Sport.id == TeamPoints.sport_id) \
-        .filter(TeamPoints.team_id == team_id) \
-        .group_by(Sport.name, TeamPoints.category) \
-        .all()
-    return [{"sport": r[0], "category": r[1], "points": r[2]} for r in results]
+# def get_team_points_by_category(db: Session, team_id: int):
+#     """Get team points per sport category."""
+#     results = db.query(Sport.name, TeamPoints.category, func.sum(TeamPoints.team_points)) \
+#         .join(Sport, Sport.id == TeamPoints.sport_id) \
+#         .filter(TeamPoints.team_id == team_id) \
+#         .group_by(Sport.name, TeamPoints.category) \
+#         .all()
+#     return [{"sport": r[0], "category": r[1], "points": r[2]} for r in results]
+
+#
+# def get_team_points_by_sport(db: Session, team_id: int):
+#     """Get team points per sport (ignoring category)."""
+#     results = db.query(
+#         Sport.name,
+#         func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
+#     ).join(Sport, Sport.id == TeamPoints.sport_id) \
+#         .filter(TeamPoints.team_id == team_id) \
+#         .group_by(Sport.name) \
+#         .all()
+#     return [{"sport": r[0], "points": r[1] or 0} for r in results]
 
 
-def get_team_points_by_sport(db: Session, team_id: int):
-    """Get team points per sport (ignoring category)."""
-    results = db.query(
-        Sport.name,
-        func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
-    ).join(Sport, Sport.id == TeamPoints.sport_id) \
-        .filter(TeamPoints.team_id == team_id) \
-        .group_by(Sport.name) \
-        .all()
-    return [{"sport": r[0], "points": r[1] or 0} for r in results]
-
-
-def get_total_team_points(db: Session, team_id: int):
-    """Get total points for a team across all sports."""
-    total = db.query(
-        func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
-    ).filter(TeamPoints.team_id == team_id).scalar()
-
-    return {"team_id": team_id, "total_points": total or 0}
+# def get_total_team_points(db: Session, team_id: int):
+#     """Get total points for a team across all sports."""
+#     total = db.query(
+#         func.sum(TeamPoints.team_points + TeamPoints.bonus_points)
+#     ).filter(TeamPoints.team_id == team_id).scalar()
+#
+#     return {"team_id": team_id, "total_points": total or 0}
 
 
 def get_leaderboard(db: Session):
