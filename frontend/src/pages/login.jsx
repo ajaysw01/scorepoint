@@ -9,12 +9,12 @@ const API_URL = "https://scorepoint.onrender.com/api/auth/login";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Disable button
+    setLoading(true);
     try {
       const formData = new URLSearchParams();
       formData.append("username", email);
@@ -36,7 +36,7 @@ const Login = () => {
         position: "top-right",
       });
     } finally {
-      setLoading(false); // Re-enable button after request completes
+      setLoading(false);
     }
   };
 
@@ -47,7 +47,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="w-full">
           <input
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 hover:shadow-md"
             type="email"
             placeholder="Email"
             value={email}
@@ -55,7 +55,7 @@ const Login = () => {
             required
           />
           <input
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 hover:shadow-md"
             type="password"
             placeholder="Password"
             value={password}
