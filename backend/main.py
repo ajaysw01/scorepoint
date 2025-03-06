@@ -42,9 +42,12 @@ app = FastAPI(
 
 # Health check endpoint
 @app.head("/healthz", status_code=200)
-@app.get("/healthz", status_code=200)
 async def health_check():
     return {"status": "healthy"}
+
+@app.get("/", status_code=200)
+async def home():
+    return {"msg" : "Welcome to Scorepoint"}
 
 # CORS Middleware
 app.add_middleware(
