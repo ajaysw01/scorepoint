@@ -23,6 +23,7 @@ import TeamsManagement from "./pages/teamsmanagement";
 import EditScores from "./pages/editscores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -31,62 +32,68 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/scores" element={<Scores />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/cricket" element={<Cricket />} />
-        <Route path="/badminton" element={<Badminton />} />
-        <Route path="/badminton/:categoryName" element={<BCategoryDetails />} />
-        <Route
-          path="/tabletennis/:categoryName"
-          element={<TTCategoryDetails />}
-        />
-        <Route path="/carrom/:categoryName" element={<CCategoryDetails />} />
-        <Route path="/tabletennis" element={<Tabletennis />} />
-        <Route path="/carrom" element={<Carrom />} />
-        <Route path="/darts" element={<Darts />} />
-        <Route path="/funfriday" element={<Funfriday />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/rules" element={<SportsDashboard />} />
-        <Route path="/updates" element={<Updates />} />
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/teamsmangement"
-          element={
-            <ProtectedRoute>
-              <TeamsManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/editscores"
-          element={
-            <ProtectedRoute>
-              <EditScores />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/schedule"
-          element={
-            <ProtectedRoute>
-              <Schedule />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <>
+      <ToastContainer />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/scores" element={<Scores />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/cricket" element={<Cricket />} />
+          <Route path="/badminton" element={<Badminton />} />
+          <Route
+            path="/badminton/:categoryName"
+            element={<BCategoryDetails />}
+          />
+          <Route
+            path="/tabletennis/:categoryName"
+            element={<TTCategoryDetails />}
+          />
+          <Route path="/carrom/:categoryName" element={<CCategoryDetails />} />
+          <Route path="/tabletennis" element={<Tabletennis />} />
+          <Route path="/carrom" element={<Carrom />} />
+          <Route path="/darts" element={<Darts />} />
+          <Route path="/funfriday" element={<Funfriday />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/rules" element={<SportsDashboard />} />
+          <Route path="/updates" element={<Updates />} />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teamsmangement"
+            element={
+              <ProtectedRoute>
+                <TeamsManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editscores"
+            element={
+              <ProtectedRoute>
+                <EditScores />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/schedule"
+            element={
+              <ProtectedRoute>
+                <Schedule />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
