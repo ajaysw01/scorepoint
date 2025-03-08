@@ -65,6 +65,20 @@ const Navbar = () => {
               Admin Login
             </Link>
           </li>
+          <li>
+            <Link
+              to="/search"
+              className="text-white text-lg hover:text-gray-200" >
+              Search Player  
+              </Link>        
+          </li> 
+                    <li>
+            <Link
+              to="/search"
+              className="text-white text-lg hover:text-gray-200" >
+              Search Player  
+              </Link>        
+          </li> 
         </ul>
 
         {/* Mobile Menu Button */}

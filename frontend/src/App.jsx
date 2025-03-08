@@ -6,6 +6,7 @@ import Navbar from "./components/navbar";
 import Scores from "./pages/scores";
 import Teams from "./pages/teams";
 import Leaderboard from "./pages/leaderboard";
+import SearchPlayer from "./pages/searchplayer";
 import Cricket from "./pages/cricket";
 import Badminton from "./pages/badminton";
 import Tabletennis from "./pages/tabletennis";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/scores" element={<Scores />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/search" element={<SearchPlayer />} /> {/* Define route for SearchPlayer */}
           <Route path="/cricket" element={<Cricket />} />
           <Route path="/badminton" element={<Badminton />} />
           <Route

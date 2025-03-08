@@ -20,7 +20,7 @@ from src.api.customexception.exceptions import (
 )
 from src.api.configurations.config import get_settings
 from src.api.database.db_conn import Base, engine, SessionLocal
-from src.api.routes import user_route, team_route, sport_route, points_route
+from src.api.routes import user_route, team_route, sport_route, points_route, search_player_route
 from src.api.customexception import exception_handlers
 from src.api.models.models import User
 from src.api.utils.hashing import Hash
@@ -67,6 +67,7 @@ app.include_router(authentication.router, prefix=settings.API_PREFIX + "/auth", 
 app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team Endpoints"])
 app.include_router(sport_route.router, prefix=settings.API_PREFIX + "/sports", tags=["Sports Endpoints"])
 app.include_router(points_route.router, prefix=settings.API_PREFIX + "/points", tags=["Points Endpoints"])
+app.include_router(search_player_route.router, prefix=settings.API_PREFIX + "/players", tags=["Search Players Endpoints"])
 
 # Create admin user
 def create_admin():
