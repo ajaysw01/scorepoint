@@ -15,20 +15,31 @@ def search_player(
     db: Session = Depends(get_db)
 ):
     """
-    Search for players by name and return details including sport, player points, and team points.
-    If only some fields are available, only return the present ones.
+    Search for players by name and return full details including:
+    - Player name
+    - Team name
+    - Sport name
+    - Player points
+    - Team points
+    - Competition level
+    - Category
     """
     try:
         query = (
             db.query(
                 Player.name,
+                Team.name.label("team_name"),
                 Sport.name.label("sport_name"),
                 PlayerPoints.points.label("player_points"),
-                TeamPoints.team_points.label("team_points")
+                PlayerPoints.competition_level,
+                PlayerPoints.category,
+                TeamPoints.team_points.label("team_points"),
+                TeamPoints.bonus_points,
+                PlayerPoints.recorded_at
             )
+            .join(Team, Player.team_id == Team.id, isouter=True)
             .join(PlayerPoints, Player.id == PlayerPoints.player_id, isouter=True)
             .join(Sport, PlayerPoints.sport_id == Sport.id, isouter=True)
-            .join(Team, Player.team_id == Team.id, isouter=True)
             .join(TeamPoints, (Team.id == TeamPoints.team_id) & (Sport.id == TeamPoints.sport_id), isouter=True)
             .filter(Player.name.ilike(f"%{name}%"))
         )
@@ -41,14 +52,17 @@ def search_player(
         return [
             {key: value for key, value in {
                 "player_name": row[0],
-                "sport_name": row[1],
-                "player_points": row[2],
-                "team_points": row[3]
+                "team_name": row[1],
+                "sport_name": row[2],
+                "player_points": row[3],
+                "competition_level": row[4],
+                "category": row[5].value if row[5] else None, 
+                "team_points": row[6],
+                "bonus_points": row[7],
+                "recorded_at": row[8]
             }.items() if value is not None}
             for row in result
         ]
 
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
-
-
