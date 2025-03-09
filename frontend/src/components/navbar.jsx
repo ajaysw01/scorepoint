@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
+import { IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,18 +67,9 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link
-              to="/search"
-              className="text-white text-lg hover:text-gray-200" >
-              Search Player  
-              </Link>        
-          </li> 
-                    <li>
-            <Link
-              to="/search"
-              className="text-white text-lg hover:text-gray-200" >
-              Search Player  
-              </Link>        
+          <IconButton component={Link} to="/search" sx={{ color: "#fff" }}>
+            <SearchIcon />
+          </IconButton>       
           </li> 
         </ul>
 
