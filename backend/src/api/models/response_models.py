@@ -42,10 +42,32 @@ class SportResponse(BaseModel):
 class PlayerPointsResponse(BaseModel):
     player_id: int
     sport_id: int
-    category: Optional[SportCategoryEnum] = None  # Use SportCategoryEnum instead of category_id
-    competition_level: str  # Tracks the level of competition
+    category: Optional[SportCategoryEnum] = None
+    competition_level: str
     points: int
-    total_player_points: int  # Accumulated points for the player in this sport
+    total_player_points: int
+
+    class Config:
+        from_attributes = True
+
+
+
+class PlayerDetails(BaseModel):
+    player_id: int
+    name: str
+    team_id: int
+    team_name: str
+    points: int
+
+    class Config:
+        from_attributes = True
+
+
+class PlayerResponse2(BaseModel):
+    player_id: int
+    name: str
+    team_id: int
+    team_name : str
 
     class Config:
         from_attributes = True
@@ -60,7 +82,7 @@ class LeaderboardEntry(BaseModel):
 
 class TeamLeaderboardResponse(BaseModel):
     team_name: str
-    sports_scores: Dict[str, int]  # Example: {"Badminton": 50, "Cricket": 30}
+    sports_scores: Dict[str, int]
     bonus_points: int
     total_points: int
 
@@ -72,7 +94,7 @@ class TeamBonusResponse(BaseModel):
     team_id: int
     sport_id: int
     bonus_points: int
-    awarded_at: datetime  # Proper timestamp for when the bonus was awarded
+    awarded_at: datetime
 
     class Config:
         from_attributes = True

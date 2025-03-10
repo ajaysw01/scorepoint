@@ -18,7 +18,7 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "https://scorepoint.onrender.com/api/points/leaderboard"
+          "http://localhost:8000/api/points/leaderboard"
         );
         const leaderboardData = response.data;
 

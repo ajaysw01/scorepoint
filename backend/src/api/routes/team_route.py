@@ -12,9 +12,9 @@ from src.api.database.db_conn import get_db
 from src.api.auth.oauth2 import get_current_user
 from src.api.utils.dependencies import require_admin
 from src.api.models.request_models import TeamCreate, TeamUpdate
-from src.api.models.response_models import TeamResponse
+from src.api.models.response_models import TeamResponse, PlayerResponse2
 from src.api.services.team_service import (
-    create_team, get_teams, get_team_by_id, update_team, delete_team
+    create_team, get_teams, get_team_by_id, update_team, delete_team, get_all_players_service
 )
 
 router = APIRouter()
@@ -51,5 +51,10 @@ def delete_team_route(
     user=Depends(require_admin)
 ):
     delete_team(db, team_id, user)
+
+@router.get("/players/all", response_model=List[PlayerResponse2])
+def get_all_players(db: Session = Depends(get_db)):
+    return get_all_players_service(db)
+
 
 

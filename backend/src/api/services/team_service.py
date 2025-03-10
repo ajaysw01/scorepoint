@@ -5,11 +5,13 @@ Description: This file contains FastAPI services for managing teams.
 """
 
 import logging
+from typing import List
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from src.api.models.models import Team, User, Player, Sport, TeamPoints
 from src.api.models.request_models import TeamCreate, TeamUpdate
-from src.api.models.response_models import TeamResponse, PlayerResponse
+from src.api.models.response_models import TeamResponse, PlayerResponse, PlayerResponse2
 
 logger = logging.getLogger(__name__)
 
@@ -103,4 +105,18 @@ def delete_team(db: Session, team_id: int, user: User):
     db.commit()
 
     return {"message": "Team deleted successfully"}
+
+def get_all_players_service(db: Session) -> List[PlayerResponse2]:
+    players_query = (
+        db.query(Player.id, Player.name, Team.id.label("team_id"), Team.name.label("team_name"))
+        .join(Team, Player.team_id == Team.id)
+        .all()
+    )
+
+    if not players_query:
+        raise HTTPException(status_code=404, detail="No players found")
+
+    return [{"player_id": player_id, "name": player_name, "team_id": team_id, "team_name": team_name}
+            for player_id, player_name, team_id, team_name in players_query]
+
 

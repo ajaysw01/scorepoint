@@ -3,10 +3,13 @@ Author: Ajay Wankhade
 Version: 1.0
 Description: This file contains FastAPI endpoints for managing points of players and teams.
 """
+from typing import List
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.api.database.db_conn import get_db
+from src.api.models.models import SportCategoryEnum
+from src.api.models.response_models import PlayerDetails
 from src.api.services.points_service import (
     submit_player_points,
     get_player_points_by_category,
@@ -16,7 +19,7 @@ from src.api.services.points_service import (
     get_team_points_by_category,
     get_team_points_by_sport,
     get_total_team_points,
-    get_leaderboard, get_player_rankings_by_category
+    get_leaderboard, get_player_rankings_by_category, fetch_player_points_by_sport
 )
 from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate
 from src.api.utils.dependencies import require_admin
@@ -66,3 +69,7 @@ def leaderboard(db: Session = Depends(get_db)):
 @router.get("/player/rankings")
 def player_rankings_by_category(db: Session = Depends(get_db)):
     return get_player_rankings_by_category(db)
+
+@router.get("/players", response_model=List[PlayerDetails])
+def get_player_points_by_sports(sport_id: int, category: SportCategoryEnum, db: Session = Depends(get_db)):
+    return fetch_player_points_by_sport(sport_id, category, db)
