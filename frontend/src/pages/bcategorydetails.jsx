@@ -4,7 +4,10 @@ import TeamPointsTable from "./teampointstable";
 import MatchHistory from "./matchhistory";
 
 // Sample data for each category
+
+
 const categoryData = {
+   
     "Men's Singles": {
         playerData: [
             { name: "Player A", points: 1600 },

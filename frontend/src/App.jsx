@@ -20,9 +20,10 @@ import AdminDashboard from "./pages/adminDashboard";
 import Updates from "./pages/updates";
 import SportsDashboard from "./pages/rules";
 import TeamsManagement from "./pages/teamsmanagement";
-import EditScores from "./pages/editscores";
+import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
+import PlayerStats from "./pages/test";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -53,6 +54,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/rules" element={<SportsDashboard />} />
         <Route path="/updates" element={<Updates />} />
+        <Route path="/test" element={<PlayerStats/>}/>
+        <Route
+          path="/editscores"
+          element={
+            <ProtectedRoute><EditScores /></ProtectedRoute>
+              
+          }
+        />
         <Route
           path="/admin-dashboard"
           element={
@@ -69,14 +78,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/editscores"
-          element={
-            <ProtectedRoute>
-              <EditScores />
-            </ProtectedRoute>
-          }
-        />
+        
         <Route
           path="/schedule"
           element={
