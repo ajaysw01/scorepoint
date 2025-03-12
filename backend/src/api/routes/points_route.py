@@ -70,6 +70,8 @@ def leaderboard(db: Session = Depends(get_db)):
 def player_rankings_by_category(db: Session = Depends(get_db)):
     return get_player_rankings_by_category(db)
 
-@router.get("/players", response_model=List[PlayerDetails])
-def get_player_points_by_sports(sport_id: int, category: SportCategoryEnum, db: Session = Depends(get_db)):
+@router.get("/players/{sport_id}/{category}", response_model=List[PlayerDetails])
+def get_player_points_by_sports(
+    sport_id: int, category: SportCategoryEnum | None = None, db: Session = Depends(get_db)
+):
     return fetch_player_points_by_sport(sport_id, category, db)
