@@ -5,7 +5,7 @@ Description: This file contains FastAPI endpoints for managing teams.
 """
 
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
 from src.api.database.db_conn import get_db
@@ -14,7 +14,7 @@ from src.api.utils.dependencies import require_admin
 from src.api.models.request_models import TeamCreate, TeamUpdate
 from src.api.models.response_models import TeamResponse, PlayerResponse2
 from src.api.services.team_service import (
-    create_team, get_teams, get_team_by_id, update_team, delete_team, get_all_players_service
+    create_team, get_teams, get_team_by_id, update_team, delete_team, get_all_players_service, fetch_players_by_name
 )
 
 router = APIRouter()
@@ -55,6 +55,15 @@ def delete_team_route(
 @router.get("/players/all", response_model=List[PlayerResponse2])
 def get_all_players(db: Session = Depends(get_db)):
     return get_all_players_service(db)
+
+
+@router.get("/player/search", response_model=List[dict])
+def search_player(
+    name: str = Query(..., description="Player name to search"),
+    db: Session = Depends(get_db)
+):
+    return fetch_players_by_name(name, db)
+
 
 
 
