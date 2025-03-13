@@ -24,6 +24,7 @@ import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
 import PlayerStats from "./pages/test";
+import AddScore from "./pages/addScore";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -46,6 +47,7 @@ function App() {
           path="/tabletennis/:categoryName"
           element={<TTCategoryDetails />}
         />
+        <Route path="/addScores" element={<AddScore />} />
         <Route path="/carrom/:categoryName" element={<CCategoryDetails />} />
         <Route path="/tabletennis" element={<Tabletennis />} />
         <Route path="/carrom" element={<Carrom />} />
