@@ -11,11 +11,12 @@ const sports = [
 
 const Scores = () => {
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
+        <div className="min-h-screen bg-gray-100 p-6 px-4 sm:px-6">
             <h1 className="text-4xl font-bold text-center text-Red-400 mb-8">Choose Your Sport</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 {sports.map((sport) => (
-                    <Link to={sport.path} key={sport.name} className="group">
+                    <Link to={sport.path} key={sport.name} className="group" aria-label={`Go to ${sport.name}`}>
+
                     <div className="relative overflow-hidden rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
                         <img
                             src={sport.image}
