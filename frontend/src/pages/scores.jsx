@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
 const sports = [
-    { name: "Cricket", image: "static/images/cricket.jpg", path: "/cricket" },
     { name: "Badminton", image: "static/images/badminton.jpg", path: "/badminton" },
     { name: "Table Tennis", image: "static/images/tabletennis.jpg", path: "/tabletennis" },
     { name: "Carrom", image: "static/images/carrom.jpg", path: "/carrom" },
-    { name: "Darts", image: "static/images/darts.jpg", path: "/darts" },
-    { name: "Fun Friday", image: "static/images/funfriday.png", path: "/funfriday" }, 
+    { name: "Cricket", image: "static/images/cricket.jpg", path: "/Cricket/1/none" },
+    { name: "Darts", image: "static/images/darts.jpg", path: "/Darts/6/none" },
+    { name: "Fun Friday", image: "static/images/funfriday.png", path: "/Fun Friday/5/none" }, 
 ];
 
 const Scores = () => {

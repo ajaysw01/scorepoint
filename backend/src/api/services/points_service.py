@@ -401,18 +401,29 @@ def get_player_rankings_by_category(db: Session):
     return category_rankings
 
 
-def fetch_player_points_by_sport(sport_id: int, category: SportCategoryEnum, db: Session) -> List[PlayerDetails]:
+def fetch_player_points_by_sport(
+    sport_id: int, category: SportCategoryEnum | None, db: Session
+) -> List[PlayerDetails]:
+
+    # Adjust category check for non-category sports
     points_query = (
         db.query(Player.id, Player.name, Team.id.label("team_id"), Team.name.label("team_name"), PlayerPoints.points)
         .join(PlayerPoints, Player.id == PlayerPoints.player_id)
         .join(Team, Player.team_id == Team.id)
         .filter(PlayerPoints.sport_id == sport_id)
-        .filter(PlayerPoints.category == category)
-        .all()
     )
+
+    if category is None or category == SportCategoryEnum.NONE:
+        points_query = points_query.filter(PlayerPoints.category.is_(None))
+    else:
+        points_query = points_query.filter(PlayerPoints.category == category)
+
+    points_query = points_query.all()
 
     if not points_query:
         raise HTTPException(status_code=404, detail="No player points found for the given sport and category")
 
-    return [{"player_id": player_id, "name": player_name, "team_id": team_id, "team_name": team_name, "points": points}
-            for player_id, player_name, team_id, team_name, points in points_query]
+    return [
+        {"player_id": player_id, "name": player_name, "team_id": team_id, "team_name": team_name, "points": points}
+        for player_id, player_name, team_id, team_name, points in points_query
+    ]

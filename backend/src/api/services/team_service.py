@@ -7,6 +7,7 @@ Description: This file contains FastAPI services for managing teams.
 import logging
 from typing import List
 
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from src.api.models.models import Team, User, Player, Sport, TeamPoints
@@ -120,3 +121,35 @@ def get_all_players_service(db: Session) -> List[PlayerResponse2]:
             for player_id, player_name, team_id, team_name in players_query]
 
 
+
+def fetch_players_by_name(name: str, db: Session) -> List[dict]:
+    try:
+        query = (
+            db.query(
+                Player.id.label("player_id"),
+                Player.name.label("player_name"),
+                Team.id.label("team_id"),
+                Team.name.label("team_name")
+            )
+            .join(Team, Player.team_id == Team.id, isouter=True)
+            .filter(Player.name.ilike(f"%{name}%"))
+            .distinct()  # Ensures unique results
+        )
+
+        result = query.all()
+
+        if not result:
+            raise HTTPException(status_code=404, detail="No players found")
+
+        return [
+            {
+                "player_id": row.player_id,
+                "player_name": row.player_name,
+                "team_id": row.team_id,
+                "team_name": row.team_name,
+            }
+            for row in result
+        ]
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

@@ -6,15 +6,11 @@ import Navbar from "./components/navbar";
 import Scores from "./pages/scores";
 import Teams from "./pages/teams";
 import Leaderboard from "./pages/leaderboard";
-import Cricket from "./pages/cricket";
 import Badminton from "./pages/badminton";
 import Tabletennis from "./pages/tabletennis";
 import Carrom from "./pages/carrom";
-import Darts from "./pages/darts";
 import Funfriday from "./pages/funfriday";
-import BCategoryDetails from "./pages/bcategorydetails";
-import TTCategoryDetails from "./pages/ttcategorydetails";
-import CCategoryDetails from "./pages/ccategorydetails";
+import GameScores from "./pages/commonscore";
 import Login from "./pages/login";
 import AdminDashboard from "./pages/adminDashboard";
 import Updates from "./pages/updates";
@@ -40,18 +36,13 @@ function App() {
         <Route path="/scores" element={<Scores />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/cricket" element={<Cricket />} />
         <Route path="/badminton" element={<Badminton />} />
-        <Route path="/badminton/:categoryName" element={<BCategoryDetails />} />
-        <Route
-          path="/tabletennis/:categoryName"
-          element={<TTCategoryDetails />}
-        />
-        <Route path="/addScores" element={<AddScore />} />
-        <Route path="/carrom/:categoryName" element={<CCategoryDetails />} />
+        <Route path="/:game_name/:sport_id/:category" element={<GameScores />} />
+        {/* <Route path="/badminton/:sport_id/:category" element={<BCategoryDetails />} />
+        <Route path="/tabletennis/:sport_id/:category" element={<TTCategoryDetails />}/>
+        <Route path="/carrom/:sport_id/:category" element={<CCategoryDetails />} /> */}
         <Route path="/tabletennis" element={<Tabletennis />} />
         <Route path="/carrom" element={<Carrom />} />
-        <Route path="/darts" element={<Darts />} />
         <Route path="/funfriday" element={<Funfriday />} />
         <Route path="/login" element={<Login />} />
         <Route path="/rules" element={<SportsDashboard />} />
