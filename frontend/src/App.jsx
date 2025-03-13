@@ -20,6 +20,7 @@ import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
 import PlayerStats from "./pages/test";
+import AddScore from "./pages/addScore";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -32,6 +33,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/addScore" element={<AddScore />} />
         <Route path="/scores" element={<Scores />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/leaderboard" element={<Leaderboard />} />

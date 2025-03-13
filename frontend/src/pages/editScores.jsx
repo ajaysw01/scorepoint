@@ -16,12 +16,9 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
   const [playerPoints, setPlayerPoints] = useState([]);
 
   const fetchPoints = async (sportId, categori) => {
-    if (!sportId) return;
     try {
-      let url = `https://scorepoint.onrender.com/api/points/players?sport_id=${sportId}`;
-      if (categori) {
-        url += `&category=${categori}`;
-      }
+      let categoryNum = sportsWithCategories.includes(sport) ? categori : none;
+      let url = `https://scorepoint.onrender.com/api/points/players?sport_id=${sportId}&category=${categoryNum}`;
       const response = await axios.get(url);
       setPlayerPoints(response.data);
     } catch (error) {
@@ -74,7 +71,7 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
 const EditScores = () => {
   const [sports, setSports] = useState([]);
   const [editDialog, setEditDialog] = useState({ isOpen: false, sport: null });
-  const [pointsDialog, setPointsDialog] = useState({ isOpen: false, sport: "", sportId: null });
+  const [pointsDialog, setPointsDialog] = useState({ isOpen: false, sport: "", sportId: null, category: null });
 
   useEffect(() => {
     fetchSports();
@@ -137,7 +134,7 @@ const EditScores = () => {
           </div>
         </div>
       )}
-      <PointsDialog isOpen={pointsDialog.isOpen} onClose={() => setPointsDialog({ isOpen: false, sport: "", sportId: null })} sport={pointsDialog.sport} sportId={pointsDialog.sportId} />
+      <PointsDialog isOpen={pointsDialog.isOpen} onClose={() => setPointsDialog({ isOpen: false, sport: "", sportId: null, category: null })} sport={pointsDialog.sport} sportId={pointsDialog.sportId} />
     </div>
   );
 };
