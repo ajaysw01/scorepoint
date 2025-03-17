@@ -29,8 +29,8 @@ const AdminDashboard = () => {
 
     const cards = [
         { title: 'Team Management', icon: <Users size={40} />, path: '/teamsmangement' },
-        { title: 'Scores', icon: <Trophy size={40} />, path: '/editscores' },
-        { title: 'Scheduling', icon: <Calendar size={40} />, path: '/schedule' },
+        { title: 'Sports CRUD', icon: <Trophy size={40} />, path: '/editscores' },
+        { title: 'Scores, Scheduling', icon: <Calendar size={40} />, path: '/schedule' },
     ];
 
     return (

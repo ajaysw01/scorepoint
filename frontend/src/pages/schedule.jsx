@@ -1,7 +1,10 @@
-﻿const Schedule = () => {
+﻿import AddScore from "../pages/addScore"
+
+const Schedule = () => {
     return (
         <div>
-            <h1>Schedule</h1>
+            <AddScore/>
+
         </div>
     )
 }
