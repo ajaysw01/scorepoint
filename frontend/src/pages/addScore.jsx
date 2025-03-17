@@ -5,7 +5,7 @@ const AddScore = () => {
   const [playerData, setPlayerData] = useState({
     player_id: "",
     sport_id: "",
-    category: "",
+    category: null,
     competition_level: "",
     points: "",
   });
