@@ -19,16 +19,22 @@ from src.api.services.points_service import (
     get_team_points_by_category,
     get_team_points_by_sport,
     get_total_team_points,
-    get_leaderboard, get_player_rankings_by_category, fetch_player_points_by_sport
+    get_leaderboard, get_player_rankings_by_category, fetch_player_points_by_sport, submit_batch_player_points
 )
 from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate
 from src.api.utils.dependencies import require_admin
 
 router = APIRouter()
 
+# submit single player points
 @router.post("/player/submit", dependencies=[Depends(require_admin)])
 def submit_points(payload: PlayerPointsCreate, db: Session = Depends(get_db)):
     return submit_player_points(db, payload)
+
+# submit multiple player points
+@router.post("/player/submit_batch", dependencies=[Depends(require_admin)])
+def submit_batch_points(payload: list[PlayerPointsCreate], db: Session = Depends(get_db)):
+    return submit_batch_player_points(db, payload)
 
 @router.get("/player/category/{player_id}")
 def player_points_by_category(player_id: int, db: Session = Depends(get_db)):
@@ -69,6 +75,13 @@ def leaderboard(db: Session = Depends(get_db)):
 @router.get("/player/rankings")
 def player_rankings_by_category(db: Session = Depends(get_db)):
     return get_player_rankings_by_category(db)
+
+# @router.get("/players/{sport_id}/{category}", response_model=List[PlayerDetails])
+# def get_player_points_by_sports(
+#     sport_id: int, category: SportCategoryEnum | None = None, db: Session = Depends(get_db)
+# ):
+#     return fetch_player_points_by_sport(sport_id, category, db)
+
 
 @router.get("/players/{sport_id}/{category}", response_model=List[PlayerDetails])
 def get_player_points_by_sports(

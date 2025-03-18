@@ -65,6 +65,72 @@ def submit_player_points(db: Session, payload):
     }
 
 
+
+def submit_batch_player_points(db: Session, payload_list):
+    """Submit points for multiple players in a batch."""
+    response = []
+
+    for payload in payload_list:
+        # Validate sport
+        sport = db.query(Sport).filter(Sport.id == payload.sport_id).first()
+        if not sport:
+            raise HTTPException(status_code=404, detail=f"Sport with ID {payload.sport_id} not found")
+
+        # Validate player
+        player = db.query(Player).filter(Player.id == payload.player_id).first()
+        if not player:
+            raise HTTPException(status_code=404, detail=f"Player with ID {payload.player_id} not found")
+
+        # Category validation
+        if sport.name in {"Badminton", "Carrom", "Table Tennis"} and not payload.category:
+            raise HTTPException(status_code=400, detail=f"This sport requires a category for player ID {payload.player_id}.")
+        if sport.name in {"Cricket", "Darts", "Fun Fridays"} and payload.category:
+            raise HTTPException(status_code=400, detail=f"This sport does not have categories for player ID {payload.player_id}.")
+
+        # Create and store player points
+        new_points = PlayerPoints(
+            player_id=payload.player_id,
+            sport_id=payload.sport_id,
+            category=payload.category,
+            competition_level=payload.competition_level,
+            points=payload.points
+        )
+        db.add(new_points)
+
+        # Update or create team points
+        team_points = db.query(TeamPoints).filter(
+            TeamPoints.team_id == player.team_id,
+            TeamPoints.sport_id == payload.sport_id,
+            TeamPoints.category == payload.category
+        ).first()
+
+        if team_points:
+            team_points.team_points += payload.points
+        else:
+            team_points = TeamPoints(
+                team_id=player.team_id,
+                sport_id=payload.sport_id,
+                category=payload.category,
+                team_points=payload.points,
+                bonus_points=0
+            )
+            db.add(team_points)
+
+        # Commit after processing each player
+        db.commit()
+        db.refresh(new_points)
+        db.refresh(team_points)
+
+        response.append({
+            "player_id": payload.player_id,
+            "message": "Player points submitted successfully",
+            "points_id": new_points.id,
+            "team_total_points": team_points.team_points + team_points.bonus_points  # Correct total calculation
+        })
+
+    return response
+
+
 # def get_player_points_by_category(db: Session, player_id: int):
 #     """Get player points categorized by sport category."""
 #     results = db.query(Sport.name, PlayerPoints.category, func.sum(PlayerPoints.points)) \
@@ -400,6 +466,34 @@ def get_player_rankings_by_category(db: Session):
 
     return category_rankings
 
+#
+# def fetch_player_points_by_sport(
+#     sport_id: int, category: SportCategoryEnum | None, db: Session
+# ) -> List[PlayerDetails]:
+#
+#     # Adjust category check for non-category sports
+#     points_query = (
+#         db.query(Player.id, Player.name, Team.id.label("team_id"), Team.name.label("team_name"), PlayerPoints.points)
+#         .join(PlayerPoints, Player.id == PlayerPoints.player_id)
+#         .join(Team, Player.team_id == Team.id)
+#         .filter(PlayerPoints.sport_id == sport_id)
+#     )
+#
+#     if category is None or category == SportCategoryEnum.NONE:
+#         points_query = points_query.filter(PlayerPoints.category.is_(None))
+#     else:
+#         points_query = points_query.filter(PlayerPoints.category == category)
+#
+#     points_query = points_query.all()
+#
+#     if not points_query:
+#         raise HTTPException(status_code=404, detail="No player points found for the given sport and category")
+#
+#     return [
+#         {"player_id": player_id, "name": player_name, "team_id": team_id, "team_name": team_name, "points": points}
+#         for player_id, player_name, team_id, team_name, points in points_query
+#     ]
+
 
 def fetch_player_points_by_sport(
     sport_id: int, category: SportCategoryEnum | None, db: Session
@@ -407,7 +501,13 @@ def fetch_player_points_by_sport(
 
     # Adjust category check for non-category sports
     points_query = (
-        db.query(Player.id, Player.name, Team.id.label("team_id"), Team.name.label("team_name"), PlayerPoints.points)
+        db.query(
+            Player.id,
+            Player.name,
+            Team.id.label("team_id"),
+            Team.name.label("team_name"),
+            func.sum(PlayerPoints.points).label("total_points")  # Properly labeled
+        )
         .join(PlayerPoints, Player.id == PlayerPoints.player_id)
         .join(Team, Player.team_id == Team.id)
         .filter(PlayerPoints.sport_id == sport_id)
@@ -418,12 +518,19 @@ def fetch_player_points_by_sport(
     else:
         points_query = points_query.filter(PlayerPoints.category == category)
 
-    points_query = points_query.all()
+    # Group by player to get total points across matches
+    points_query = points_query.group_by(Player.id, Player.name, Team.id, Team.name).all()
 
     if not points_query:
         raise HTTPException(status_code=404, detail="No player points found for the given sport and category")
 
     return [
-        {"player_id": player_id, "name": player_name, "team_id": team_id, "team_name": team_name, "points": points}
-        for player_id, player_name, team_id, team_name, points in points_query
+        {
+            "player_id": player_id,
+            "name": player_name,
+            "team_id": team_id,
+            "team_name": team_name,
+            "total_points": total_points
+        }
+        for player_id, player_name, team_id, team_name, total_points in points_query
     ]

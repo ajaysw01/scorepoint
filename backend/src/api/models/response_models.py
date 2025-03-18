@@ -57,7 +57,7 @@ class PlayerDetails(BaseModel):
     name: str
     team_id: int
     team_name: str
-    points: int
+    total_points: int
 
     class Config:
         from_attributes = True
