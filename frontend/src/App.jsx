@@ -21,6 +21,13 @@ import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
 import PlayerStats from "./pages/test";
 import AddScore from "./pages/addScore";
+import CricketRules from './pages/cricketrules';
+import CarromRules from "./pages/carromrules";
+import TableTennis from "./pages/tabletennis";
+import TableTennisRules from "./pages/tabletennisrules";
+import BadmintonRules from "./pages/badmintonrules";
+import FunFridayRules from "./pages/funfridayrules";
+import Cricket from "./pages/cricket";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -49,6 +56,13 @@ function App() {
         <Route path="/rules" element={<SportsDashboard />} />
         <Route path="/updates" element={<Updates />} />
         <Route path="/test" element={<PlayerStats/>}/>
+        <Route path="/cricketrules" element={<CricketRules />} />
+        <Route path="/carromrules" element={<CarromRules/>} />
+        <Route path="/tabletennisrules" element={<TableTennisRules/>} />
+        <Route path="/badmintonrules" element={<BadmintonRules/>} />
+        <Route path="/funfridayrules" element={<FunFridayRules/>} />
+        <Route path="/cricket" element={<Cricket/>} />
+
         <Route
           path="/editscores"
           element={

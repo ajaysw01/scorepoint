@@ -164,7 +164,7 @@ const FunFriday = () => {
             <div className="flex justify-center mt-6">
                 <button
                     onClick={() => navigate(-1)}
-                    className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all"
+                    className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
                 >
                     Back
                 </button>
