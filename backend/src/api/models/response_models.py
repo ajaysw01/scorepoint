@@ -98,3 +98,25 @@ class TeamBonusResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CompetitionLevelPoints(BaseModel):
+    competition_level: str
+    points: int
+
+class CategoryPoints(BaseModel):
+    category_total_points: int
+    competitions: List[CompetitionLevelPoints]
+
+class SportPoints(BaseModel):
+    sport_total_points: int
+    categories: Dict[str, CategoryPoints]
+
+class PlayerHistoryResponse(BaseModel):
+    player_name: str
+    team_name: str
+    player_total_points: int
+    player_points: Dict[str, SportPoints]
+
+    class Config:
+        from_attributes = True
