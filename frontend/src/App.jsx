@@ -23,7 +23,6 @@ import PlayerStats from "./pages/test";
 import AddScore from "./pages/addScore";
 import CricketRules from './pages/cricketrules';
 import CarromRules from "./pages/carromrules";
-import TableTennis from "./pages/tabletennis";
 import TableTennisRules from "./pages/tabletennisrules";
 import BadmintonRules from "./pages/badmintonrules";
 import FunFridayRules from "./pages/funfridayrules";
