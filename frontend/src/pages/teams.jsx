@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-
+import PlayerDetails from "./playerdetails";
 export default function Teams() {
   const [teams, setTeams] = useState([
     {
@@ -51,21 +51,20 @@ export default function Teams() {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
             const fetchedTeam = response.data.find(
-              (t) =>
-                t.name &&
-                team.name &&
-                t.name.toLowerCase() === team.name.toLowerCase()
+              (t) => t.name.toLowerCase() === team.name.toLowerCase()
             );
             return fetchedTeam
               ? {
                   ...team,
-                  members:
-                    fetchedTeam.players.map((player) => player.name) || [],
+                  members: fetchedTeam.players.map((player) => ({
+                    id: player.id, // Include player ID
+                    name: player.name,
+                  })),
                 }
               : team;
           })
         );
-      })
+        })
       .catch((error) => console.error("Error fetching teams:", error));
   }, []);
 
@@ -113,29 +112,32 @@ function TeamsList({ teams, onSelectTeam }) {
 // ✅ Team Details Component with Background Logo Effect
 // ✅ Team Details Component with Background Logo Only
 function TeamDetails({ team, onBack }) {
+  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+
+  if (selectedPlayerId) {
+    return <PlayerDetails playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />;
+  }
+
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-      {/* Team Name */}
-      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">
-        {team.name}
-      </h2>
+      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">{team.name}</h2>
 
       {/* Members Section with Background Logo */}
       <div className="relative p-4">
-        {/* Background Logo - behind members only */}
         <div
           className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-85"
           style={{ backgroundImage: `url(${team.logo})` }}
         />
 
-        {/* Members List */}
+        {/* Members List (Clickable) */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
           {team.members.map((member, index) => (
             <div
               key={index}
-              className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 transition duration-200"
+              onClick={() => setSelectedPlayerId(member.id)} // Pass player ID
+              className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 cursor-pointer transition duration-200"
             >
-              {member}
+              {member.name}
             </div>
           ))}
         </div>
@@ -153,8 +155,6 @@ function TeamDetails({ team, onBack }) {
     </div>
   );
 }
-
-
 
 
 // ✅ Prop Types
