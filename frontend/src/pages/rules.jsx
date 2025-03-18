@@ -8,7 +8,7 @@ const sports = [
   { name: 'Table Tennis', image: '/static/images/tabletennis.jpg', path: '/tabletennisrules' },
   { name: 'Carrom', image: '/static/images/carrom.jpg', path: '/carromrules' },
   { name: 'Darts', image: '/static/images/darts.jpg', path: '/dartsrules' },
-  { name: 'Fun Friday', image: '/static/images/funfriday.png', path: '/funfridayrules' }, // Keeping this as is
+  { name: 'Fun Friday and General', image: '/static/images/funfriday.png', path: '/funfridayrules' }, // Keeping this as is
 ];
 
 const Rules = () => {
