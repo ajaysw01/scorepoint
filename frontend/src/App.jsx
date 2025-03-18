@@ -2,6 +2,8 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Navbar from "./components/navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Scores from "./pages/scores";
 import Teams from "./pages/teams";
@@ -38,7 +40,10 @@ function App() {
         <Route path="/teams" element={<Teams />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/badminton" element={<Badminton />} />
-        <Route path="/:game_name/:sport_id/:category" element={<GameScores />} />
+        <Route
+          path="/:game_name/:sport_id/:category"
+          element={<GameScores />}
+        />
         {/* <Route path="/badminton/:sport_id/:category" element={<BCategoryDetails />} />
         <Route path="/tabletennis/:sport_id/:category" element={<TTCategoryDetails />}/>
         <Route path="/carrom/:sport_id/:category" element={<CCategoryDetails />} /> */}
@@ -48,12 +53,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/rules" element={<SportsDashboard />} />
         <Route path="/updates" element={<Updates />} />
-        <Route path="/test" element={<PlayerStats/>}/>
+        <Route path="/test" element={<PlayerStats />} />
         <Route
           path="/editscores"
           element={
-            <ProtectedRoute><EditScores /></ProtectedRoute>
-              
+            <ProtectedRoute>
+              <EditScores />
+            </ProtectedRoute>
           }
         />
         <Route
@@ -72,7 +78,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/schedule"
           element={
@@ -82,6 +88,18 @@ function App() {
           }
         />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Router>
   );
 }
