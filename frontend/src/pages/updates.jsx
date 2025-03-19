@@ -64,7 +64,7 @@ const Updates = () => {
       <button
         key={sport}
         onClick={() => setCurrentSport(sport)}
-        className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+        className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition-all cursor-pointer ${
           currentSport === sport ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"
         }`}
       >
@@ -81,7 +81,7 @@ const Updates = () => {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all cursor-pointer ${
               filter === f ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"
             }`}
           >
