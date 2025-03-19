@@ -64,10 +64,11 @@ app.add_exception_handler(UserNotFoundException, exception_handlers.user_not_fou
 # Include Routers
 app.include_router(user_route.router, prefix=settings.API_PREFIX + "/users", tags=["User registration"])
 app.include_router(authentication.router, prefix=settings.API_PREFIX + "/auth", tags=["Login"])
-app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team and Player Endpoints"])
+app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team Endpoints"])
 app.include_router(sport_route.router, prefix=settings.API_PREFIX + "/sports", tags=["Sports Endpoints"])
 app.include_router(points_route.router, prefix=settings.API_PREFIX + "/points", tags=["Points Endpoints"])
 app.include_router(match_route.router, prefix=settings.API_PREFIX + "/match", tags=["Match Endpoints"])
+app.include_router(match_route.router, prefix=settings.API_PREFIX + "/players", tags=["Player Endpoints"])
 
 
 def create_admin():
