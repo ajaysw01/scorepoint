@@ -29,7 +29,7 @@ import TableTennisRules from "./pages/tabletennisrules";
 import BadmintonRules from "./pages/badmintonrules";
 import FunFridayRules from "./pages/funfridayrules";
 import Cricket from "./pages/cricket";
-
+import PlayerRankings from "./pages/playerranking";
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
   return token ? children : <Navigate to="/login" />;
@@ -44,6 +44,7 @@ function App() {
         <Route path="/addScore" element={<AddScore />} />
         <Route path="/scores" element={<Scores />} />
         <Route path="/teams" element={<Teams />} />
+        <Route path="/rankings" element={<PlayerRankings />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/badminton" element={<Badminton />} />
         <Route
