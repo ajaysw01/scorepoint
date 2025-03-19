@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from fastapi import HTTPException
 from src.api.models.models import PlayerPoints, TeamPoints, Player, Team, Sport, SportCategoryEnum
+from src.api.models.request_models import BatchPlayerPointsCreate
 from src.api.models.response_models import PlayerDetails
 
 
@@ -66,66 +67,78 @@ def submit_player_points(db: Session, payload):
     }
 
 
-def submit_batch_player_points(db: Session, payload_list):
+def submit_batch_player_points(db: Session, payload: BatchPlayerPointsCreate):
     """Submit points for multiple players in a batch."""
     response = []
     try:
-        with db.begin():
-            for payload in payload_list:
-                sport = db.query(Sport).filter(Sport.id == payload.sport_id).first()
-                if not sport:
-                    raise HTTPException(status_code=404, detail=f"Sport with ID {payload.sport_id} not found")
+        for player_point in payload.player_points:
+            # Validate sport
+            sport = db.query(Sport).filter(Sport.id == player_point.sport_id).first()
+            if not sport:
+                raise HTTPException(status_code=404, detail=f"Sport with ID {player_point.sport_id} not found")
 
-                player = db.query(Player).filter(Player.id == payload.player_id).first()
-                if not player:
-                    raise HTTPException(status_code=404, detail=f"Player with ID {payload.player_id} not found")
+            # Validate player
+            player = db.query(Player).filter(Player.id == player_point.player_id).first()
+            if not player:
+                raise HTTPException(status_code=404, detail=f"Player with ID {player_point.player_id} not found")
 
-                if sport.name in {"Badminton", "Carrom", "Table Tennis"} and not payload.category:
-                    raise HTTPException(status_code=400, detail=f"This sport requires a category for player ID {payload.player_id}.")
-                if sport.name in {"Cricket", "Darts", "Fun Fridays"} and payload.category:
-                    raise HTTPException(status_code=400, detail=f"This sport does not have categories for player ID {payload.player_id}.")
-
-                new_points = PlayerPoints(
-                    player_id=payload.player_id,
-                    sport_id=payload.sport_id,
-                    category=payload.category,
-                    competition_level=payload.competition_level,
-                    points=payload.points
+            # Category validation
+            if sport.name in CATEGORY_SPORTS and not player_point.category:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Sport '{sport.name}' requires a category for player ID {player_point.player_id}."
                 )
-                db.add(new_points)
+            if sport.name in NON_CATEGORY_SPORTS and player_point.category:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Sport '{sport.name}' does not support categories for player ID {player_point.player_id}."
+                )
 
-                team_points = db.query(TeamPoints).filter(
-                    TeamPoints.team_id == player.team_id,
-                    TeamPoints.sport_id == payload.sport_id,
-                    TeamPoints.category == payload.category
-                ).first()
+            # Create and store player points
+            new_points = PlayerPoints(
+                player_id=player_point.player_id,
+                sport_id=player_point.sport_id,
+                category=player_point.category,
+                competition_level=player_point.competition_level,
+                points=player_point.points
+            )
+            db.add(new_points)
 
-                if team_points:
-                    team_points.team_points += payload.points
-                else:
-                    team_points = TeamPoints(
-                        team_id=player.team_id,
-                        sport_id=payload.sport_id,
-                        category=payload.category,
-                        team_points=payload.points,
-                        bonus_points=0
-                    )
-                    db.add(team_points)
+            # Update or create team points
+            team_points = db.query(TeamPoints).filter(
+                TeamPoints.team_id == player.team_id,
+                TeamPoints.sport_id == player_point.sport_id,
+                TeamPoints.category == player_point.category
+            ).first()
 
-                db.flush()
+            if team_points:
+                team_points.team_points += player_point.points
+            else:
+                team_points = TeamPoints(
+                    team_id=player.team_id,
+                    sport_id=player_point.sport_id,
+                    category=player_point.category,
+                    team_points=player_point.points,
+                    bonus_points=0
+                )
+                db.add(team_points)
 
-                response.append({
-                    "player_id": payload.player_id,
-                    "message": "Player points submitted successfully",
-                    "points_id": new_points.id,
-                    "team_total_points": team_points.team_points + team_points.bonus_points
-                })
+            db.flush()
 
+            response.append({
+                "player_id": player_point.player_id,
+                "message": "Player points submitted successfully",
+                "points_id": new_points.id,
+                "team_total_points": team_points.team_points + team_points.bonus_points
+            })
+
+        db.commit()
         return response
 
     except SQLAlchemyError as e:
-        db.rollback()  
+        db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to submit player points: {str(e)}")
+
 
 
 # def get_player_points_by_category(db: Session, player_id: int):

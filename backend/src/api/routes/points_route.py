@@ -23,7 +23,7 @@ from src.api.services.points_service import (
     fetch_player_history,
 
 )
-from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate
+from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate, BatchPlayerPointsCreate
 from src.api.utils.dependencies import require_admin
 
 router = APIRouter()
@@ -33,9 +33,9 @@ router = APIRouter()
 def submit_points(payload: PlayerPointsCreate, db: Session = Depends(get_db)):
     return submit_player_points(db, payload)
 
-# submit multiple player points
+# Submit batch player points (multiple players at once)
 @router.post("/player/submit_batch", dependencies=[Depends(require_admin)])
-def submit_batch_points(payload: list[PlayerPointsCreate], db: Session = Depends(get_db)):
+def submit_batch_points(payload: BatchPlayerPointsCreate, db: Session = Depends(get_db)):
     return submit_batch_player_points(db, payload)
 
 # @router.get("/player/category/{player_id}")
