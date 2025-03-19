@@ -23,13 +23,15 @@ const GameScores = () => {
                 }
                 const data = await response.json();
 
+                console.log(data);
+
                 const groupedTeams = data.reduce((acc, player) => {
-                    const { team_name, name, points } = player;
+                    const { team_name, name, total_points } = player;
                     if (!acc[team_name]) {
                         acc[team_name] = { teamName: team_name, teamScore: 0, players: [] };
                     }
-                    acc[team_name].players.push({ name, score: points });
-                    acc[team_name].teamScore += points;
+                    acc[team_name].players.push({ name, score: total_points });
+                    acc[team_name].teamScore += total_points;
                     return acc;
                 }, {});
 

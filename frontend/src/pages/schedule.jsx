@@ -3,7 +3,8 @@
 const Schedule = () => {
     return (
         <div>
-            <AddScore/>
+            <AddScore />
+
 
         </div>
     )

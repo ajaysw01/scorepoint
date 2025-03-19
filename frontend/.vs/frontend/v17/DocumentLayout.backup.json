@@ -1,0 +1,62 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\addScore.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\addScore.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\teamsManagement.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\teamsManagement.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "teamsManagement.jsx",
+              "DocumentMoniker": "C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\teamsManagement.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\teamsManagement.jsx",
+              "ToolTip": "C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\teamsManagement.jsx",
+              "RelativeToolTip": "src\\pages\\teamsManagement.jsx",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAB8AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-03-18T11:34:59.73Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "addScore.jsx",
+              "DocumentMoniker": "C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\addScore.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\addScore.jsx",
+              "ToolTip": "C:\\Users\\csinmadi\\OneDrive - Creditsafe\\Desktop\\sco-celeb\\scorepoint\\frontend\\src\\pages\\addScore.jsx",
+              "RelativeToolTip": "src\\pages\\addScore.jsx",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAGEAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-03-18T09:32:21.115Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
