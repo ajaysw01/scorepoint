@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains logger configuration for debugging purpose.
+"""
 import logging
 import os
 

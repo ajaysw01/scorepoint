@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file handles the login functionality.
+"""
 import logging
 from datetime import timedelta
 

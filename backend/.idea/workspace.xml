@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ddc626df-89f4-4282-950e-cb090626be4e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/routes/points_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/routes/points_route.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/services/points_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/points_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth/authentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth/jwt_token.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth/jwt_token.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth/oauth2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth/oauth2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/configurations/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/configurations/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/configurations/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/configurations/logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/database/db_conn.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/database/db_conn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/models/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/utils/hashing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/utils/hashing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
