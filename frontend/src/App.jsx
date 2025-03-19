@@ -29,6 +29,7 @@ import TableTennisRules from "./pages/tabletennisrules";
 import BadmintonRules from "./pages/badmintonrules";
 import FunFridayRules from "./pages/funfridayrules";
 import Cricket from "./pages/cricket";
+import About from "./pages/about";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -66,6 +67,7 @@ function App() {
         <Route path="/badmintonrules" element={<BadmintonRules/>} />
         <Route path="/funfridayrules" element={<FunFridayRules/>} />
         <Route path="/cricket" element={<Cricket/>} />
+        <Route path="/about" element={<About/>} />
 
         <Route
           path="/editscores"
