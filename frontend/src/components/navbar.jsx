@@ -1,70 +1,51 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Check login status on each render
+  const isLoggedIn = !!localStorage.getItem("authToken");
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   return (
-    <nav className="bg-gradient-to-r from-white-600 to-red-600 p-4 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-gradient-to-r from-white-600 to-red-600 shadow-lg">
+      <div className="container mx-auto flex justify-between items-center h-20 px-4">
         {/* Logo */}
-        <Link to="/" className="text-white text-2xl font-bold">
-          <img src="static/images/Creditsafe-Logo-Red.png" />
+        <Link to="/" className="text-white text-2xl font-bold flex items-center">
+          <img src="static/images/CreditsafeLogo.png" alt="Creditsafe Logo" className="h-36 w-auto" />
         </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          <li>
-            <Link
-              to="/updates"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Updates
-            </Link>
-          </li>
+          {["updates", "rules", "scores", "teams", "leaderboard"].map((item) => (
+            <li key={item}>
+              <Link to={`/${item}`} className="text-white text-lg hover:text-gray-200 transition-colors">
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+              </Link>
+            </li>
+          ))}
 
-          <li>
-            <Link
-              to="/rules"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Rules
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              to="/scores"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Scores
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/teams"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Teams
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/leaderboard"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Leaderboard
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/login"
-              className="text-white text-lg hover:text-gray-200"
-            >
-              Admin Login
-            </Link>
-          </li>
+          {/* Show Admin Login or Logout */}
+          {isLoggedIn ? (
+            <li>
+              <button onClick={handleLogout} className="text-white text-lg hover:text-gray-200 transition-colors">
+                Logout
+              </button>
+            </li>
+          ) : (
+            <li>
+              <Link to="/login" className="text-white text-lg hover:text-gray-200 transition-colors">
+                Admin Login
+              </Link>
+            </li>
+          )}
         </ul>
 
         {/* Mobile Menu Button */}
@@ -78,71 +59,44 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-blue-700 p-4">
+        <div className="md:hidden bg-gradient-to-r from-white-600 to-red-600 p-4 mt-2 rounded-lg shadow-lg">
           <ul className="flex flex-col space-y-4">
-            <li>
-              <Link
-                to="/updates"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Updates
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/rules"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Rules
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/scores"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Scores
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/teams"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Teams
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/leaderboard"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Leaderboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/login"
-                className="text-white text-lg block"
-                onClick={() => setIsOpen(false)}
-              >
-                Admin Login
-              </Link>
-            </li>
+            {["updates", "rules", "scores", "teams", "leaderboard"].map((item) => (
+              <li key={item}>
+                <Link
+                  to={`/${item}`}
+                  className="text-white text-lg block hover:text-gray-200 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </Link>
+              </li>
+            ))}
+
+            {/* Show Admin Login or Logout */}
+            {isLoggedIn ? (
+              <li>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="text-white text-lg block hover:text-gray-200 transition-colors"
+                >
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  to="/login"
+                  className="text-white text-lg block hover:text-gray-200 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admin Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       )}

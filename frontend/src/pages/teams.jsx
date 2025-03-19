@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-
+import PlayerDetails from "./playerdetails";
 export default function Teams() {
   const [teams, setTeams] = useState([
     {
@@ -35,7 +35,7 @@ export default function Teams() {
       logo: "static/images/Death.png",
       members: [],
     },
-    { id: 7, name: "The Gaints", logo: "static/images/maru.png", members: [] },
+    { id: 7, name: "The Giants", logo: "static/images/maru.png", members: [] },
     {
       id: 8,
       name: "The Dragons",
@@ -51,28 +51,27 @@ export default function Teams() {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
             const fetchedTeam = response.data.find(
-              (t) =>
-                t.name &&
-                team.name &&
-                t.name.toLowerCase() === team.name.toLowerCase()
+              (t) => t.name.toLowerCase() === team.name.toLowerCase()
             );
             return fetchedTeam
               ? {
                   ...team,
-                  members:
-                    fetchedTeam.players.map((player) => player.name) || [],
+                  members: fetchedTeam.players.map((player) => ({
+                    id: player.id, // Include player ID
+                    name: player.name,
+                  })),
                 }
               : team;
           })
         );
-      })
+        })
       .catch((error) => console.error("Error fetching teams:", error));
   }, []);
 
   const [selectedTeam, setSelectedTeam] = useState(null);
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen p-8 bg-gray-100">
       {selectedTeam ? (
         <TeamDetails team={selectedTeam} onBack={() => setSelectedTeam(null)} />
       ) : (
@@ -82,12 +81,14 @@ export default function Teams() {
   );
 }
 
-// ✅ Pass `teams` as a prop to `TeamsList`
+// ✅ Teams List Component
 function TeamsList({ teams, onSelectTeam }) {
   return (
-    <>
-      <h1 className="text-4xl font-bold text-center mb-8">Teams</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 justify-items-center">
+    <div className="max-w-6xl mx-auto">
+      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
+        Teams
+      </h1>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 justify-items-center">
         {teams.map((team) => (
           <div
             key={team.id}
@@ -97,49 +98,66 @@ function TeamsList({ teams, onSelectTeam }) {
             <img
               src={team.logo}
               alt={team.name}
-              className="w-40 h-40 object-contain transition-transform duration-200 ease-in-out hover:scale-110"
+              className="w-32 h-32 md:w-40 md:h-40 object-contain transition-transform duration-200 ease-in-out hover:scale-110"
             />
-            <p className="mt-2 text-xl font-bold">{team.name}</p>
+            <p className="mt-2 text-lg md:text-xl font-bold">{team.name}</p>
           </div>
         ))}
       </div>
-    </>
-  );
-}
-
-function TeamDetails({ team, onBack }) {
-  return (
-    <div
-      className="relative flex flex-col items-center text-gray-900 bg-white max-w-2xl mx-auto p-6 rounded-lg shadow-lg border border-gray-200"
-      style={{
-        backgroundImage: `url(${team.logo})`,
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        filter: "brightness(1)", // Lightens the image
-      }}
-    >
-      <h2 className="text-3xl font-bold mb-6 z-10">{team.name}</h2>
-      <div className="grid grid-cols-2 gap-4 p-4 z-10">
-        {team.members.map((member, index) => (
-          <div
-            key={index}
-            className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 transition duration-200"
-          >
-            {member}
-          </div>
-        ))}
-      </div>
-      <button
-        onClick={onBack}
-        className="mt-6 px-6 py-2 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 hover:shadow-lg transition duration-200 z-10"
-      >
-        ← Back to Teams
-      </button>
     </div>
   );
 }
 
+// ✅ Team Details Component
+// ✅ Team Details Component with Background Logo Effect
+// ✅ Team Details Component with Background Logo Only
+function TeamDetails({ team, onBack }) {
+  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+
+  if (selectedPlayerId) {
+    return <PlayerDetails playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />;
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">{team.name}</h2>
+
+      {/* Members Section with Background Logo */}
+      <div className="relative p-4">
+        <div
+          className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-85"
+          style={{ backgroundImage: `url(${team.logo})` }}
+        />
+
+        {/* Members List (Clickable) */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
+          {team.members.map((member, index) => (
+            <div
+              key={index}
+              onClick={() => setSelectedPlayerId(member.id)} // Pass player ID
+              className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 cursor-pointer transition duration-200"
+            >
+              {member.name}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Back Button */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={onBack}
+          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
+        >
+          Back to Teams
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+// ✅ Prop Types
 TeamsList.propTypes = {
   teams: PropTypes.arrayOf(
     PropTypes.shape({

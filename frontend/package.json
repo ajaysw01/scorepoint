@@ -15,12 +15,14 @@
     "date-fns": "^4.1.0",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.4.7",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.475.0",
     "papaparse": "^5.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
     "react-router-dom": "^7.2.0",
+    "react-toastify": "^11.0.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
@@ -36,6 +38,6 @@
     "globals": "^15.14.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.8",
-    "vite": "^6.1.0"
+    "vite": "^6.2.1"
   }
 }

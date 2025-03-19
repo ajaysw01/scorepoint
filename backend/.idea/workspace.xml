@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ddc626df-89f4-4282-950e-cb090626be4e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/routes/team_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/routes/team_route.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/services/team_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/team_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/routes/points_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/routes/points_route.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/services/points_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/services/points_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +47,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.points_service.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
