@@ -53,7 +53,7 @@ const GameScores = () => {
     return (
         <div className="p-8 min-h-screen bg-gray-100">
             <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
-                {game_name } 
+                {game_name }&nbsp;
                 { category !== "none" ?  category.replace("_", " ").toLowerCase() : ""} Scores
 
             </h1>
@@ -109,7 +109,7 @@ const GameScores = () => {
             <div className="mt-12 flex justify-center">
                 <button
                     onClick={() => navigate(-1)}
-                    className="mt-12 px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all"
+                    className="mt-12 px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
                 >
                     Back
                 </button>

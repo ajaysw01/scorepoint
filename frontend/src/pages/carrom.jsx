@@ -31,7 +31,7 @@ const categories = [
 const Carroms = () => {
   const navigate = useNavigate();
   const sport_id = 4;
-  const game_name = "Carrom ";
+  const game_name = "Carrom";
 
   const handleCategoryClick = (category) => {
     navigate(`/${game_name}/${sport_id}/${category.apiValue}`);
@@ -71,7 +71,7 @@ const Carroms = () => {
       <div className="mt-12 flex justify-center">
         <button
           onClick={() => navigate("/scores")}
-          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all"
+          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
         >
           Back
         </button>

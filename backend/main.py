@@ -20,7 +20,7 @@ from src.api.customexception.exceptions import (
 )
 from src.api.configurations.config import get_settings
 from src.api.database.db_conn import Base, engine, SessionLocal
-from src.api.routes import user_route, team_route, sport_route, points_route
+from src.api.routes import user_route, team_route, sport_route, points_route, match_route
 from src.api.customexception import exception_handlers
 from src.api.models.models import User
 from src.api.utils.hashing import Hash
@@ -64,21 +64,22 @@ app.add_exception_handler(UserNotFoundException, exception_handlers.user_not_fou
 # Include Routers
 app.include_router(user_route.router, prefix=settings.API_PREFIX + "/users", tags=["User registration"])
 app.include_router(authentication.router, prefix=settings.API_PREFIX + "/auth", tags=["Login"])
-app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team Endpoints"])
+app.include_router(team_route.router, prefix=settings.API_PREFIX + "/teams", tags=["Team and Player Endpoints"])
 app.include_router(sport_route.router, prefix=settings.API_PREFIX + "/sports", tags=["Sports Endpoints"])
 app.include_router(points_route.router, prefix=settings.API_PREFIX + "/points", tags=["Points Endpoints"])
+app.include_router(match_route.router, prefix=settings.API_PREFIX + "/match", tags=["Match Endpoints"])
 
-# Create admin user
+
 def create_admin():
     db: Session = SessionLocal()
 
     try:
-        admin_email = "ajaysw45@mail.com"
+        admin_email = "ajaysw45@gmail.com"
         admin = db.query(User).filter(User.email == admin_email).first()
 
         if not admin:
             new_admin = User(
-                name="Ajay",
+                name="Ajay Wankhade",
                 email=admin_email,
                 hashed_password=Hash.bcrypt("Ajay@123"),
                 role="admin"
