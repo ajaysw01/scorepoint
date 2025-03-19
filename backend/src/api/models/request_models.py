@@ -68,6 +68,13 @@ class TeamBonusPointsCreate(BaseModel):
     bonus_points: conint(ge=0)
 
 
+# player models
+class PlayerUpdate2(BaseModel):
+    name: str
+
+
+
+
 # separate models for match schedules. It does not have any relation with rest of the applicaiton.
 class MatchScheduleCreate(BaseModel):
     player1: str

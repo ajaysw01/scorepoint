@@ -123,6 +123,15 @@ class PlayerHistoryResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class PlayerResponse3(BaseModel):
+    id: int
+    name: str
+    team_id: int
+
+    class Config:
+        from_attributes = True
+
+
 # separate models for match schedules. It has no relation with rest of the application.
 from datetime import date, time
 
