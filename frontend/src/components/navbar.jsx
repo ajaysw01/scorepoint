@@ -61,8 +61,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-gradient-to-r from-white-600 to-red-600 p-4 mt-2 rounded-lg shadow-lg">
           <ul className="flex flex-col space-y-4">
-            {["updates", "rules", "scores", "teams","rankings", "leaderboard"].map((item) => (
-            {["updates", "rules", "scores", "teams", "leaderboard", "about"].map((item) => (
+            {["updates", "rules", "scores", "teams","rankings", "leaderboard","about"].map((item) => (
               <li key={item}>
                 <Link
                   to={`/${item}`}
