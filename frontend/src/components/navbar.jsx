@@ -24,7 +24,7 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          {["updates", "rules", "scores", "teams", "leaderboard"].map((item) => (
+          {["updates", "rules", "scores", "teams","rankings","leaderboard","about"].map((item) => (
             <li key={item}>
               <Link to={`/${item}`} className="text-white text-lg hover:text-gray-200 transition-colors">
                 {item.charAt(0).toUpperCase() + item.slice(1)}
@@ -61,7 +61,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-gradient-to-r from-white-600 to-red-600 p-4 mt-2 rounded-lg shadow-lg">
           <ul className="flex flex-col space-y-4">
-            {["updates", "rules", "scores", "teams", "leaderboard"].map((item) => (
+            {["updates", "rules", "scores", "teams","rankings", "leaderboard","about"].map((item) => (
               <li key={item}>
                 <Link
                   to={`/${item}`}

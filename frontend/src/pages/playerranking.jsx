@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import axios from "axios";
 import { Loader2 } from "lucide-react";
 
 const PlayerRankings = () => {
@@ -8,10 +7,10 @@ const PlayerRankings = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://scorepoint.onrender.com/api/points/player/rankings")
-      .then((res) => res.json())
-      .then((data) => {
-        setRankings(data);
+    axios
+      .get("https://scorepoint.onrender.com/api/points/player/rankings")
+      .then((response) => {
+        setRankings(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -22,50 +21,58 @@ const PlayerRankings = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="animate-spin w-10 h-10 text-gray-500" />
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="animate-spin w-12 h-12 text-gray-600" />
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Player Rankings</h1>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Player Rankings</h1>
+
       {rankings &&
         Object.entries(rankings).map(([sport, categories]) => (
-          <div key={sport} className="mb-6">
-            <h2 className="text-xl font-semibold capitalize mb-2">{sport}</h2>
+          <div key={sport} className="mb-8">
+            <h2 className="text-2xl font-semibold text-gray-700 capitalize mb-4">{sport}</h2>
+
             {categories &&
               Object.entries(categories).map(([category, { playerData }]) => (
-                <Card key={category} className="mb-4">
-                  <CardContent>
-                    <h3 className="text-lg font-medium capitalize mb-2">{category.replace('_', ' ')}</h3>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Rank</TableHead>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Team</TableHead>
-                          <TableHead>Matches Played</TableHead>
-                          <TableHead>Points</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
+                <div key={category} className="mb-6 bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+                  <div className="p-4 border-b">
+                    <h3 className="text-lg font-medium text-gray-700 capitalize">{category.replace("_", " ")}</h3>
+                  </div>
+
+                  {/* Responsive Table */}
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full border-collapse border border-gray-300">
+                      <thead>
+                        <tr className="bg-gray-800 text-white text-left">
+                          <th className="px-4 py-3 border border-gray-600">Rank</th>
+                          <th className="px-4 py-3 border border-gray-600">Name</th>
+                          <th className="px-4 py-3 border border-gray-600">Team</th>
+                          <th className="px-4 py-3 border border-gray-600">Matches Played</th>
+                          <th className="px-4 py-3 border border-gray-600">Points</th>
+                        </tr>
+                      </thead>
+                      <tbody>
                         {playerData
                           .sort((a, b) => b.points - a.points)
                           .map((player, index) => (
-                            <TableRow key={player.name}>
-                              <TableCell>{index + 1}</TableCell>
-                              <TableCell>{player.name}</TableCell>
-                              <TableCell>{player.team}</TableCell>
-                              <TableCell>{player.matches_played}</TableCell>
-                              <TableCell>{player.points}</TableCell>
-                            </TableRow>
+                            <tr key={player.name} className="border border-gray-300 odd:bg-gray-100 hover:bg-blue-50">
+                              <td className="px-4 py-3 border border-gray-300 text-center">{index + 1}</td>
+                              <td className="px-4 py-3 border border-gray-300">{player.name}</td>
+                              <td className="px-4 py-3 border border-gray-300">{player.team}</td>
+                              <td className="px-4 py-3 border border-gray-300 text-center">{player.matches_played}</td>
+                              <td className="px-4 py-3 border border-gray-300 font-bold text-blue-600 text-center">
+                                {player.points}
+                              </td>
+                            </tr>
                           ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               ))}
           </div>
         ))}

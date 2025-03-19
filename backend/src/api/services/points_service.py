@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from fastapi import HTTPException
 from src.api.models.models import PlayerPoints, TeamPoints, Player, Team, Sport, SportCategoryEnum
-from src.api.models.request_models import BatchPlayerPointsCreate
+from src.api.models.request_models import BatchPlayerPointsCreate, CATEGORY_SPORTS, NON_CATEGORY_SPORTS
 from src.api.models.response_models import PlayerDetails
 
 
@@ -65,7 +65,6 @@ def submit_player_points(db: Session, payload):
         "points_id": new_points.id,
         "team_total_points": team_points.team_points + team_points.bonus_points
     }
-
 
 def submit_batch_player_points(db: Session, payload: BatchPlayerPointsCreate):
     """Submit points for multiple players in a batch."""
@@ -138,7 +137,6 @@ def submit_batch_player_points(db: Session, payload: BatchPlayerPointsCreate):
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to submit player points: {str(e)}")
-
 
 
 # def get_player_points_by_category(db: Session, player_id: int):
@@ -446,35 +444,42 @@ def get_leaderboard(db: Session):
     ]
 
 
-def get_player_rankings_by_category(db: Session):
-    """Get player rankings grouped by sport category, counting competition levels."""
+def get_player_rankings(db: Session):
+    """Get player rankings grouped by sport and category, counting competition levels."""
     results = (
         db.query(
+            Sport.name.label("sport_name"),
             PlayerPoints.category,
             Player.name,
             Team.name.label("team"),
             func.count(PlayerPoints.competition_level).label("matches_played"),
             func.sum(PlayerPoints.points).label("total_points")
         )
+        .join(Sport, Sport.id == PlayerPoints.sport_id)
         .join(Player, Player.id == PlayerPoints.player_id)
         .join(Team, Team.id == Player.team_id)
-        .group_by(PlayerPoints.category, Player.name, Team.name)
-        .order_by(PlayerPoints.category, func.sum(PlayerPoints.points).desc())
+        .group_by(Sport.name, PlayerPoints.category, Player.name, Team.name)
+        .order_by(Sport.name, PlayerPoints.category, func.sum(PlayerPoints.points).desc())
         .all()
     )
 
-    category_rankings = {}
-    for category, player_name, team_name, matches_played, total_points in results:
-        if category not in category_rankings:
-            category_rankings[category] = {"playerData": []}
-        category_rankings[category]["playerData"].append({
+    sport_rankings = {}
+    for sport_name, category, player_name, team_name, matches_played, total_points in results:
+        if sport_name not in sport_rankings:
+            sport_rankings[sport_name] = {}
+
+        if category not in sport_rankings[sport_name]:
+            sport_rankings[sport_name][category] = {"playerData": []}
+
+        sport_rankings[sport_name][category]["playerData"].append({
             "name": player_name,
             "team": team_name,
             "matches_played": matches_played,
             "points": total_points
         })
 
-    return category_rankings
+    return sport_rankings
+
 
 #
 # def fetch_player_points_by_sport(

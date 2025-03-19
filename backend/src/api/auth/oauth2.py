@@ -1,3 +1,9 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains authentication login .
+"""
+
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session

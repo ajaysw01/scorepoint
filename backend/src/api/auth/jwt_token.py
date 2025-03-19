@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains jwt token creation and verification code.
+"""
 from datetime import datetime, timedelta, timezone
 import logging
 import jwt

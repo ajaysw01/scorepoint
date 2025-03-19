@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file establishes connection between the database and our application.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

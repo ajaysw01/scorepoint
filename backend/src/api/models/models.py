@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains sqlalchemy orm models to define the db schema.
+"""
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, Enum, Date, Time
 from sqlalchemy.orm import relationship
 from src.api.database.db_conn import Base

@@ -71,26 +71,26 @@ app.include_router(match_route.router, prefix=settings.API_PREFIX + "/match", ta
 app.include_router(match_route.router, prefix=settings.API_PREFIX + "/players", tags=["Player Endpoints"])
 
 
-def create_admin():
-    db: Session = SessionLocal()
+# def create_admin():
+#     db: Session = SessionLocal()
 
-    try:
-        admin_email = "ajaysw45@gmail.com"
-        admin = db.query(User).filter(User.email == admin_email).first()
+#     try:
+#         admin_email = "ajay@gmail.com"
+#         admin = db.query(User).filter(User.email == admin_email).first()
 
-        if not admin:
-            new_admin = User(
-                name="Ajay Wankhade",
-                email=admin_email,
-                hashed_password=Hash.bcrypt("Ajay@123"),
-                role="admin"
-            )
-            db.add(new_admin)
-            db.commit()
-    finally:
-        db.close()
+#         if not admin:
+#             new_admin = User(
+#                 name="Ajay Wankhade",
+#                 email=admin_email,
+#                 hashed_password=Hash.bcrypt("ajay"),
+#                 role="admin"
+#             )
+#             db.add(new_admin)
+#             db.commit()
+#     finally:
+#         db.close()
 
-create_admin()
+# create_admin()
 
 # Middleware for process time
 @app.middleware("http")

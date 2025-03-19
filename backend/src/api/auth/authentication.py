@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file handles the login functionality.
+"""
 import logging
 from datetime import timedelta
 
@@ -15,7 +20,7 @@ from src.api.configurations import  config
 
 settings = config.get_settings()
 
-router = APIRouter(tags=["Authentication"])
+router = APIRouter()
 
 logger = logging.getLogger(__name__)
 

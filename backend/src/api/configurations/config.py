@@ -1,9 +1,14 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains configurations of the whole application.
+"""
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 import os
  
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()
  
 class Settings(BaseSettings):
     APP_NAME: str = "CS_Sports"
