@@ -27,11 +27,7 @@ const Login = () => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
-      const response = await axios.post(API_URL, formData, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
+     
 
       const { access_token, message } = response.data;
       localStorage.setItem("authToken", access_token);
