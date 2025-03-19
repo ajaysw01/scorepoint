@@ -124,7 +124,7 @@ def submit_batch_player_points(db: Session, payload_list):
         return response
 
     except SQLAlchemyError as e:
-        db.rollback()  # Rollback the transaction in case of any error
+        db.rollback()  
         raise HTTPException(status_code=500, detail=f"Failed to submit player points: {str(e)}")
 
 
