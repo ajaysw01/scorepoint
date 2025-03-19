@@ -22,7 +22,7 @@ import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
 import PlayerStats from "./pages/test";
-import CricketRules from './pages/cricketrules';
+import CricketRules from "./pages/cricketrules";
 import CarromRules from "./pages/carromrules";
 import TableTennisRules from "./pages/tabletennisrules";
 import BadmintonRules from "./pages/badmintonrules";
@@ -40,6 +40,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/scores" element={<Scores />} />
@@ -59,12 +60,12 @@ function App() {
         <Route path="/updates" element={<Updates />} />
         <Route path="/test" element={<PlayerStats />} />
         <Route path="/cricketrules" element={<CricketRules />} />
-        <Route path="/carromrules" element={<CarromRules/>} />
-        <Route path="/tabletennisrules" element={<TableTennisRules/>} />
-        <Route path="/badmintonrules" element={<BadmintonRules/>} />
-        <Route path="/funfridayrules" element={<FunFridayRules/>} />
-        <Route path="/cricket" element={<Cricket/>} />
-        <Route path="/about" element={<About/>} />
+        <Route path="/carromrules" element={<CarromRules />} />
+        <Route path="/tabletennisrules" element={<TableTennisRules />} />
+        <Route path="/badmintonrules" element={<BadmintonRules />} />
+        <Route path="/funfridayrules" element={<FunFridayRules />} />
+        <Route path="/cricket" element={<Cricket />} />
+        <Route path="/about" element={<About />} />
         <Route path="/carromrules" element={<CarromRules />} />
         <Route path="/tabletennisrules" element={<TableTennisRules />} />
         <Route path="/badmintonrules" element={<BadmintonRules />} />
