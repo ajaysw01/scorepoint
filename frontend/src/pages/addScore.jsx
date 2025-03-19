@@ -85,18 +85,20 @@ const BulkUpload = () => {
             return;
         }
 
-        const payload = editingData.map(({ player_id, sport_id, category, competition_level, points }) => {
-            const data = {
-                player_id: Number(player_id), // Ensure it's stored as a number
-                sport_id,
-                competition_level,
-                points
-            };
-            if (category && category.trim() !== "") {
-                data.category = category; // Only include if category is present
-            }
-            return data;
-        });
+        const payload = {
+            player_points: editingData.map(({ player_id, sport_id, category, competition_level, points }) => {
+                const data = {
+                    player_id: Number(player_id), // Ensure it's stored as a number
+                    sport_id,
+                    competition_level,
+                    points
+                };
+                if (category && category.trim() !== "") {
+                    data.category = category; // Only include if category is present
+                }
+                return data;
+            })
+        };
 
         console.log(payload);
         const token = localStorage.getItem("authToken");
@@ -164,8 +166,8 @@ const BulkUpload = () => {
                                     </td>
                                     <td className="p-2">
                                         {row.player_id ? (
-                                            row.player_id // Show assigned ID if only one
-                                        ) : row.possible_players.length > 1 ? ( // Show dropdown if multiple IDs
+                                            row.player_id
+                                        ) : row.possible_players.length > 1 ? (
                                             <select onChange={(e) => handleAssignPlayerId(rowIndex, e.target.value)}>
                                                 <option value="">Select Player</option>
                                                 {row.possible_players.map((player) => (
@@ -175,7 +177,7 @@ const BulkUpload = () => {
                                                 ))}
                                             </select>
                                         ) : (
-                                            "Fetching..." // Show while fetching
+                                            "Fetching..."
                                         )}
                                     </td>
                                     <td className="p-2">
