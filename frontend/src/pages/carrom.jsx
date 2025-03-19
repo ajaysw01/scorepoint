@@ -31,7 +31,7 @@ const categories = [
 const Carroms = () => {
   const navigate = useNavigate();
   const sport_id = 4;
-  const game_name = "Carrom ";
+  const game_name = "Carrom";
 
   const handleCategoryClick = (category) => {
     navigate(`/${game_name}/${sport_id}/${category.apiValue}`);

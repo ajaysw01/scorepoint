@@ -51,7 +51,7 @@ const GameScores = () => {
     return (
         <div className="p-8 min-h-screen bg-gray-100">
             <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
-                {game_name } 
+                {game_name }&nbsp;
                 { category !== "none" ?  category.replace("_", " ").toLowerCase() : ""} Scores
 
             </h1>
