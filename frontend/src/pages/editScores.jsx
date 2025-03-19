@@ -6,7 +6,7 @@ const categoryOptions = [
   { label: "Womens Singles", value: "women_singles" },
   { label: "Mens Doubles", value: "men_doubles" },
   { label: "Womens Doubles", value: "women_doubles" },
-  { label: "Mixed Doubles", value: "mixed_doubles" }
+  { label: "Mixed Doubles", value: "mixed_doubles" },
 ];
 
 const sportsWithCategories = ["Badminton", "Table Tennis", "Carroms"];
@@ -18,7 +18,7 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
   const fetchPoints = async (sportId, categori) => {
     try {
       let categoryNum = sportsWithCategories.includes(sport) ? categori : none;
-      let url = `https://scorepoint.onrender.com/api/points/players?sport_id=${sportId}&category=${categoryNum}`;
+      let url = `https://18.201.173.70/api/points/players?sport_id=${sportId}&category=${categoryNum}`;
       const response = await axios.get(url);
       setPlayerPoints(response.data);
     } catch (error) {
@@ -46,20 +46,34 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
           >
             <option value="">-- Select Category --</option>
             {categoryOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
           </select>
         )}
         <div className="mt-4 flex justify-end gap-2">
           {sportsWithCategories.includes(sport) && (
-            <button onClick={() => fetchPoints(sportId, category)} className="bg-blue-500 text-white px-4 py-2 rounded-md">Fetch</button>
+            <button
+              onClick={() => fetchPoints(sportId, category)}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Fetch
+            </button>
           )}
-          <button onClick={onClose} className="bg-gray-400 text-white px-4 py-2 rounded-md">Close</button>
+          <button
+            onClick={onClose}
+            className="bg-gray-400 text-white px-4 py-2 rounded-md"
+          >
+            Close
+          </button>
         </div>
         {playerPoints.length > 0 && (
           <ul className="mt-4 border p-2 max-h-40 overflow-auto">
             {playerPoints.map((player) => (
-              <li key={player.id} className="border-b py-2">{player.name} - {player.points} Points</li>
+              <li key={player.id} className="border-b py-2">
+                {player.name} - {player.points} Points
+              </li>
             ))}
           </ul>
         )}
@@ -71,7 +85,12 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
 const EditScores = () => {
   const [sports, setSports] = useState([]);
   const [editDialog, setEditDialog] = useState({ isOpen: false, sport: null });
-  const [pointsDialog, setPointsDialog] = useState({ isOpen: false, sport: "", sportId: null, category: null });
+  const [pointsDialog, setPointsDialog] = useState({
+    isOpen: false,
+    sport: "",
+    sportId: null,
+    category: null,
+  });
 
   useEffect(() => {
     fetchSports();
@@ -79,7 +98,7 @@ const EditScores = () => {
 
   const fetchSports = async () => {
     try {
-      const response = await axios.get("https://scorepoint.onrender.com/api/sports");
+      const response = await axios.get("https://18.201.173.70/api/sports");
       setSports(response.data);
     } catch (error) {
       console.error("Error fetching sports:", error);
@@ -89,7 +108,7 @@ const EditScores = () => {
   const handleDelete = async (sportId) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(`https://scorepoint.onrender.com/api/sports/${sportId}`, {
+      await axios.delete(`https://18.201.173.70/api/sports/${sportId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchSports();
@@ -108,7 +127,13 @@ const EditScores = () => {
             <div
               key={sport.id}
               className="bg-blue-100 hover:bg-blue-200 p-4 rounded-lg shadow-md text-center relative"
-              onClick={() => setPointsDialog({ isOpen: true, sport: sport.name, sportId: sport.id })}
+              onClick={() =>
+                setPointsDialog({
+                  isOpen: true,
+                  sport: sport.name,
+                  sportId: sport.id,
+                })
+              }
               onMouseDown={() => {
                 timer = setTimeout(() => {
                   setEditDialog({ isOpen: true, sport });
@@ -127,14 +152,41 @@ const EditScores = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h3 className="text-xl font-bold mb-4">Edit/Delete Sport</h3>
             <div className="flex justify-between">
-              <button onClick={() => handleDelete(editDialog.sport.id)} className="bg-red-500 text-white px-4 py-2 rounded-md">Delete</button>
-              <button onClick={() => console.log("Edit") } className="bg-yellow-500 text-white px-4 py-2 rounded-md">Edit</button>
+              <button
+                onClick={() => handleDelete(editDialog.sport.id)}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => console.log("Edit")}
+                className="bg-yellow-500 text-white px-4 py-2 rounded-md"
+              >
+                Edit
+              </button>
             </div>
-            <button onClick={() => setEditDialog({ isOpen: false, sport: null })} className="bg-gray-400 text-white px-4 py-2 rounded-md mt-4">Close</button>
+            <button
+              onClick={() => setEditDialog({ isOpen: false, sport: null })}
+              className="bg-gray-400 text-white px-4 py-2 rounded-md mt-4"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
-      <PointsDialog isOpen={pointsDialog.isOpen} onClose={() => setPointsDialog({ isOpen: false, sport: "", sportId: null, category: null })} sport={pointsDialog.sport} sportId={pointsDialog.sportId} />
+      <PointsDialog
+        isOpen={pointsDialog.isOpen}
+        onClose={() =>
+          setPointsDialog({
+            isOpen: false,
+            sport: "",
+            sportId: null,
+            category: null,
+          })
+        }
+        sport={pointsDialog.sport}
+        sportId={pointsDialog.sportId}
+      />
     </div>
   );
 };

@@ -89,7 +89,7 @@ const ScheduleUpload = () => {
 
     try {
       await axios.post(
-        "https://scorepoint.onrender.com/api/match/batch/schedules",
+        "https://18.201.173.70/api/match/batch/schedules",
         previewData,
         {
           headers: {

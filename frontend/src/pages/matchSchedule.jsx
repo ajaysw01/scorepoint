@@ -9,7 +9,7 @@ const MatchScheduleCard = ({ sport, category }) => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `https://scorepoint.onrender.com/api/match/${sport}/${category}`
+          `https://18.201.173.70/api/match/${sport}/${category}`
         );
         const data = await response.json();
         setMatches(data);
@@ -39,8 +39,6 @@ const MatchScheduleCard = ({ sport, category }) => {
 
   return (
     <div className="container mx-auto mt-8 p-4">
-      
-
       {/* Filter Buttons */}
       <div className="flex justify-center space-x-2 mb-6">
         {["completed", "live", "upcoming"].map((f) => (
@@ -48,7 +46,9 @@ const MatchScheduleCard = ({ sport, category }) => {
             key={f}
             onClick={() => setFilter(f)}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-all cursor-pointer ${
-              filter === f ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"
+              filter === f
+                ? "bg-red-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
           >
             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -72,9 +72,6 @@ const MatchScheduleCard = ({ sport, category }) => {
   );
 };
 
-
-
-
 const MatchCard = ({ match }) => (
   <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-all border border-gray-300 p-5">
     {/* Date */}
@@ -84,7 +81,9 @@ const MatchCard = ({ match }) => (
 
     {/* Match Info */}
     <div className="mt-4 text-center">
-      <h3 className="text-xl font-bold text-gray-900">{match.team1} vs {match.team2}</h3>
+      <h3 className="text-xl font-bold text-gray-900">
+        {match.team1} vs {match.team2}
+      </h3>
       <p className="text-gray-600 text-sm mt-1">{match.category}</p>
     </div>
 
@@ -111,9 +110,5 @@ const MatchCard = ({ match }) => (
     )}
   </div>
 );
-
-
-
-
 
 export default MatchScheduleCard;

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const API_URL = "https://scorepoint.onrender.com/api/auth/login";
+const API_URL = "https://18.201.173.70/api/auth/login";
 
 const Login = () => {
   const [email, setEmail] = useState("");

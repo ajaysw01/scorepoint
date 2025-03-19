@@ -46,7 +46,7 @@ export default function Teams() {
 
   useEffect(() => {
     axios
-      .get("https://scorepoint.onrender.com/api/teams")
+      .get("https://18.201.173.70/api/teams")
       .then((response) => {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
@@ -64,7 +64,7 @@ export default function Teams() {
               : team;
           })
         );
-        })
+      })
       .catch((error) => console.error("Error fetching teams:", error));
   }, []);
 
@@ -115,12 +115,19 @@ function TeamDetails({ team, onBack }) {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
 
   if (selectedPlayerId) {
-    return <PlayerDetails playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />;
+    return (
+      <PlayerDetails
+        playerId={selectedPlayerId}
+        onBack={() => setSelectedPlayerId(null)}
+      />
+    );
   }
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">{team.name}</h2>
+      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">
+        {team.name}
+      </h2>
 
       {/* Members Section with Background Logo */}
       <div className="relative p-4">
@@ -155,7 +162,6 @@ function TeamDetails({ team, onBack }) {
     </div>
   );
 }
-
 
 // ✅ Prop Types
 TeamsList.propTypes = {

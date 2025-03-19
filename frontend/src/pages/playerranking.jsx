@@ -8,7 +8,7 @@ const PlayerRankings = () => {
 
   useEffect(() => {
     axios
-      .get("https://scorepoint.onrender.com/api/points/player/rankings")
+      .get("https://18.201.173.70/api/points/player/rankings")
       .then((response) => {
         setRankings(response.data);
         setLoading(false);
@@ -34,13 +34,20 @@ const PlayerRankings = () => {
       {rankings &&
         Object.entries(rankings).map(([sport, categories]) => (
           <div key={sport} className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-700 capitalize mb-4">{sport}</h2>
+            <h2 className="text-2xl font-semibold text-gray-700 capitalize mb-4">
+              {sport}
+            </h2>
 
             {categories &&
               Object.entries(categories).map(([category, { playerData }]) => (
-                <div key={category} className="mb-6 bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+                <div
+                  key={category}
+                  className="mb-6 bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200"
+                >
                   <div className="p-4 border-b">
-                    <h3 className="text-lg font-medium text-gray-700 capitalize">{category.replace("_", " ")}</h3>
+                    <h3 className="text-lg font-medium text-gray-700 capitalize">
+                      {category.replace("_", " ")}
+                    </h3>
                   </div>
 
                   {/* Responsive Table */}
@@ -48,22 +55,43 @@ const PlayerRankings = () => {
                     <table className="min-w-full border-collapse border border-gray-300">
                       <thead>
                         <tr className="bg-gray-800 text-white text-left">
-                          <th className="px-4 py-3 border border-gray-600">Rank</th>
-                          <th className="px-4 py-3 border border-gray-600">Name</th>
-                          <th className="px-4 py-3 border border-gray-600">Team</th>
-                          <th className="px-4 py-3 border border-gray-600">Matches Played</th>
-                          <th className="px-4 py-3 border border-gray-600">Points</th>
+                          <th className="px-4 py-3 border border-gray-600">
+                            Rank
+                          </th>
+                          <th className="px-4 py-3 border border-gray-600">
+                            Name
+                          </th>
+                          <th className="px-4 py-3 border border-gray-600">
+                            Team
+                          </th>
+                          <th className="px-4 py-3 border border-gray-600">
+                            Matches Played
+                          </th>
+                          <th className="px-4 py-3 border border-gray-600">
+                            Points
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {playerData
                           .sort((a, b) => b.points - a.points)
                           .map((player, index) => (
-                            <tr key={player.name} className="border border-gray-300 odd:bg-gray-100 hover:bg-blue-50">
-                              <td className="px-4 py-3 border border-gray-300 text-center">{index + 1}</td>
-                              <td className="px-4 py-3 border border-gray-300">{player.name}</td>
-                              <td className="px-4 py-3 border border-gray-300">{player.team}</td>
-                              <td className="px-4 py-3 border border-gray-300 text-center">{player.matches_played}</td>
+                            <tr
+                              key={player.name}
+                              className="border border-gray-300 odd:bg-gray-100 hover:bg-blue-50"
+                            >
+                              <td className="px-4 py-3 border border-gray-300 text-center">
+                                {index + 1}
+                              </td>
+                              <td className="px-4 py-3 border border-gray-300">
+                                {player.name}
+                              </td>
+                              <td className="px-4 py-3 border border-gray-300">
+                                {player.team}
+                              </td>
+                              <td className="px-4 py-3 border border-gray-300 text-center">
+                                {player.matches_played}
+                              </td>
                               <td className="px-4 py-3 border border-gray-300 font-bold text-blue-600 text-center">
                                 {player.points}
                               </td>
