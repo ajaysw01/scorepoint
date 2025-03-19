@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, Enum, Date, Time
 from sqlalchemy.orm import relationship
 from src.api.database.db_conn import Base
 import enum
@@ -86,3 +86,20 @@ class TeamPoints(Base):
 
     team = relationship("Team", back_populates="scores")
     sport = relationship("Sport", back_populates="scores")
+
+
+class MatchSchedule(Base):
+    __tablename__ = "match_schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    player1 = Column(String(100), nullable=False)
+    player2 = Column(String(100), nullable=False)
+    team1 = Column(String(100), nullable=False)
+    team2 = Column(String(100), nullable=False)
+    sport = Column(String, nullable=False)
+    category = Column(Enum(SportCategoryEnum), nullable=True)
+    venue = Column(String(100), nullable=False)
+    comments = Column(String(100), nullable=True)
+    status = Column(String, nullable=False)
+    date = Column(Date, nullable=False)
+    time = Column(Time, nullable=False)

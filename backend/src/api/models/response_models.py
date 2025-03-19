@@ -1,3 +1,8 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains pydantic response models.
+"""
 from typing import List, Optional, Dict
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
@@ -19,6 +24,15 @@ class PlayerResponse(BaseModel):
     id: int
     name: str
     team_id: int
+
+    class Config:
+        from_attributes = True
+
+class PlayerResponse2(BaseModel):
+    player_id: int
+    name: str
+    team_id: int
+    team_name : str
 
     class Config:
         from_attributes = True
@@ -51,23 +65,12 @@ class PlayerPointsResponse(BaseModel):
         from_attributes = True
 
 
-
 class PlayerDetails(BaseModel):
     player_id: int
     name: str
     team_id: int
     team_name: str
-    points: int
-
-    class Config:
-        from_attributes = True
-
-
-class PlayerResponse2(BaseModel):
-    player_id: int
-    name: str
-    team_id: int
-    team_name : str
+    total_points: int
 
     class Config:
         from_attributes = True
@@ -98,3 +101,46 @@ class TeamBonusResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CompetitionLevelPoints(BaseModel):
+    competition_level: str
+    points: int
+
+class CategoryPoints(BaseModel):
+    category_total_points: int
+    competitions: List[CompetitionLevelPoints]
+
+class SportPoints(BaseModel):
+    sport_total_points: int
+    categories: Dict[str, CategoryPoints]
+
+class PlayerHistoryResponse(BaseModel):
+    player_name: str
+    team_name: str
+    player_total_points: int
+    player_points: Dict[str, SportPoints]
+
+    class Config:
+        from_attributes = True
+
+# separate models for match schedules. It has no relation with rest of the application.
+from datetime import date, time
+
+class MatchScheduleResponse(BaseModel):
+    id: int
+    player1: str
+    player2: str
+    team1: str
+    team2: str
+    sport: str
+    category: Optional[str] = None
+    venue: str
+    comments: Optional[str] = None
+    status: str
+    date: date
+    time: time
+
+    class Config:
+        from_attributes = True
+
+

@@ -1,6 +1,12 @@
+"""
+Author: Ajay Wankhade
+Version: 1.0
+Description: This file contains pydantic request models.
+"""
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, conint, field_validator
 from src.api.models.models import SportCategoryEnum
+from datetime import date, time
 
 class UserRegister(BaseModel):
     name: str
@@ -38,9 +44,9 @@ class SportUpdate(BaseModel):
 class PlayerPointsCreate(BaseModel):
     player_id: int
     sport_id: int
-    category: Optional[SportCategoryEnum] = None  # Use Optional
+    category: Optional[SportCategoryEnum] = None
     competition_level: str
-    points: conint(ge=0)  # Ensures points cannot be negative
+    points: conint(ge=0)
 
     @field_validator("category")
     @classmethod
@@ -53,7 +59,39 @@ class PlayerPointsCreate(BaseModel):
             raise ValueError(f"{sport_name} requires a category.")
         return category
 
+class BatchPlayerPointsCreate(BaseModel):
+    player_points: List[PlayerPointsCreate]
+
 class TeamBonusPointsCreate(BaseModel):
     team_id: int
     sport_id: int
-    bonus_points: conint(ge=0)  # Ensures bonus points cannot be negative
+    bonus_points: conint(ge=0)
+
+
+# separate models for match schedules. It does not have any relation with rest of the applicaiton.
+class MatchScheduleCreate(BaseModel):
+    player1: str
+    player2: str
+    team1: str
+    team2: str
+    sport: str
+    category: Optional[SportCategoryEnum] = None
+    venue: str
+    comments: Optional[str] = None
+    status: str
+    date: date
+    time: time
+
+class MatchScheduleUpdate(BaseModel):
+    player1: Optional[str] = None
+    player2: Optional[str] = None
+    team1: Optional[str] = None
+    team2: Optional[str] = None
+    sport: Optional[str] = None
+    category: Optional[SportCategoryEnum] = None
+    venue: Optional[str] = None
+    comments: Optional[str] = None
+    status: Optional[str] = None
+    date: Optional[date] = None
+    time: Optional[time] = None
+

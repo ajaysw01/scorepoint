@@ -13,6 +13,106 @@ A **FastAPI**-powered backend for managing **sports, teams, players, and scores*
 
 ---
 
+
+Here’s a well-formatted version of your setup instructions:  
+
+---
+
+# **Setup Instructions for ScorePoint Backend**  
+
+### **1. Connect to the Server**  
+Open Git Bash and connect to your Ubuntu instance:  
+```sh
+ssh -i cs-sports.pem ubuntu@18.201.173.70
+```
+
+---
+
+### **2. Create a Virtual Environment**  
+```sh
+python -m venv venv
+source venv/bin/activate  
+```
+
+---
+
+### **3. Clone the Git Repository**  
+```sh
+git clone https://github.com/ajaysw01/scorepoint
+cd scorepoint/backend
+```
+
+---
+
+### **4. Install Dependencies**  
+#### **Install Python**  
+```sh
+sudo apt update && sudo apt install -y python3 python3-pip python3-venv
+```
+
+#### **Install PostgreSQL**  
+For **Ubuntu/Debian**:  
+```sh
+sudo apt update && sudo apt install postgresql-client -y
+```
+For **Amazon Linux/CentOS**:  
+```sh
+sudo yum install postgresql -y
+```
+
+#### **Install Additional PostgreSQL Dependencies**  
+```sh
+sudo apt update && sudo apt install -y python3-dev libpq-dev postgresql postgresql-contrib
+pip install psycopg2
+pip install psycopg2-binary
+```
+
+#### **Install Python Packages**  
+```sh
+pip install -r requirements.txt
+```
+
+---
+
+### **5. Configure Environment Variables**  
+```sh
+vi .env
+```
+(Add the necessary environment variables inside `.env` file)
+
+---
+
+### **6. Setup Nginx**  
+```sh
+sudo apt install nginx
+cd /etc/nginx/sites-enabled/
+sudo nano fastapi_nginx
+```
+#### **Nginx Configuration File (`fastapi_nginx`)**  
+```nginx
+server {
+    listen 80;
+    server_name http://18.201.173.70;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+```
+Save the file and restart Nginx:  
+```sh
+sudo service nginx restart
+```
+
+---
+
+### **7. Start the FastAPI Server**  
+```sh
+cd scorepoint/backend
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+```
+
+Now your **FastAPI backend** should be running and accessible via **Nginx**. 🚀
+
 ## 🚀 **Getting Started**
 
 ### **🔧 Setup Instructions**

@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const API_URL = "https://scorepoint.onrender.com/api/auth/login";
 
@@ -21,6 +22,11 @@ const Login = () => {
       formData.append("username", email);
       formData.append("password", password);
 
+      const response = await axios.post(API_URL, formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
       const response = await axios.post(API_URL, formData, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
