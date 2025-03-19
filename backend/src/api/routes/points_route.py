@@ -19,8 +19,8 @@ from src.api.services.points_service import (
     get_team_points_by_category,
     get_team_points_by_sport,
     get_total_team_points,
-    get_leaderboard, get_player_rankings_by_category, fetch_player_points_by_sport, submit_batch_player_points,
-    fetch_player_history,
+    get_leaderboard, fetch_player_points_by_sport, submit_batch_player_points,
+    fetch_player_history, get_player_rankings,
 
 )
 from src.api.models.request_models import PlayerPointsCreate, TeamBonusPointsCreate, BatchPlayerPointsCreate
@@ -75,8 +75,8 @@ def leaderboard(db: Session = Depends(get_db)):
 
 
 @router.get("/player/rankings")
-def player_rankings_by_category(db: Session = Depends(get_db)):
-    return get_player_rankings_by_category(db)
+def player_rankings(db: Session = Depends(get_db)):
+    return get_player_rankings(db)
 
 # @router.get("/players/{sport_id}/{category}", response_model=List[PlayerDetails])
 # def get_player_points_by_sports(
