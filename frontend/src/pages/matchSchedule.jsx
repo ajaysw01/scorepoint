@@ -9,7 +9,7 @@ const MatchScheduleCard = ({ sport, category }) => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `https://18.201.173.70/api/match/${sport}/${category}`
+          `http://18.201.173.70/api/match/${sport}/${category}`
         );
         const data = await response.json();
         setMatches(data);

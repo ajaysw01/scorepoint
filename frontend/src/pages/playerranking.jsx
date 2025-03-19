@@ -8,7 +8,7 @@ const PlayerRankings = () => {
 
   useEffect(() => {
     axios
-      .get("https://18.201.173.70/api/points/player/rankings")
+      .get("http://18.201.173.70/api/points/player/rankings")
       .then((response) => {
         setRankings(response.data);
         setLoading(false);

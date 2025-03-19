@@ -19,7 +19,7 @@ const PlayerDetails = ({ playerId, onBack }) => {
 
   useEffect(() => {
     axios
-      .get(`https://18.201.173.70/api/points/player/${playerId}/history`)
+      .get(`http://18.201.173.70/api/points/player/${playerId}/history`)
       .then((response) => setPlayerHistory(response.data))
       .catch((error) => console.error("Error fetching player history:", error));
   }, [playerId]);

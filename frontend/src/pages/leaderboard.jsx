@@ -20,7 +20,7 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "https://18.201.173.70/api/points/leaderboard"
+          "http://18.201.173.70/api/points/leaderboard"
         );
         const leaderboardData = response.data;
 

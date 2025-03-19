@@ -46,7 +46,7 @@ export default function Teams() {
 
   useEffect(() => {
     axios
-      .get("https://18.201.173.70/api/teams")
+      .get("http://18.201.173.70/api/teams")
       .then((response) => {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
