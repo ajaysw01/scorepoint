@@ -15,7 +15,7 @@ from src.api.configurations import  config
 
 settings = config.get_settings()
 
-router = APIRouter(tags=["Authentication"])
+router = APIRouter()
 
 logger = logging.getLogger(__name__)
 
