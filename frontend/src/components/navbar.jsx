@@ -24,8 +24,7 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          {["updates", "rules", "scores", "teams","rankings","leaderboard"].map((item) => (
-          {["updates", "rules", "scores", "teams", "leaderboard", "about"].map((item) => (
+          {["updates", "rules", "scores", "teams","rankings","leaderboard","about"].map((item) => (
             <li key={item}>
               <Link to={`/${item}`} className="text-white text-lg hover:text-gray-200 transition-colors">
                 {item.charAt(0).toUpperCase() + item.slice(1)}
