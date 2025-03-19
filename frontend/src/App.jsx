@@ -22,7 +22,6 @@ import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
 import { Navigate } from "react-router-dom";
 import PlayerStats from "./pages/test";
-import AddScore from "./pages/addScore";
 import CricketRules from './pages/cricketrules';
 import CarromRules from "./pages/carromrules";
 import TableTennisRules from "./pages/tabletennisrules";
@@ -43,7 +42,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/addScore" element={<AddScore />} />
         <Route path="/scores" element={<Scores />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/rankings" element={<PlayerRankings />} />
@@ -53,16 +51,13 @@ function App() {
           path="/:game_name/:sport_id/:category"
           element={<GameScores />}
         />
-        {/* <Route path="/badminton/:sport_id/:category" element={<BCategoryDetails />} />
-        <Route path="/tabletennis/:sport_id/:category" element={<TTCategoryDetails />}/>
-        <Route path="/carrom/:sport_id/:category" element={<CCategoryDetails />} /> */}
         <Route path="/tabletennis" element={<Tabletennis />} />
         <Route path="/carrom" element={<Carrom />} />
         <Route path="/funfriday" element={<Funfriday />} />
         <Route path="/login" element={<Login />} />
         <Route path="/rules" element={<SportsDashboard />} />
         <Route path="/updates" element={<Updates />} />
-        <Route path="/test" element={<PlayerStats/>}/>
+        <Route path="/test" element={<PlayerStats />} />
         <Route path="/cricketrules" element={<CricketRules />} />
         <Route path="/carromrules" element={<CarromRules/>} />
         <Route path="/tabletennisrules" element={<TableTennisRules/>} />
@@ -70,6 +65,11 @@ function App() {
         <Route path="/funfridayrules" element={<FunFridayRules/>} />
         <Route path="/cricket" element={<Cricket/>} />
         <Route path="/about" element={<About/>} />
+        <Route path="/carromrules" element={<CarromRules />} />
+        <Route path="/tabletennisrules" element={<TableTennisRules />} />
+        <Route path="/badmintonrules" element={<BadmintonRules />} />
+        <Route path="/funfridayrules" element={<FunFridayRules />} />
+        <Route path="/cricket" element={<Cricket />} />
 
         <Route
           path="/editscores"

@@ -1,7 +1,12 @@
-﻿const Schedule = () => {
+﻿import AddScore from "../pages/addScore"
+import ScheduleUpload from "../pages/addSchedules"
+
+const Schedule = () => {
     return (
         <div>
-            <h1>Schedule</h1>
+            <AddScore />
+            <ScheduleUpload/>
+
         </div>
     )
 }
