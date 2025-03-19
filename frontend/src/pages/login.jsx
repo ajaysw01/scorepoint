@@ -8,14 +8,12 @@ const API_URL = "https://scorepoint.onrender.com/api/auth/login";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);  // Loading state
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);  // Show loader on submit
+    setIsLoading(true); // Show loader on submit
 
     try {
       const formData = new URLSearchParams();
@@ -27,25 +25,27 @@ const Login = () => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
-     
 
       const { access_token, message } = response.data;
       localStorage.setItem("authToken", access_token);
-      alert(message || "Login successful");
+      toast.success(message || "Login successful");
       navigate("/admin-dashboard"); // Redirect to Admin Dashboard
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
     } finally {
-      setIsLoading(false);  // Hide loader after response
+      setIsLoading(false); // Hide loader after response
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className={`w-96 bg-white p-8 rounded-lg shadow-lg flex flex-col items-center transition-all duration-300 ${isLoading ? "opacity-50" : "opacity-100"}`}>
+      <div
+        className={`w-96 bg-white p-8 rounded-lg shadow-lg flex flex-col items-center transition-all duration-300 ${
+          isLoading ? "opacity-50" : "opacity-100"
+        }`}
+      >
         <h2 className="text-3xl font-bold mb-6 text-blue-600">Admin Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        
+
         <form onSubmit={handleSubmit} className="w-full">
           <input
             className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -67,7 +67,9 @@ const Login = () => {
           />
           <button
             type="submit"
-            className={`w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
+            className={`w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 ${
+              isLoading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             disabled={isLoading}
           >
             {isLoading ? (
