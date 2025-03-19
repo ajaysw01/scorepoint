@@ -31,7 +31,7 @@ const categories = [
 const Badminton = () => {
   const navigate = useNavigate();
   const sport_id = 3;
-  const game_name = "Badminton ";
+  const game_name = "Badminton";
 
   const handleCategoryClick = (category) => {
     navigate(`/${game_name}/${sport_id}/${category.apiValue}`);
