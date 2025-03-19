@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const API_URL = "https://scorepoint.onrender.com/api/auth/login";
 
@@ -26,6 +27,7 @@ const Login = () => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
+     
 
       const { access_token, message } = response.data;
       localStorage.setItem("authToken", access_token);
