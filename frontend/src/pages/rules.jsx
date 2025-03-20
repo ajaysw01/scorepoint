@@ -8,25 +8,29 @@ import generalAnimation from "/src//static/animations/general.json";
 const sports = [
   {
     name: "Cricket",
-    image: "/src/static/images/cricket.jpg",
+    image: "/assets/images/cricket.jpg",
     path: "/cricketrules",
   },
   {
     name: "Badminton",
-    image: "/src/static/images/badminton.jpg",
+    image: "/assets/images/badminton.jpg",
     path: "/badmintonrules",
   },
   {
     name: "Table Tennis",
-    image: "/src/static/images/tabletennis.jpg",
+    image: "/assets/images/tabletennis.jpg",
     path: "/tabletennisrules",
   },
   {
     name: "Carrom",
-    image: "/src/static/images/carrom.jpg",
+    image: "/assets/images/carrom.jpg",
     path: "/carromrules",
   },
-  { name: "Darts", image: "/src/static/images/darts.jpg", path: "/dartsrules" },
+  {
+    name: "Darts",
+    image: "/assets/images/darts.jpg",
+    path: "/dartsrules",
+  },
   { name: "General", animation: generalAnimation, path: "/funfridayrules" }, // General Animation
 ];
 

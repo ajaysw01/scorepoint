@@ -4,27 +4,27 @@ const categories = [
   {
     name: "Men's Singles",
     apiValue: "men_singles",
-    image: "//src/static/images/mensingle.webp",
+    image: "//assets/images/mensingle.webp",
   },
   {
     name: "Men's Doubles",
     apiValue: "men_doubles",
-    image: "//src/static/images/mend.webp",
+    image: "//assets/images/mend.webp",
   },
   {
     name: "Women's Singles",
     apiValue: "women_singles",
-    image: "//src/static/images/womensin.webp",
+    image: "//assets/images/womensin.webp",
   },
   {
     name: "Women's Doubles",
     apiValue: "women_doubles",
-    image: "//src/static/images/womendoub.webp",
+    image: "//assets/images/womendoub.webp",
   },
   {
     name: "Mixed Doubles",
     apiValue: "mixed_doubles",
-    image: "//src/static/images/mixdoub.webp",
+    image: "//assets/images/mixdoub.webp",
   },
 ];
 

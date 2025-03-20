@@ -23,7 +23,7 @@ const Navbar = () => {
           className="text-white text-2xl font-bold flex items-center"
         >
           <img
-            src="/src/static/images/CreditsafeLogo.png"
+            src="/assets/images/CreditsafeLogo.png"
             alt="Creditsafe Logo"
             className="h-36 w-auto"
           />

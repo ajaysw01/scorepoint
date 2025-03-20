@@ -43,7 +43,7 @@ const sports = [
   },
   {
     name: "Fun Friday",
-    image: "/src/static/images/funfriday.png",
+    image: "/assets/images/funfriday.png",
     path: "/Fun Friday/5/none",
   }, // Static Image
 ];
