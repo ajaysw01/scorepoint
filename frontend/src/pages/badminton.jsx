@@ -4,27 +4,27 @@ const categories = [
   {
     name: "Men's Singles",
     apiValue: "men_singles",
-    image: "/static/images/mensingle.webp",
+    image: "//src/static/images/mensingle.webp",
   },
   {
     name: "Men's Doubles",
     apiValue: "men_doubles",
-    image: "/static/images/mend.webp",
+    image: "//src/static/images/mend.webp",
   },
   {
     name: "Women's Singles",
     apiValue: "women_singles",
-    image: "/static/images/womensin.webp",
+    image: "//src/static/images/womensin.webp",
   },
   {
     name: "Women's Doubles",
     apiValue: "women_doubles",
-    image: "/static/images/womendoub.webp",
+    image: "//src/static/images/womendoub.webp",
   },
   {
     name: "Mixed Doubles",
     apiValue: "mixed_doubles",
-    image: "/static/images/mixdoub.webp",
+    image: "//src/static/images/mixdoub.webp",
   },
 ];
 
@@ -40,7 +40,9 @@ const Badminton = () => {
   return (
     <div className="p-8 min-h-screen bg-gray-100">
       {/* Title */}
-      <h1 className="text-black text-4xl font-bold text-center mb-8">Badminton</h1>
+      <h1 className="text-black text-4xl font-bold text-center mb-8">
+        Badminton
+      </h1>
 
       {/* Categories */}
       <div className="flex flex-wrap justify-center items-center gap-6 p-4">

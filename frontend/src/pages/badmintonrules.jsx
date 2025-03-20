@@ -22,19 +22,19 @@ const badmintonRules = {
     "5. A player cannot hold his racket near the net to ward off a downward stroke by his opponent or to interfere with his racket.",
     "6. If a player gets injured, then the opponent will be given a bye.",
   ],
-  "Singles": [
+  Singles: [
     "1. At the beginning of the game (0-0) and when the server’s score is even, the server serves from the right service court. When the server’s score is odd, the server serves from the left service court.",
     "2. If the server wins a rally, the server scores a point and then serves again from the alternate service court.",
     "3. If the receiver wins a rally, the receiver scores a point and becomes the new server. They serve from the appropriate service court – left if their score is odd, and right if it is even.",
   ],
-  "Doubles": [
+  Doubles: [
     "1. The service passes consecutively to the players standing diagonal to them.",
     "2. At the beginning of the game and when the score is even, the server serves from the right service court. When it is odd, the server serves from the left court.",
     "3. If the serving side wins a rally, the serving side scores a point, and the same server serves again from the alternate service court.",
     "4. If the receiving side wins a rally, the receiving side scores a point. The receiving side becomes the new serving side.",
     "5. The players do not change their respective service courts until they win a point when their side is serving.",
   ],
-  "Faults": [
+  Faults: [
     "1. The shuttle does not land in the correct service court.",
     "2. The server's feet are not in the service court or if the feet of the receiver are not in the court diagonally opposite the server.",
     "3. The server steps forward as he/she serves.",
@@ -48,7 +48,8 @@ const badmintonRules = {
 
 const BadmintonRules = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("Basic Instructions");
+  const [selectedCategory, setSelectedCategory] =
+    useState("Basic Instructions");
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 sm:p-10">
@@ -106,7 +107,7 @@ const BadmintonRules = () => {
           {selectedCategory === "Basic Instructions" && (
             <div className="flex justify-center mt-6">
               <img
-                src="/static/images/badminton-court.gif"
+                src="//src/static/images/badminton-court.gif"
                 alt="Badminton Court"
                 className="w-full max-w-lg border border-gray-300 rounded-lg shadow-md"
               />

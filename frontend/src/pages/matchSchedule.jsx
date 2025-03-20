@@ -11,10 +11,18 @@ const MatchScheduleCard = ({ sport, category }) => {
         const response = await fetch(
           `http://18.201.173.70/api/match/${sport}/${category}`
         );
+
+        if (response.status === 404) {
+          console.warn("No updates available for this sport and category.");
+          setMatches([]); // Set matches to an empty array when 404 occurs
+          return;
+        }
+
         const data = await response.json();
         setMatches(data);
       } catch (error) {
         console.error("Error fetching match schedules:", error);
+        setMatches([]); // Set matches to an empty array on error
       }
     };
 
@@ -22,6 +30,8 @@ const MatchScheduleCard = ({ sport, category }) => {
   }, [sport, category]);
 
   const filterMatches = (matchList) => {
+    if (!matchList || matchList.length === 0) return []; // Handle empty match list
+
     const todayMatches = matchList.filter((match) =>
       isToday(new Date(match.date))
     );
@@ -55,6 +65,13 @@ const MatchScheduleCard = ({ sport, category }) => {
           </button>
         ))}
       </div>
+
+      {/* No Updates Available */}
+      {matches.length === 0 && (
+        <p className="text-gray-500 text-center text-xl font-semibold mb-6">
+          No updates available.
+        </p>
+      )}
 
       {/* Match Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

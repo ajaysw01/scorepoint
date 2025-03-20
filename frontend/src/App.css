@@ -5,30 +5,27 @@
 
 /* Import Harry Potter Font */
 @font-face {
-    font-family: "HarryPotter";
-    src: url("/fonts/HarryP.ttf") format("truetype");
+  font-family: "HarryPotter";
+  src: url("/fonts/HarryP.ttf") format("truetype");
 }
 
 /* Magic Background */
 .bg-magic {
-    @apply bg-cover bg-center bg-no-repeat;
-    background-image: url('static/images/bg.jpg'); /* Use your Hogwarts image */
+  @apply bg-cover bg-center bg-no-repeat;
+  background-image: url("/src/static/images/bg.jpg"); /* Use your Hogwarts image */
 }
 
 /* Glowing Hover Effects */
 .magic-text {
-    transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-    .magic-text:hover {
-        text-shadow: 0 0 10px rgba(255, 255, 0, 0.8), 0 0 20px rgba(255, 255, 0, 0.6);
-        transform: scale(1.05);
-    }
+.magic-text:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.8), 0 0 20px rgba(255, 255, 0, 0.6);
+  transform: scale(1.05);
+}
 
 /* Ensure No Scrollbars */
-
-
-
 
 #root {
   max-width: auto;

@@ -18,15 +18,33 @@ const Navbar = () => {
     <nav className="bg-gradient-to-r from-white-600 to-red-600 shadow-lg">
       <div className="container mx-auto flex justify-between items-center h-20 px-4">
         {/* Logo */}
-        <Link to="/" className="text-white text-2xl font-bold flex items-center">
-          <img src="static/images/CreditsafeLogo.png" alt="Creditsafe Logo" className="h-36 w-auto" />
+        <Link
+          to="/"
+          className="text-white text-2xl font-bold flex items-center"
+        >
+          <img
+            src="/src/static/images/CreditsafeLogo.png"
+            alt="Creditsafe Logo"
+            className="h-36 w-auto"
+          />
         </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          {["updates", "rules", "scores", "teams","rankings","leaderboard","about"].map((item) => (
+          {[
+            "updates",
+            "rules",
+            "scores",
+            "teams",
+            "rankings",
+            "leaderboard",
+            "about",
+          ].map((item) => (
             <li key={item}>
-              <Link to={`/${item}`} className="text-white text-lg hover:text-gray-200 transition-colors">
+              <Link
+                to={`/${item}`}
+                className="text-white text-lg hover:text-gray-200 transition-colors"
+              >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </Link>
             </li>
@@ -35,13 +53,19 @@ const Navbar = () => {
           {/* Show Admin Login or Logout */}
           {isLoggedIn ? (
             <li>
-              <button onClick={handleLogout} className="text-white text-lg hover:text-gray-200 transition-colors">
+              <button
+                onClick={handleLogout}
+                className="text-white text-lg hover:text-gray-200 transition-colors"
+              >
                 Logout
               </button>
             </li>
           ) : (
             <li>
-              <Link to="/login" className="text-white text-lg hover:text-gray-200 transition-colors">
+              <Link
+                to="/login"
+                className="text-white text-lg hover:text-gray-200 transition-colors"
+              >
                 Admin Login
               </Link>
             </li>
@@ -61,7 +85,15 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-gradient-to-r from-white-600 to-red-600 p-4 mt-2 rounded-lg shadow-lg">
           <ul className="flex flex-col space-y-4">
-            {["updates", "rules", "scores", "teams","rankings", "leaderboard","about"].map((item) => (
+            {[
+              "updates",
+              "rules",
+              "scores",
+              "teams",
+              "rankings",
+              "leaderboard",
+              "about",
+            ].map((item) => (
               <li key={item}>
                 <Link
                   to={`/${item}`}
