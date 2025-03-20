@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 
 // Animation Variants
 const fadeIn = {
@@ -14,15 +15,17 @@ const cardVariants = {
   visible: { scale: 1, opacity: 1, transition: { duration: 0.3 } },
 };
 
-const PlayerDetails = ({ playerId, onBack }) => {
+const PlayerDetails = () => {
+  const navigate = useNavigate();
+  const { team_id, player_id } = useParams();
   const [playerHistory, setPlayerHistory] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`http://18.201.173.70/api/points/player/${playerId}/history`)
+      .get(`http://18.201.173.70/api/points/player/${player_id}/history`)
       .then((response) => setPlayerHistory(response.data))
       .catch((error) => console.error("Error fetching player history:", error));
-  }, [playerId]);
+  }, [player_id]);
 
   if (!playerHistory) {
     return (
@@ -90,31 +93,27 @@ const PlayerDetails = ({ playerId, onBack }) => {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(playerHistory.player_points).map(
-                ([sport, details]) =>
-                  Object.entries(details.categories).map(
-                    ([category, catDetails]) =>
-                      catDetails.competitions.map((comp, idx) => (
-                        <motion.tr
-                          key={`${sport}-${category}-${idx}`}
-                          whileHover={{ scale: 1.02 }}
-                          className="odd:bg-gray-50 even:bg-white hover:bg-red-50 transition"
-                        >
-                          <td className="px-3 py-2 border border-gray-300">
-                            {sport}
-                          </td>
-                          <td className="px-3 py-2 border border-gray-300 capitalize">
-                            {category.replace("_", " ")}
-                          </td>
-                          <td className="px-3 py-2 border border-gray-300">
-                            {comp.competition_level}
-                          </td>
-                          <td className="px-3 py-2 border border-gray-300 font-semibold text-blue-600">
-                            {comp.points}
-                          </td>
-                        </motion.tr>
-                      ))
-                  )
+              {Object.entries(playerHistory.player_points).map(([sport, details]) =>
+                Object.entries(details.categories).map(([category, catDetails]) =>
+                  catDetails.competitions.map((comp, idx) => (
+                    <motion.tr
+                      key={`${sport}-${category}-${idx}`}
+                      whileHover={{ scale: 1.02 }}
+                      className="odd:bg-gray-50 even:bg-white hover:bg-red-50 transition"
+                    >
+                      <td className="px-3 py-2 border border-gray-300">{sport}</td>
+                      <td className="px-3 py-2 border border-gray-300 capitalize">
+                        {category.replace("_", " ")}
+                      </td>
+                      <td className="px-3 py-2 border border-gray-300">
+                        {comp.competition_level}
+                      </td>
+                      <td className="px-3 py-2 border border-gray-300 font-semibold text-blue-600">
+                        {comp.points}
+                      </td>
+                    </motion.tr>
+                  ))
+                )
               )}
             </tbody>
           </table>
@@ -129,10 +128,10 @@ const PlayerDetails = ({ playerId, onBack }) => {
         className="mt-6 flex justify-center"
       >
         <button
-          onClick={onBack}
+          onClick={() => navigate(`/teams/${team_id}`)}
           className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition cursor-pointer"
         >
-          Back
+          Back to Team Details
         </button>
       </motion.div>
     </motion.div>
@@ -140,8 +139,7 @@ const PlayerDetails = ({ playerId, onBack }) => {
 };
 
 PlayerDetails.propTypes = {
-  playerId: PropTypes.number.isRequired,
-  onBack: PropTypes.func.isRequired,
+  playerId: PropTypes.number,
 };
 
 export default PlayerDetails;
