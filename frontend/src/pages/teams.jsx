@@ -43,7 +43,7 @@ export default function Teams() {
     {
       id: 7,
       name: "The Giants",
-      logo: "/assets/images/maru.png",
+      logo: "/assets/images/giants_logo.png",
       members: [],
     },
     {
