@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from "react";
-import { format, isToday, isFuture, isPast } from "date-fns";
+import { format, isToday, isFuture, isPast, isBefore, startOfDay, endOfDay } from "date-fns";
 
 const MatchScheduleCard = ({ sport, category }) => {
   const [matches, setMatches] = useState([]);
@@ -14,7 +14,7 @@ const MatchScheduleCard = ({ sport, category }) => {
 
         if (response.status === 404) {
           console.warn("No updates available for this sport and category.");
-          setMatches([]); // Set matches to an empty array when 404 occurs
+          setMatches([]);
           return;
         }
 
@@ -22,29 +22,28 @@ const MatchScheduleCard = ({ sport, category }) => {
         setMatches(data);
       } catch (error) {
         console.error("Error fetching match schedules:", error);
-        setMatches([]); // Set matches to an empty array on error
+        setMatches([]);
       }
     };
 
     fetchMatches();
   }, [sport, category]);
 
+  // ✅ Filter Matches based on "live", "completed", and "upcoming"
   const filterMatches = (matchList) => {
-    if (!matchList || matchList.length === 0) return []; // Handle empty match list
+    const now = new Date();
 
-    const todayMatches = matchList.filter((match) =>
-      isToday(new Date(match.date))
-    );
-    const completedMatches = matchList.filter(
-      (match) => isPast(new Date(match.date)) && !isToday(new Date(match.date))
-    );
-    const upcomingMatches = matchList.filter((match) =>
-      isFuture(new Date(match.date))
-    );
+    if (!matchList || matchList.length === 0) return [];
 
-    if (filter === "live") return todayMatches;
-    if (filter === "completed") return completedMatches;
-    return upcomingMatches;
+    return matchList.filter((match) => {
+      const matchDate = new Date(match.date);
+
+      if (filter === "live") return isToday(matchDate);
+      if (filter === "completed") return isPast(matchDate) && !isToday(matchDate);
+      if (filter === "upcoming") return isFuture(matchDate);
+
+      return true;
+    });
   };
 
   return (
