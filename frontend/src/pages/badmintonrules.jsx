@@ -107,7 +107,7 @@ const BadmintonRules = () => {
           {selectedCategory === "Basic Instructions" && (
             <div className="flex justify-center mt-6">
               <img
-                src="//assets/images/badminton-court.gif"
+                src="/assets/images/badminton-court.gif"
                 alt="Badminton Court"
                 className="w-full max-w-lg border border-gray-300 rounded-lg shadow-md"
               />
