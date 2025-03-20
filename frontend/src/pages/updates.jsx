@@ -1,89 +1,99 @@
-﻿import { useState } from "react";
-import MatchScheduleCard from "../pages/matchSchedule";
+﻿import { useEffect, useState } from "react";
 
-const sportsCategories = {
-  Cricket: ["none"],
-  Badminton: [
-    "men_singles",
-    "men_doubles",
-    "women_singles",
-    "women_doubles",
-    "mixed_doubles",
-  ],
-  TableTennis: [
-    "men_singles",
-    "men_doubles",
-    "women_singles",
-    "women_doubles",
-    "mixed_doubles",
-  ],
-  Carrom: [
-    "men_singles",
-    "men_doubles",
-    "women_singles",
-    "women_doubles",
-    "mixed_doubles",
-  ],
-  Darts: ["none"],
-};
+const MatchScheduleCard = ({ sport, category }) => {
+  const [matches, setMatches] = useState([]);
 
-const Updates = () => {
-  const [currentSport, setCurrentSport] = useState("Cricket");
-  const [currentCategory, setCurrentCategory] = useState(
-    sportsCategories["Cricket"][0]
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch(`https://scorepoint.onrender.com/api/match/batch/schedules`);
+        const data = await response.json();
+
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); // Reset to start of the day
+
+        const oneWeekLater = new Date();
+        oneWeekLater.setDate(now.getDate() + 7);
+
+        const filteredMatches = data.filter((match) => {
+          const matchDate = new Date(match.date);
+          matchDate.setHours(0, 0, 0, 0); // Ensure we compare only date parts
+
+          return match.sport === sport && match.category === category;
+        });
+
+        setMatches(filteredMatches);
+      } catch (error) {
+        console.error("Error fetching match schedules:", error);
+      }
+    };
+
+    fetchMatches();
+  }, [sport, category]);
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  const oneWeekLater = new Date();
+  oneWeekLater.setDate(now.getDate() + 7);
+
+  const todayMatches = matches.filter(
+    (match) => new Date(match.date).toDateString() === now.toDateString()
+  );
+
+  const upcomingMatches = matches.filter(
+    (match) => {
+      const matchDate = new Date(match.date);
+      return matchDate > now && matchDate <= oneWeekLater;
+    }
   );
 
   return (
-    <div className="container mx-auto mt-8 p-4">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
-        Match Updates
-      </h1>
-
-      {/* Sport Selection */}
-      <div className="flex justify-center mb-4">
-        <div className="flex overflow-x-auto space-x-2 px-2">
-          {Object.keys(sportsCategories).map((sport) => (
-            <button
-              key={sport}
-              onClick={() => {
-                setCurrentSport(sport);
-                setCurrentCategory(sportsCategories[sport][0]);
-              }}
-              className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                currentSport === sport
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {sport}
-            </button>
-          ))}
+    <div className="space-y-6">
+      {/* Today's Matches */}
+      {todayMatches.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Today's Matches
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {todayMatches.map((match) => (
+              <div key={match._id} className="p-4 border rounded-lg shadow-md bg-white">
+                <h3 className="text-lg font-bold">{match.team1} vs {match.team2}</h3>
+                <p className="text-gray-600">{match.category}</p>
+                <p className="text-gray-500">{match.date} | {match.time}</p>
+                <p className="text-gray-700">{match.venue}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Category Selection */}
-      <div className="flex justify-center mb-6">
-        <div className="flex overflow-x-auto space-x-2 px-2">
-          {sportsCategories[currentSport].map((category) => (
-            <button
-              key={category}
-              onClick={() => setCurrentCategory(category)}
-              className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                currentCategory === category
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+      {/* Upcoming Matches */}
+      {upcomingMatches.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Upcoming Matches (Next 7 Days)
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {upcomingMatches.map((match) => (
+              <div key={match._id} className="p-4 border rounded-lg shadow-md bg-white">
+                <h3 className="text-lg font-bold">{match.team1} vs {match.team2}</h3>
+                <p className="text-gray-600">{match.category}</p>
+                <p className="text-gray-500">{match.date} | {match.time}</p>
+                <p className="text-gray-700">{match.venue}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Match Schedule Card */}
-      <MatchScheduleCard sport={currentSport} category={currentCategory} />
+      {/* No Matches Found */}
+      {todayMatches.length === 0 && upcomingMatches.length === 0 && (
+        <p className="text-center text-gray-600">No matches available.</p>
+      )}
     </div>
   );
 };
 
-export default Updates;
+export default MatchScheduleCard;
