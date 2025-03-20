@@ -21,7 +21,8 @@ import Badminton from "./pages/badminton";
 import Tabletennis from "./pages/tabletennis";
 import Carrom from "./pages/carrom";
 import Funfriday from "./pages/funfriday";
-
+import TeamDetails from "./pages/teamdetails"; 
+import PlayerDetails from "./pages/playerdetails";
 // Rules Pages
 import SportsDashboard from "./pages/rules";
 import CricketRules from "./pages/cricketrules";
@@ -63,6 +64,8 @@ function App() {
         <Route path="/rankings" element={<PlayerRankings />} />
         <Route path="/:game_name/:sport_id/:category" element={<GameScores />} />
         <Route path="/test" element={<PlayerStats />} />
+        <Route path="/teams/:team_id" element={<TeamDetails />} />
+        <Route path="/teams/:team_id/:player_id/history" element={<PlayerDetails />} />
 
         {/* Sports Pages */}
         <Route path="/cricket" element={<Cricket />} />
