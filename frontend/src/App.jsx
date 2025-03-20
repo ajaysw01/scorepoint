@@ -35,6 +35,7 @@ import AdminDashboard from "./pages/adminDashboard";
 import TeamsManagement from "./pages/teamsmanagement";
 import EditScores from "./pages/editScores";
 import Schedule from "./pages/schedule";
+import ScheduleTree from "./pages/displaySchedules";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
@@ -53,6 +54,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/updates" element={<Updates />} />
+        <Route path="/ScheduleTree" element={<ScheduleTree/>}/>
 
         {/* Scores & Rankings */}
         <Route path="/scores" element={<Scores />} />
