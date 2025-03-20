@@ -1,53 +1,46 @@
 ﻿import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
-import PlayerDetails from "./playerdetails";
+
 export default function Teams() {
   const [teams, setTeams] = useState([
     {
-      id: 1,
       name: "Order of the Phoenix",
       logo: "/assets/images/order.png",
       members: [],
     },
     {
-      id: 2,
       name: "Hogwarts Heroes",
       logo: "/assets/images/Hogwarts.png",
       members: [],
     },
     {
-      id: 3,
       name: "The Goblins",
       logo: "/assets/images/goblins.png",
       members: [],
     },
     {
-      id: 4,
       name: "Gryffindors",
       logo: "/assets/images/gry.png",
       members: [],
     },
     {
-      id: 5,
       name: "Ravenclaws",
       logo: "/assets/images/ravenclaw.png",
       members: [],
     },
     {
-      id: 6,
       name: "Dark Wizards",
       logo: "/assets/images/Death.png",
       members: [],
     },
     {
-      id: 7,
       name: "The Giants",
       logo: "/assets/images/giants_logo.png",
       members: [],
     },
     {
-      id: 8,
       name: "The Dragons",
       logo: "/assets/images/dragon.png",
       members: [],
@@ -66,9 +59,12 @@ export default function Teams() {
             return fetchedTeam
               ? {
                   ...team,
+                  id: fetchedTeam.id,
+                  total_points: fetchedTeam.total_points,
                   members: fetchedTeam.players.map((player) => ({
-                    id: player.id, // Include player ID
+                    id: player.id,
                     name: player.name,
+                    teamId: player.team_id,
                   })),
                 }
               : team;
@@ -77,32 +73,27 @@ export default function Teams() {
       })
       .catch((error) => console.error("Error fetching teams:", error));
   }, []);
-
-  const [selectedTeam, setSelectedTeam] = useState(null);
+  
+  
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
-      {selectedTeam ? (
-        <TeamDetails team={selectedTeam} onBack={() => setSelectedTeam(null)} />
-      ) : (
-        <TeamsList teams={teams} onSelectTeam={setSelectedTeam} />
-      )}
+      <TeamsList teams={teams} />
     </div>
   );
 }
 
-// ✅ Teams List Component
-function TeamsList({ teams, onSelectTeam }) {
+function TeamsList({ teams }) {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-6xl mx-auto">
-      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-        Teams
-      </h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Teams</h1>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 justify-items-center">
         {teams.map((team) => (
           <div
             key={team.id}
-            onClick={() => onSelectTeam(team)}
+            onClick={() => navigate(`/teams/${team.id}`)} // Navigate to player details with teamId
             className="flex flex-col items-center cursor-pointer text-lg font-semibold hover:text-red-600"
           >
             <img
@@ -117,63 +108,7 @@ function TeamsList({ teams, onSelectTeam }) {
     </div>
   );
 }
-
-// ✅ Team Details Component
-// ✅ Team Details Component with Background Logo Effect
-// ✅ Team Details Component with Background Logo Only
-function TeamDetails({ team, onBack }) {
-  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-
-  if (selectedPlayerId) {
-    return (
-      <PlayerDetails
-        playerId={selectedPlayerId}
-        onBack={() => setSelectedPlayerId(null)}
-      />
-    );
-  }
-
-  return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-      <h2 className="text-4xl font-bold text-gray-800 text-center mb-6">
-        {team.name}
-      </h2>
-
-      {/* Members Section with Background Logo */}
-      <div className="relative p-4">
-        <div
-          className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-85"
-          style={{ backgroundImage: `url(${team.logo})` }}
-        />
-
-        {/* Members List (Clickable) */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
-          {team.members.map((member, index) => (
-            <div
-              key={index}
-              onClick={() => setSelectedPlayerId(member.id)} // Pass player ID
-              className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 cursor-pointer transition duration-200"
-            >
-              {member.name}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Back Button */}
-      <div className="flex justify-center mt-8">
-        <button
-          onClick={onBack}
-          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
-        >
-          Back to Teams
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ✅ Prop Types
+  
 TeamsList.propTypes = {
   teams: PropTypes.arrayOf(
     PropTypes.shape({
@@ -183,14 +118,4 @@ TeamsList.propTypes = {
       members: PropTypes.arrayOf(PropTypes.string).isRequired,
     })
   ).isRequired,
-  onSelectTeam: PropTypes.func.isRequired,
-};
-
-TeamDetails.propTypes = {
-  team: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired,
-    members: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }).isRequired,
-  onBack: PropTypes.func.isRequired,
 };
