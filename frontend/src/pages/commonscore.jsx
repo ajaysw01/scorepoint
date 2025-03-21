@@ -7,7 +7,7 @@ const GameScores = () => {
 
   const navigate = useNavigate();
 
-  const API_URL = `https://18.201.173.70/api/points/players/${sport_id}/${category}`;
+  const API_URL = `https://sports-backend.apps-dev.creditsafe.com/api/points/players/${sport_id}/${category}`;
 
   const [teams, setTeams] = useState([]);
   const [openTeam, setOpenTeam] = useState(null);

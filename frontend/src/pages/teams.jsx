@@ -49,7 +49,7 @@ export default function Teams() {
 
   useEffect(() => {
     axios
-      .get("https://18.201.173.70/api/teams")
+      .get("https://sports-backend.apps-dev.creditsafe.com/api/teams")
       .then((response) => {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {

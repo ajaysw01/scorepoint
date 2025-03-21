@@ -17,7 +17,7 @@ const MatchScheduleCard = ({ sport, category }) => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `https://18.201.173.70/api/match/${sport}/${category}`
+          `https://sports-backend.apps-dev.creditsafe.com/api/match/${sport}/${category}`
         );
 
         if (response.status === 404) {

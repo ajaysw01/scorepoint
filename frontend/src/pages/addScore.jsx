@@ -43,7 +43,7 @@ const BulkUpload = () => {
       if (updatedData[i].player_name) {
         try {
           const response = await axios.get(
-            `https://18.201.173.70/api/teams/player/search?name=${updatedData[i].player_name}`
+            `https://sports-backend.apps-dev.creditsafe.com/api/teams/player/search?name=${updatedData[i].player_name}`
           );
           const players = response.data.map((player) => ({
             player_id: player.player_id,
@@ -107,7 +107,7 @@ const BulkUpload = () => {
 
     try {
       await axios.post(
-        "https://18.201.173.70/api/points/player/submit_batch",
+        "https://sports-backend.apps-dev.creditsafe.com/api/points/player/submit_batch",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

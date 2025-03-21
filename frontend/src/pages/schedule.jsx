@@ -42,7 +42,7 @@ const MatchManager = () => {
 
     try {
       const response = await axios.get(
-        `https://18.201.173.70/api/match/${matchId}`
+        `https://sports-backend.apps-dev.creditsafe.com/api/match/${matchId}`
       );
       setMatch(response.data);
       setFormData(response.data);
@@ -59,7 +59,7 @@ const MatchManager = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this match?")) {
       try {
-        await axios.delete(`https://18.201.173.70/api/match/${matchId}`, {
+        await axios.delete(`https://sports-backend.apps-dev.creditsafe.com/api/match/${matchId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Match deleted successfully");
@@ -75,7 +75,7 @@ const MatchManager = () => {
   const handleUpdate = async () => {
     try {
       await axios.patch(
-        `https://18.201.173.70/api/match/${matchId}`,
+        `https://sports-backend.apps-dev.creditsafe.com/api/match/${matchId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

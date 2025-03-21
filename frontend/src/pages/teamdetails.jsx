@@ -14,7 +14,7 @@ export default function TeamDetails() {
 
   useEffect(() => {
     axios
-      .get(`https://18.201.173.70/api/teams/${team_id}`)
+      .get(`https://sports-backend.apps-dev.creditsafe.com/api/teams/${team_id}`)
       .then((response) => setTeam(response.data))
       .catch((error) => console.error("Error fetching team details:", error));
   }, [team_id]);

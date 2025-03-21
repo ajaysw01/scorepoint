@@ -26,7 +26,7 @@ const PlayerDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`https://18.201.173.70/api/points/player/${player_id}/history`)
+      .get(`https://sports-backend.apps-dev.creditsafe.com/api/points/player/${player_id}/history`)
       .then((response) => setPlayerHistory(response.data))
       .catch((error) => console.error("Error fetching player history:", error));
   }, [player_id]);
