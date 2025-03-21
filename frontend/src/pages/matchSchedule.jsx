@@ -1,5 +1,13 @@
 ﻿import { useEffect, useState } from "react";
-import { format, isToday, isFuture, isPast, isBefore, startOfDay, endOfDay } from "date-fns";
+import {
+  format,
+  isToday,
+  isFuture,
+  isPast,
+  isBefore,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 
 const MatchScheduleCard = ({ sport, category }) => {
   const [matches, setMatches] = useState([]);
@@ -39,7 +47,8 @@ const MatchScheduleCard = ({ sport, category }) => {
       const matchDate = new Date(match.date);
 
       if (filter === "live") return isToday(matchDate);
-      if (filter === "completed") return isPast(matchDate) && !isToday(matchDate);
+      if (filter === "completed")
+        return isPast(matchDate) && !isToday(matchDate);
       if (filter === "upcoming") return isFuture(matchDate);
 
       return true;
