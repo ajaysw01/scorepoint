@@ -90,9 +90,9 @@ const BulkUpload = () => {
         ({ player_id, sport_id, category, competition_level, points }) => {
           const data = {
             player_id: Number(player_id), // Ensure it's stored as a number
-            sport_id,
+            sport_id: Number(sport_id),
             competition_level,
-            points,
+            points : Number(points), // Ensure it's stored as a number
           };
           if (category && category.trim() !== "") {
             data.category = category; // Only include if category is present

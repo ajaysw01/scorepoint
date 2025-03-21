@@ -49,7 +49,7 @@ export default function Teams() {
 
   useEffect(() => {
     axios
-      .get("https://sports-backend.apps-dev.creditsafe.com/api/teams")
+      .get("https://sports-backend.apps-dev.creditsafe.com/api/teams/")
       .then((response) => {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
@@ -87,7 +87,7 @@ function TeamsList({ teams }) {
   return (
     <div className="max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-        Teams
+        Teams  
       </h1>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 justify-items-center">
         {teams.map((team) => (
@@ -99,6 +99,7 @@ function TeamsList({ teams }) {
             }
             className="flex flex-col items-center cursor-pointer text-lg font-semibold hover:text-red-600"
           >
+
             <img
               src={team.logo}
               alt={team.name}
