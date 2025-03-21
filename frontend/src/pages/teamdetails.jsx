@@ -49,7 +49,7 @@ export default function TeamDetails() {
 
       <div className="flex justify-center mt-8">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/teams")}
           className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
         >
           Back to Teams
