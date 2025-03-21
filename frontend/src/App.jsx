@@ -29,7 +29,7 @@ import CricketRules from "./pages/cricketrules";
 import CarromRules from "./pages/carromrules";
 import TableTennisRules from "./pages/tabletennisrules";
 import BadmintonRules from "./pages/badmintonrules";
-import FunFridayRules from "./pages/funfridayrules";
+import GeneralRules from "./pages/generalrules";
 import DartsRules from "./pages/dartsrules";
 
 // Admin & Protected Pages
@@ -81,7 +81,7 @@ function App() {
         <Route path="/carromrules" element={<CarromRules />} />
         <Route path="/tabletennisrules" element={<TableTennisRules />} />
         <Route path="/badmintonrules" element={<BadmintonRules />} />
-        <Route path="/funfridayrules" element={<FunFridayRules />} />
+        <Route path="/generalrules" element={<GeneralRules />} />
         <Route path="/dartsrules" element={<DartsRules />} />
 
 

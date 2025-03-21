@@ -31,7 +31,7 @@ const sports = [
     image: "/assets/images/darts.jpg",
     path: "/dartsrules",
   },
-  { name: "General", animation: generalAnimation, path: "/funfridayrules" }, // General Animation
+  { name: "General", animation: generalAnimation, path: "/generalrules" }, // General Animation
 ];
 
 const Rules = () => {

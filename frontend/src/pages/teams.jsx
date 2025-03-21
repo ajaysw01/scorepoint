@@ -73,8 +73,6 @@ export default function Teams() {
       })
       .catch((error) => console.error("Error fetching teams:", error));
   }, []);
-  
-  
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
@@ -93,7 +91,8 @@ function TeamsList({ teams }) {
         {teams.map((team) => (
           <div
             key={team.id}
-            onClick={() => navigate(`/teams/${team.id}`)} // Navigate to player details with teamId
+            // Pass the logo as part of the state
+            onClick={() => navigate(`/teams/${team.id}`, { state: { logo: team.logo } })}
             className="flex flex-col items-center cursor-pointer text-lg font-semibold hover:text-red-600"
           >
             <img
@@ -108,7 +107,7 @@ function TeamsList({ teams }) {
     </div>
   );
 }
-  
+
 TeamsList.propTypes = {
   teams: PropTypes.arrayOf(
     PropTypes.shape({

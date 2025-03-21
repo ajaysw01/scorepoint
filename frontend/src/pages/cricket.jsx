@@ -101,7 +101,7 @@ const Cricket = () => {
 
       {/* Back Button */}
       <div className="flex justify-center mt-8">
-        <button onClick={() => navigate("/scores")} className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all">
+        <button onClick={() => navigate("/scores")} className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer">
           Back
         </button>
       </div>

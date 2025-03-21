@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
@@ -18,7 +18,11 @@ const cardVariants = {
 const PlayerDetails = () => {
   const navigate = useNavigate();
   const { team_id, player_id } = useParams();
+  const location = useLocation();
   const [playerHistory, setPlayerHistory] = useState(null);
+
+  // Retrieve the logo from the location state (passed from TeamDetails)
+  const logo = location.state?.logo;
 
   useEffect(() => {
     axios
@@ -33,7 +37,7 @@ const PlayerDetails = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center text-lg font-semibold"
+        className="text-center text-lg font-semibold mt-16"
       >
         Loading...
       </motion.p>
@@ -45,7 +49,7 @@ const PlayerDetails = () => {
       initial="hidden"
       animate="visible"
       variants={fadeIn}
-      className="max-w-lg mx-auto"
+      className="max-w-lg mx-auto pt-20 pb-8"
     >
       {/* Player Card */}
       <motion.div
@@ -78,18 +82,10 @@ const PlayerDetails = () => {
           <table className="min-w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gradient-to-r from-red-500 to-red-700 text-white">
-                <th className="px-3 py-2 text-left border border-gray-300">
-                  Sport
-                </th>
-                <th className="px-3 py-2 text-left border border-gray-300">
-                  Category
-                </th>
-                <th className="px-3 py-2 text-left border border-gray-300">
-                  Level
-                </th>
-                <th className="px-3 py-2 text-left border border-gray-300">
-                  Points
-                </th>
+                <th className="px-3 py-2 text-left border border-gray-300">Sport</th>
+                <th className="px-3 py-2 text-left border border-gray-300">Category</th>
+                <th className="px-3 py-2 text-left border border-gray-300">Level</th>
+                <th className="px-3 py-2 text-left border border-gray-300">Points</th>
               </tr>
             </thead>
             <tbody>
@@ -128,7 +124,8 @@ const PlayerDetails = () => {
         className="mt-6 flex justify-center"
       >
         <button
-          onClick={() => navigate(`/teams/${team_id}`)}
+          // Pass the logo back to TeamDetails when navigating back
+          onClick={() => navigate(`/teams/${team_id}`, { state: { logo } })}
           className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-700 transition cursor-pointer"
         >
           Back to Team Details
