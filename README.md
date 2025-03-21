@@ -26,22 +26,22 @@ Open Git Bash and connect to your Ubuntu instance:
 ssh -i cs-sports.pem ubuntu@18.201.173.70
 ```
 
----
 
-### **2. Create a Virtual Environment**  
-```sh
-python -m venv venv
-source venv/bin/activate  
-```
 
 ---
 
-### **3. Clone the Git Repository**  
+### **2. Clone the Git Repository**  
 ```sh
 git clone https://github.com/ajaysw01/scorepoint
 cd scorepoint/backend
 ```
+---
 
+### **3. Create a Virtual Environment**  
+```sh
+python -m venv venv
+source venv/bin/activate  
+```
 ---
 
 ### **4. Install Dependencies**  
