@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+ 
+// Reusable Card Component
 const Card = ({ children, className = "" }) => (
   <div className={`bg-white shadow-lg rounded-lg p-4 ${className}`}>{children}</div>
 );
-
+ 
 const Cricket = () => {
   const navigate = useNavigate();
   const [pointsTable, setPointsTable] = useState({
@@ -21,7 +22,7 @@ const Cricket = () => {
       { team: "The Dragons", played: 0, won: 0, lost: 0, nrr: "0.0" },
     ],
   });
-
+ 
   // Group matches (static data)
   const groupMatches = {
     A: [
@@ -37,7 +38,56 @@ const Cricket = () => {
         { date: "2025-03-23", time: "03:00 PM", venue: "AM Cricket Ground, Hyderabad", team1: "Gryffindors", team2: "Dark Wizards", status: "Completed", link: "https://cricheroes.in/scorecard/15847938/Creditsafe-2k25/Gryffindors-vs-Dark-Wizards" }
     ],
 };
+ 
+  useEffect(() => {
+    const sportId = 1; // Cricket ID
+    const category = "none";
+ 
+    fetch(`https://sports-backend.apps-dev.creditsafe.com/api/points/players/${sportId}/${category}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const teamPoints = {};
+        const playerZeroPoints = {}; // Track if any player has 0 points
+ 
+        data.forEach((player) => {
+          if (!teamPoints[player.team_name]) {
+            teamPoints[player.team_name] = { total_points: 0 };
+            playerZeroPoints[player.team_name] = false; // Initialize as false
+          }
+          teamPoints[player.team_name].total_points += player.total_points;
+ 
+          // If any player has 0 points, mark the team
+          if (player.total_points === 0) {
+            playerZeroPoints[player.team_name] = true;
+          }
+        });
+ 
+        setPointsTable((prevPointsTable) => {
+          const updatedPointsTable = { ...prevPointsTable };
+ 
+          Object.entries(updatedPointsTable).forEach(([group, teams]) => {
+            updatedPointsTable[group] = teams.map((team) => {
+              const totalPoints = teamPoints[team.team]?.total_points || 0;
+              const won = Math.floor(totalPoints / 100);
+              let lost = playerZeroPoints[team.team] ? 1 : 0;
+              const played = won + lost;
 
+ 
+              return {
+                ...team,
+                played,
+                won,
+                lost,
+              };
+            });
+          });
+ 
+          return updatedPointsTable;
+        });
+      })
+      .catch((error) => console.error("Error fetching points:", error));
+  }, []);
+ 
   return (
     <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
       {/* Points Table */}
@@ -71,7 +121,7 @@ const Cricket = () => {
           ))}
         </div>
       </Card>
-
+ 
       {/* Match Schedules */}
       <Card>
         <h2 className="text-2xl font-bold mb-4 text-center">Match Schedule</h2>
@@ -88,7 +138,12 @@ const Cricket = () => {
                     <p className="text-gray-700 text-center">
                       {match.date} | {match.time} | {match.venue}
                     </p>
-                    <a href={match.link} target="_blank" rel="noopener noreferrer" className="block text-blue-500 hover:underline text-center mt-2">
+                    <a
+                      href={match.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-blue-500 hover:underline text-center mt-2"
+                    >
                       View Scorecard
                     </a>
                   </div>
@@ -98,15 +153,18 @@ const Cricket = () => {
           ))}
         </div>
       </Card>
-
+ 
       {/* Back Button */}
       <div className="flex justify-center mt-8">
-        <button onClick={() => navigate("/scores")} className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer">
+        <button
+          onClick={() => navigate("/scores")}
+          className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition-all cursor-pointer"
+        >
           Back
         </button>
       </div>
     </div>
   );
 };
-
+ 
 export default Cricket;
