@@ -14,7 +14,7 @@ export default function TeamDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://18.201.173.70/api/teams/${team_id}`)
+      .get(`https://18.201.173.70/api/teams/${team_id}`)
       .then((response) => setTeam(response.data))
       .catch((error) => console.error("Error fetching team details:", error));
   }, [team_id]);
@@ -51,7 +51,9 @@ export default function TeamDetails() {
               key={member.id}
               // Pass the logo when navigating to PlayerDetails
               onClick={() =>
-                navigate(`/teams/${team_id}/${member.id}/history`, { state: { logo } })
+                navigate(`/teams/${team_id}/${member.id}/history`, {
+                  state: { logo },
+                })
               }
               className="bg-gray-200 text-gray-800 px-6 py-4 rounded-md shadow-md text-center font-medium hover:bg-blue-100 cursor-pointer transition duration-200"
             >

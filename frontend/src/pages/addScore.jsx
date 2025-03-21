@@ -43,7 +43,7 @@ const BulkUpload = () => {
       if (updatedData[i].player_name) {
         try {
           const response = await axios.get(
-            `http://18.201.173.70/api/teams/player/search?name=${updatedData[i].player_name}`
+            `https://18.201.173.70/api/teams/player/search?name=${updatedData[i].player_name}`
           );
           const players = response.data.map((player) => ({
             player_id: player.player_id,
@@ -107,7 +107,7 @@ const BulkUpload = () => {
 
     try {
       await axios.post(
-        "http://18.201.173.70/api/points/player/submit_batch",
+        "https://18.201.173.70/api/points/player/submit_batch",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

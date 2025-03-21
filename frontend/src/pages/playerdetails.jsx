@@ -26,7 +26,7 @@ const PlayerDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://18.201.173.70/api/points/player/${player_id}/history`)
+      .get(`https://18.201.173.70/api/points/player/${player_id}/history`)
       .then((response) => setPlayerHistory(response.data))
       .catch((error) => console.error("Error fetching player history:", error));
   }, [player_id]);
@@ -82,34 +82,46 @@ const PlayerDetails = () => {
           <table className="min-w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gradient-to-r from-red-500 to-red-700 text-white">
-                <th className="px-3 py-2 text-left border border-gray-300">Sport</th>
-                <th className="px-3 py-2 text-left border border-gray-300">Category</th>
-                <th className="px-3 py-2 text-left border border-gray-300">Level</th>
-                <th className="px-3 py-2 text-left border border-gray-300">Points</th>
+                <th className="px-3 py-2 text-left border border-gray-300">
+                  Sport
+                </th>
+                <th className="px-3 py-2 text-left border border-gray-300">
+                  Category
+                </th>
+                <th className="px-3 py-2 text-left border border-gray-300">
+                  Level
+                </th>
+                <th className="px-3 py-2 text-left border border-gray-300">
+                  Points
+                </th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(playerHistory.player_points).map(([sport, details]) =>
-                Object.entries(details.categories).map(([category, catDetails]) =>
-                  catDetails.competitions.map((comp, idx) => (
-                    <motion.tr
-                      key={`${sport}-${category}-${idx}`}
-                      whileHover={{ scale: 1.02 }}
-                      className="odd:bg-gray-50 even:bg-white hover:bg-red-50 transition"
-                    >
-                      <td className="px-3 py-2 border border-gray-300">{sport}</td>
-                      <td className="px-3 py-2 border border-gray-300 capitalize">
-                        {category.replace("_", " ")}
-                      </td>
-                      <td className="px-3 py-2 border border-gray-300">
-                        {comp.competition_level}
-                      </td>
-                      <td className="px-3 py-2 border border-gray-300 font-semibold text-blue-600">
-                        {comp.points}
-                      </td>
-                    </motion.tr>
-                  ))
-                )
+              {Object.entries(playerHistory.player_points).map(
+                ([sport, details]) =>
+                  Object.entries(details.categories).map(
+                    ([category, catDetails]) =>
+                      catDetails.competitions.map((comp, idx) => (
+                        <motion.tr
+                          key={`${sport}-${category}-${idx}`}
+                          whileHover={{ scale: 1.02 }}
+                          className="odd:bg-gray-50 even:bg-white hover:bg-red-50 transition"
+                        >
+                          <td className="px-3 py-2 border border-gray-300">
+                            {sport}
+                          </td>
+                          <td className="px-3 py-2 border border-gray-300 capitalize">
+                            {category.replace("_", " ")}
+                          </td>
+                          <td className="px-3 py-2 border border-gray-300">
+                            {comp.competition_level}
+                          </td>
+                          <td className="px-3 py-2 border border-gray-300 font-semibold text-blue-600">
+                            {comp.points}
+                          </td>
+                        </motion.tr>
+                      ))
+                  )
               )}
             </tbody>
           </table>

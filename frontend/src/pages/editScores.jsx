@@ -18,7 +18,7 @@ const PointsDialog = ({ isOpen, onClose, sport, sportId }) => {
   const fetchPoints = async (sportId, categori) => {
     try {
       let categoryNum = sportsWithCategories.includes(sport) ? categori : none;
-      let url = `http://18.201.173.70/api/points/players?sport_id=${sportId}&category=${categoryNum}`;
+      let url = `https://18.201.173.70/api/points/players?sport_id=${sportId}&category=${categoryNum}`;
       const response = await axios.get(url);
       setPlayerPoints(response.data);
     } catch (error) {
@@ -98,7 +98,7 @@ const EditScores = () => {
 
   const fetchSports = async () => {
     try {
-      const response = await axios.get("http://18.201.173.70/api/sports");
+      const response = await axios.get("https://18.201.173.70/api/sports");
       setSports(response.data);
     } catch (error) {
       console.error("Error fetching sports:", error);
@@ -108,7 +108,7 @@ const EditScores = () => {
   const handleDelete = async (sportId) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(`http://18.201.173.70/api/sports/${sportId}`, {
+      await axios.delete(`https://18.201.173.70/api/sports/${sportId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchSports();

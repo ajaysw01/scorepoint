@@ -17,7 +17,7 @@ const MatchScheduleCard = ({ sport, category }) => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `http://18.201.173.70/api/match/${sport}/${category}`
+          `https://18.201.173.70/api/match/${sport}/${category}`
         );
 
         if (response.status === 404) {

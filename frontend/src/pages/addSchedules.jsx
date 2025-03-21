@@ -12,7 +12,7 @@ const ScheduleUpload = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
-  
+
     const reader = new FileReader();
     reader.readAsArrayBuffer(selectedFile);
     reader.onload = (event) => {
@@ -20,15 +20,15 @@ const ScheduleUpload = () => {
       const workbook = XLSX.read(data, { type: "binary" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-  
+
       // Read data without formatting issues
       const parsedData = XLSX.utils.sheet_to_json(sheet, {
         raw: true,
         defval: "", // Ensures missing fields are empty strings instead of undefined
       });
-  
+
       console.log(parsedData);
-  
+
       // Ensure all fields exist even if they are missing in Excel
       const formattedData = parsedData.map((row) => ({
         player1: String(row.player1 || ""),
@@ -43,7 +43,9 @@ const ScheduleUpload = () => {
         date:
           row.date && !isNaN(row.date)
             ? (() => {
-                const dateObj = new Date(Math.round((row.date - 25569) * 86400000)); // Convert to JS Date
+                const dateObj = new Date(
+                  Math.round((row.date - 25569) * 86400000)
+                ); // Convert to JS Date
                 if (isNaN(dateObj.getTime())) return ""; // Handle invalid dates
                 const day = String(dateObj.getDate()).padStart(2, "0");
                 const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
@@ -51,22 +53,26 @@ const ScheduleUpload = () => {
                 return `${year}-${month}-${day}`;
               })()
             : "",
-  
+
         time:
           row.time && typeof row.time === "number"
             ? (() => {
                 const totalSeconds = Math.round(row.time * 86400);
-                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
-                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+                const hours = String(Math.floor(totalSeconds / 3600)).padStart(
+                  2,
+                  "0"
+                );
+                const minutes = String(
+                  Math.floor((totalSeconds % 3600) / 60)
+                ).padStart(2, "0");
                 return `${hours}:${minutes}`;
               })()
             : "",
       }));
-  
+
       setPreviewData(formattedData);
     };
   };
-  
 
   // Update a Cell in Preview Data
   const handleEdit = (index, key, value) => {
@@ -86,7 +92,7 @@ const ScheduleUpload = () => {
 
     try {
       await axios.post(
-        "http://18.201.173.70/api/match/batch/schedules",
+        "https://18.201.173.70/api/match/batch/schedules",
         previewData,
         {
           headers: {

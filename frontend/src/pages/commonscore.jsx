@@ -7,7 +7,7 @@ const GameScores = () => {
 
   const navigate = useNavigate();
 
-  const API_URL = `http://18.201.173.70/api/points/players/${sport_id}/${category}`;
+  const API_URL = `https://18.201.173.70/api/points/players/${sport_id}/${category}`;
 
   const [teams, setTeams] = useState([]);
   const [openTeam, setOpenTeam] = useState(null);
@@ -61,71 +61,74 @@ const GameScores = () => {
       </h1>
 
       {loading ? (
-  <p className="text-center text-gray-600">Loading...</p>
-) : error ? (
-  <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-    <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
-      No Player Points Available
-    </h2>
-    <p className="text-gray-600 text-center">
-      Player points for this game are currently unavailable. Please check back later.
-    </p>
-  </div>
-) : teams.length === 0 ? (
-  <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-    <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
-      No Teams Found
-    </h2>
-    <p className="text-gray-600 text-center">
-      No teams have recorded points yet. Stay tuned for updates!
-    </p>
-  </div>
-) : (
-  <div className="max-w-4xl mx-auto space-y-6">
-    {teams.map((team) => (
-      <div key={team.teamName} className="bg-white shadow-lg rounded-lg p-6">
-        {/* Team Score Card */}
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => toggleDropdown(team.teamName)}
-        >
-          <h2 className="text-2xl font-semibold">{team.teamName}</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-green-600">
-              {team.teamScore} pts
-            </span>
-            {openTeam === team.teamName ? (
-              <ChevronUp className="text-gray-600 transition-transform duration-300" />
-            ) : (
-              <ChevronDown className="text-gray-600 transition-transform duration-300" />
-            )}
-          </div>
+        <p className="text-center text-gray-600">Loading...</p>
+      ) : error ? (
+        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
+            No Player Points Available
+          </h2>
+          <p className="text-gray-600 text-center">
+            Player points for this game are currently unavailable. Please check
+            back later.
+          </p>
         </div>
-
-        {/* Player Scores Dropdown */}
-        {openTeam === team.teamName && (
-          <div className="mt-4 bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-xl font-semibold mb-3">Player Scores</h3>
-            <ul className="space-y-2">
-              {team.players.map((player, index) => (
-                <li
-                  key={index}
-                  className="flex justify-between bg-white p-2 rounded-md shadow-sm"
-                >
-                  <span>{player.name}</span>
-                  <span className="font-bold text-blue-600">
-                    {player.score} pts
+      ) : teams.length === 0 ? (
+        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
+            No Teams Found
+          </h2>
+          <p className="text-gray-600 text-center">
+            No teams have recorded points yet. Stay tuned for updates!
+          </p>
+        </div>
+      ) : (
+        <div className="max-w-4xl mx-auto space-y-6">
+          {teams.map((team) => (
+            <div
+              key={team.teamName}
+              className="bg-white shadow-lg rounded-lg p-6"
+            >
+              {/* Team Score Card */}
+              <div
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => toggleDropdown(team.teamName)}
+              >
+                <h2 className="text-2xl font-semibold">{team.teamName}</h2>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-green-600">
+                    {team.teamScore} pts
                   </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-)}
+                  {openTeam === team.teamName ? (
+                    <ChevronUp className="text-gray-600 transition-transform duration-300" />
+                  ) : (
+                    <ChevronDown className="text-gray-600 transition-transform duration-300" />
+                  )}
+                </div>
+              </div>
 
+              {/* Player Scores Dropdown */}
+              {openTeam === team.teamName && (
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-3">Player Scores</h3>
+                  <ul className="space-y-2">
+                    {team.players.map((player, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between bg-white p-2 rounded-md shadow-sm"
+                      >
+                        <span>{player.name}</span>
+                        <span className="font-bold text-blue-600">
+                          {player.score} pts
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Back Button */}
       <div className="mt-12 flex justify-center">

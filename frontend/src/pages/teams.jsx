@@ -49,7 +49,7 @@ export default function Teams() {
 
   useEffect(() => {
     axios
-      .get("http://18.201.173.70/api/teams")
+      .get("https://18.201.173.70/api/teams")
       .then((response) => {
         setTeams((prevTeams) =>
           prevTeams.map((team) => {
@@ -86,13 +86,17 @@ function TeamsList({ teams }) {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Teams</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
+        Teams
+      </h1>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5 justify-items-center">
         {teams.map((team) => (
           <div
             key={team.id}
             // Pass the logo as part of the state
-            onClick={() => navigate(`/teams/${team.id}`, { state: { logo: team.logo } })}
+            onClick={() =>
+              navigate(`/teams/${team.id}`, { state: { logo: team.logo } })
+            }
             className="flex flex-col items-center cursor-pointer text-lg font-semibold hover:text-red-600"
           >
             <img

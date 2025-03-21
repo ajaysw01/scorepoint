@@ -2,7 +2,7 @@
 import axios from "axios";
 import * as XLSX from "xlsx"; // Excel Parsing & Exporting
 
-const TEAMS_API_URL = "http://18.201.173.70/api/teams";
+const TEAMS_API_URL = "https://18.201.173.70/api/teams";
 
 const TeamsManagement = () => {
   const [teams, setTeams] = useState([]);

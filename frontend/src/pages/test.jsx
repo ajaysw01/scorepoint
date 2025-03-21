@@ -8,7 +8,7 @@ const PlayerStats = ({ playerId }) => {
     const fetchPlayerStats = async () => {
       try {
         const response = await fetch(
-          `http://18.201.173.70/api/points/player/sport/${playerId}`
+          `https://18.201.173.70/api/points/player/sport/${playerId}`
         );
         const data = await response.json();
         setPlayerData(data);
