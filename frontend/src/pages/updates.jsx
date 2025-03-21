@@ -10,7 +10,7 @@ const sportsCategories = {
     "women_doubles",
     "mixed_doubles",
   ],
-  TableTennis: [
+  "Table Tennis": [
     "men_singles",
     "men_doubles",
     "women_singles",
