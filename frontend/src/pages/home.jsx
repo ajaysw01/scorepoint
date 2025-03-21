@@ -1,4 +1,5 @@
 ﻿import { motion } from "framer-motion";
+import { Linkedin, Instagram } from "lucide-react";
 
 const Home = () => {
   return (
@@ -40,10 +41,41 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="w-full text-center text-gray-300 p-4 bg-transparent">
-        <p>@ Celebrelite 2025</p>
+        <p>&copy; Celebrelite 2025</p>
+        <div className="flex justify-center space-x-4 mt-2">
+          <a
+            href="https://www.creditsafe.com/in/en.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline text-gray-300"
+          >
+            Creditsafe Technology
+          </a>
+          <span>|</span>
+          <a
+            href="https://www.linkedin.com/company/creditsafe-technology/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-1 hover:underline text-gray-300"
+          >
+            <Linkedin size={18} />
+            <span>LinkedIn</span>
+          </a>
+          <span>|</span>
+          <a
+            href="https://www.instagram.com/creditsafe_technology?igsh=MW16bmw3YnV5N3V6aA=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-1 hover:underline text-gray-300"
+          >
+            <Instagram size={18} />
+            <span>Instagram</span>
+          </a>
+        </div>
       </footer>
+
+
     </div>
   );
 };
